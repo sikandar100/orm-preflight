@@ -1,0 +1,190 @@
+name: Release
+
+# push to main: open or update the "Version Packages" PR, and publish only when every
+#   publish guard passes (see the publish job).
+# workflow_dispatch: a rehearsal that never publishes. It builds the next release, runs
+#   `npm publish --dry-run`, shows the OIDC claims npm trusted publishing will see, and
+#   publishes to a throwaway local registry to prove the package installs and runs.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.event_name }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  version:
+    name: Version PR
+    if: github.repository == 'sikandar100/orm-preflight' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      has-changesets: ${{ steps.changesets.outputs.has-changesets }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      # No publish-script, so this step can only open or update the version PR. It never publishes.
+      - id: changesets
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: version packages'
+          pr-title: 'chore: version packages'
+
+  publish:
+    name: Publish to npm
+    needs: version
+    # Guard 1: only after the version PR is merged (no pending changesets).
+    # Guard 2: the owner sets the RELEASE_ENABLED repository variable to "true" (not set in M0).
+    if: needs.version.outputs.has-changesets == 'false' && vars.RELEASE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    # Guard 3: the npm-publish environment requires the owner's approval.
+    # Guard 4: npm accepts the OIDC token only from the trusted publisher configured on npmjs.com.
+    environment: npm-publish
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - name: Refuse to publish the placeholder version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "$version" = "0.0.0" ]; then
+            echo "::error::package.json version is 0.0.0. Nothing to publish."
+            exit 1
+          fi
+      - run: pnpm build
+      - run: pnpm check:pack
+      - uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          publish-script: pnpm changeset publish
+
+  rehearsal:
+    name: Release rehearsal (never publishes)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      version: ${{ steps.next.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - name: Pending changesets
+        run: pnpm changeset status --verbose || echo "::warning::changeset status reported a problem (see above)"
+      - name: Apply the version PR changes locally (never pushed)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          pnpm changeset version
+          git --no-pager diff --stat
+      - id: next
+        name: Next version
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+      - run: pnpm build
+      - run: pnpm check:pack --out pack
+      - name: npm publish --dry-run
+        # Provenance is off and the OIDC variables are hidden so the dry run cannot sign
+        # anything or write to the public Sigstore transparency log.
+        env:
+          ACTIONS_ID_TOKEN_REQUEST_URL: ''
+          ACTIONS_ID_TOKEN_REQUEST_TOKEN: ''
+        run: npm publish --dry-run --provenance=false --access public pack/*.tgz
+      - name: OIDC claims npm trusted publishing will see
+        # Mints a token for the npm audience and prints only its non-secret claims.
+        # The token is never sent to npm. The real publish job also carries
+        # "environment": "npm-publish", which this rehearsal job does not.
+        run: |
+          token=$(curl -sSf -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=npm:registry.npmjs.org" | jq -r .value)
+          echo "::add-mask::$token"
+          cut -d. -f2 <<< "$token" | node -e '
+            const claims = JSON.parse(Buffer.from(require("fs").readFileSync(0, "utf8").trim(), "base64url"))
+            const keys = ["iss", "aud", "repository", "repository_owner", "workflow_ref", "ref", "event_name", "environment"]
+            console.log(JSON.stringify(Object.fromEntries(keys.map((k) => [k, claims[k] ?? null])), null, 2))'
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: rehearsal-tarball
+          path: pack/*.tgz
+          if-no-files-found: error
+          retention-days: 7
+
+  registry-rehearsal:
+    name: Publish to a throwaway registry and install (Node ${{ matrix.node }})
+    needs: rehearsal
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
+    services:
+      verdaccio:
+        image: verdaccio/verdaccio:6.10.4@sha256:43c4067288b050422265407ea2fe747e511fcd0c407a85ec90ab9a326d9400cd
+        ports:
+          - 4873:4873
+    env:
+      REGISTRY: http://localhost:4873
+      VERSION: ${{ needs.rehearsal.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: rehearsal-tarball
+          path: pack
+      - name: Publish to the local registry
+        # Local throwaway registry, not npmjs.com, so trusted publishing does not apply.
+        run: | # zizmor: ignore[use-trusted-publishing]
+          for _ in $(seq 1 30); do curl -sf "$REGISTRY/-/ping" > /dev/null && break; sleep 1; done
+          token=$(curl -sSf -X PUT -H 'Content-Type: application/json' \
+            -d '{"name":"ci","password":"rehearsal-only"}' \
+            "$REGISTRY/-/user/org.couchdb.user:ci" | jq -r .token)
+          echo "::add-mask::$token"
+          printf '//localhost:4873/:_authToken=%s\n' "$token" > "$RUNNER_TEMP/rehearsal.npmrc"
+          npm publish pack/*.tgz --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/rehearsal.npmrc" --provenance=false
+      - name: Install from the local registry and run
+        run: node scripts/smoke-tarball.mjs --registry "$REGISTRY" --version "$VERSION"
