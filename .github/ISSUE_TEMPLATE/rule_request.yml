@@ -1,0 +1,42 @@
+name: Rule proposal
+description: Propose a check for a migration hazard that orm-preflight does not catch
+labels: [rule]
+body:
+  - type: textarea
+    id: hazard
+    attributes:
+      label: Hazard
+      description: What goes wrong in production (data loss, which lock, runtime error), and when.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example migration
+      render: ts
+    validations:
+      required: true
+  - type: textarea
+    id: safe
+    attributes:
+      label: Safe alternative
+      description: How to make the same change safely.
+    validations:
+      required: true
+  - type: input
+    id: reference
+    attributes:
+      label: Documentation reference
+      description: Link to the PostgreSQL or MySQL documentation section that confirms the behavior.
+    validations:
+      required: true
+  - type: dropdown
+    id: dialect
+    attributes:
+      label: Dialect
+      multiple: true
+      options:
+        - postgres
+        - mysql
+    validations:
+      required: true

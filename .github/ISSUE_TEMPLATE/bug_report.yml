@@ -1,0 +1,72 @@
+name: Bug report
+description: A wrong finding, a missed hazard, a crash, or other unexpected behavior
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please remove anything private (table names, credentials) from the snippet.
+        To report a security issue, use the Security tab instead of this form.
+  - type: textarea
+    id: migration
+    attributes:
+      label: Migration snippet
+      description: The smallest migration that shows the problem.
+      render: ts
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: The output you got. Include the command you ran.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: dropdown
+    id: dialect
+    attributes:
+      label: Dialect
+      options:
+        - postgres
+        - mysql
+    validations:
+      required: true
+  - type: input
+    id: db-version
+    attributes:
+      label: PostgreSQL or MySQL version
+      placeholder: '16'
+    validations:
+      required: true
+  - type: input
+    id: typeorm-version
+    attributes:
+      label: TypeORM version
+      placeholder: 0.3.31
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: orm-preflight version
+      description: Output of `npx orm-preflight --version`
+    validations:
+      required: true
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Config
+      description: Your orm-preflight config, if any.
+      render: json
