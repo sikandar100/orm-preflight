@@ -1,0 +1,36 @@
+# Maintainer-local design documents (never commit)
+docs/SPEC.md
+
+# Dependencies
+node_modules/
+
+# Build and test output
+dist/
+coverage/
+*.tgz
+*.tsbuildinfo
+.cache/
+.turbo/
+tmp/
+
+# Secrets and local config
+.env
+.env.*
+.npmrc
+*.pem
+*.key
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local AI assistant settings
+.claude/settings.local.json
