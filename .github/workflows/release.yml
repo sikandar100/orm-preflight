@@ -112,6 +112,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          # changeset version fails when nothing is pending. Add a throwaway patch changeset
+          # so the full version path still runs. It exists only inside this runner.
+          pending=0
+          for f in .changeset/*.md; do if [ "$f" != .changeset/README.md ]; then pending=1; fi; done
+          if [ "$pending" = 0 ]; then
+            echo "::notice::No pending changesets. Rehearsing with a temporary patch changeset."
+            printf -- "---\n'orm-preflight': patch\n---\n\nRelease rehearsal. This changeset exists only inside the rehearsal run.\n" \
+              > .changeset/release-rehearsal.md
+          fi
           pnpm changeset version
           git --no-pager diff --stat
       - id: next
