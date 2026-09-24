@@ -1,0 +1,16 @@
+# Supply chain settings. This is a single-package repository, not a monorepo.
+
+# Refuse package versions published less than one day ago.
+minimumReleaseAge: 1440
+
+# Fail when a package version is published with weaker provenance than earlier versions.
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  # Required by @types/node@22. Published in Nov 2024 by the undici maintainer,
+  # like the rest of the 6.x line, before undici switched to OIDC publishing in 7.x.
+  - undici-types@6.21.0
+
+# Dependencies may not run install scripts unless approved here.
+allowBuilds:
+  # Git hooks are installed by the "prepare" script instead.
+  lefthook: false
