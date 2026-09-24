@@ -134,7 +134,7 @@ jobs:
         env:
           ACTIONS_ID_TOKEN_REQUEST_URL: ''
           ACTIONS_ID_TOKEN_REQUEST_TOKEN: ''
-        run: npm publish --dry-run --provenance=false --access public pack/*.tgz
+        run: npm publish --dry-run --provenance=false --access public ./pack/*.tgz
       - name: OIDC claims npm trusted publishing will see
         # Mints a token for the npm audience and prints only its non-secret claims.
         # The token is never sent to npm. The real publish job also carries
@@ -194,6 +194,6 @@ jobs:
             "$REGISTRY/-/user/org.couchdb.user:ci" | jq -r .token)
           echo "::add-mask::$token"
           printf '//localhost:4873/:_authToken=%s\n' "$token" > "$RUNNER_TEMP/rehearsal.npmrc"
-          npm publish pack/*.tgz --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/rehearsal.npmrc" --provenance=false
+          npm publish ./pack/*.tgz --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/rehearsal.npmrc" --provenance=false
       - name: Install from the local registry and run
         run: node scripts/smoke-tarball.mjs --registry "$REGISTRY" --version "$VERSION"
