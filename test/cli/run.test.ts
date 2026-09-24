@@ -36,7 +36,7 @@ describe('run', () => {
   })
 
   it('never uses em dashes in help text', () => {
-    expect(helpText).not.toContain('—')
+    expect(helpText).not.toContain('\u2014')
   })
 })
 
