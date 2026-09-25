@@ -25,6 +25,9 @@ export const typeormAdapter: OrmAdapter = {
   configSchema: typeormConfigSchema,
   extract: extractTypeorm,
   rules: [...typeormRules],
+  starterOptions: { transactionMode: 'all' },
+  starterNote:
+    'Set "typeorm.transactionMode" to the migrationsTransactionMode of your DataSource ("all" is the TypeORM default).',
 }
 
 /** Statically extracts every TypeORM migration class from a file. Never runs the file. */
