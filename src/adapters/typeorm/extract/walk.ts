@@ -436,7 +436,7 @@ function handleQueryRunnerCall(
 
   const action = TRANSACTION_METHODS[method]
   if (action !== undefined) {
-    operation(ctx, node, { kind: 'typeorm.transaction_control', action }, cond)
+    operation(ctx, node, { kind: 'transaction_control', action }, cond)
     return
   }
 

@@ -9,7 +9,7 @@
       {
         "kind": "operation",
         "operation": {
-          "kind": "typeorm.transaction_control",
+          "kind": "transaction_control",
           "action": "commit",
           "loc": {
             "file": "handwritten/builder/transaction-control.ts",
@@ -41,7 +41,7 @@
       {
         "kind": "operation",
         "operation": {
-          "kind": "typeorm.transaction_control",
+          "kind": "transaction_control",
           "action": "start",
           "loc": {
             "file": "handwritten/builder/transaction-control.ts",
