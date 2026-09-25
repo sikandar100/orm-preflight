@@ -1,0 +1,54 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/down-variants.ts",
+    "id": "DownEmpty1727200000060",
+    "timestamp": 1727200000060,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DownEmpty1727200000060"
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/down-variants.ts",
+    "id": "DownMissing1727200000061",
+    "timestamp": 1727200000061,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DownMissing1727200000061"
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/down-variants.ts",
+    "id": "DownSemicolons1727200000062",
+    "timestamp": 1727200000062,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DownSemicolons1727200000062"
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/down-variants.ts",
+    "id": "DownReal1727200000063",
+    "timestamp": 1727200000063,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DownReal1727200000063"
+    },
+    "up": []
+  }
+]

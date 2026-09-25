@@ -1,0 +1,34 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/postgres-16/typeorm-1.1.1/1727100007000-AddNotNullColumn.ts",
+    "id": "AddNotNullColumn1727100007000",
+    "timestamp": 1727100007000,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddNotNullColumn1727100007000",
+      "name": "AddNotNullColumn1727100007000"
+    },
+    "up": [
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "nickname",
+        "notNull": true,
+        "type": "varchar",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-1.1.1/1727100007000-AddNotNullColumn.ts",
+          "line": 7,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"nickname\" character varying NOT NULL"
+      }
+    ]
+  }
+]

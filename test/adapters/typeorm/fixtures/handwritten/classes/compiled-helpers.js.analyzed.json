@@ -1,0 +1,28 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/compiled-helpers.js",
+    "id": "HelperImport1727200000044",
+    "timestamp": 1727200000044,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "HelperImport1727200000044",
+      "name": "HelperImport1727200000044",
+      "declaredTransaction": "unknown"
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/compiled-helpers.js",
+    "id": "compiled-helpers",
+    "timestamp": null,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {},
+    "up": []
+  }
+]

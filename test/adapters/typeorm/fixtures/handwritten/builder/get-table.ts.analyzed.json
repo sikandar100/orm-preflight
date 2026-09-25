@@ -1,0 +1,55 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/get-table.ts",
+    "id": "GetTable1727200000016",
+    "timestamp": 1727200000016,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "GetTable1727200000016"
+    },
+    "up": [
+      {
+        "kind": "drop_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "legacy",
+        "loc": {
+          "file": "handwritten/builder/get-table.ts",
+          "line": 9,
+          "column": 13
+        },
+        "origin": "builder",
+        "conditional": true
+      },
+      {
+        "kind": "drop_column",
+        "table": {
+          "schema": "archive",
+          "name": "users"
+        },
+        "column": "legacy",
+        "loc": {
+          "file": "handwritten/builder/get-table.ts",
+          "line": 11,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "dropTable(): Could not resolve the table (it is read from a property)",
+        "loc": {
+          "file": "handwritten/builder/get-table.ts",
+          "line": 14,
+          "column": 11
+        },
+        "origin": "builder"
+      }
+    ]
+  }
+]

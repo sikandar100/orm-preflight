@@ -1,0 +1,28 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/arrow-methods.ts",
+    "id": "ArrowMethods1727200000041",
+    "timestamp": 1727200000041,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "ArrowMethods1727200000041"
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/arrow-methods.ts",
+    "id": "FunctionProperty1727200000042",
+    "timestamp": 1727200000042,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "FunctionProperty1727200000042"
+    },
+    "up": []
+  }
+]

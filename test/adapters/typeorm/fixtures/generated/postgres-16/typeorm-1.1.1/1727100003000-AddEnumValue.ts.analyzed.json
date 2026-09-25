@@ -1,0 +1,29 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/postgres-16/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+    "id": "AddEnumValue1727100003000",
+    "timestamp": 1727100003000,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddEnumValue1727100003000",
+      "name": "AddEnumValue1727100003000"
+    },
+    "up": [
+      {
+        "kind": "enum_add_value",
+        "name": "public.users_status_enum",
+        "value": "banned",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+          "line": 7,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TYPE \"public\".\"users_status_enum\" ADD VALUE 'banned'"
+      }
+    ]
+  }
+]

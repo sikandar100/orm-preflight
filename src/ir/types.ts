@@ -16,7 +16,13 @@ export interface OpBase {
   origin: 'sql' | 'builder' | 'execute'
   /** True when the operation runs inside a condition, loop, or callback. */
   conditional?: boolean
+  /** The SQL statement this operation came from. */
   sql?: string
+  /**
+   * Set when the statement shares one query() call with other statements. PostgreSQL runs
+   * such a batch in one implicit transaction.
+   */
+  batch?: { index: number; size: number }
 }
 
 export type ConstraintType = 'foreign_key' | 'check' | 'unique' | 'primary_key'
@@ -76,7 +82,10 @@ export type OperationBody =
       column: string
       recreates: 'yes' | 'no' | 'unknown'
     }
-  | { kind: 'typeorm.transaction_control'; action: 'start' | 'commit' | 'rollback' }
+  /** BEGIN, COMMIT, or ROLLBACK, from SQL or from QueryRunner transaction methods. */
+  | { kind: 'transaction_control'; action: 'start' | 'commit' | 'rollback' }
+  /** An explicit LOCK TABLE statement. */
+  | { kind: 'lock_table'; tables: TableRef[]; mode: string }
   | { kind: 'unanalyzable'; reason: string }
 
 export type Operation = OpBase & OperationBody

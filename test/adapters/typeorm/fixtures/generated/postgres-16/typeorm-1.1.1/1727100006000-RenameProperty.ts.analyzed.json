@@ -1,0 +1,33 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/postgres-16/typeorm-1.1.1/1727100006000-RenameProperty.ts",
+    "id": "RenameProperty1727100006000",
+    "timestamp": 1727100006000,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "RenameProperty1727100006000",
+      "name": "RenameProperty1727100006000"
+    },
+    "up": [
+      {
+        "kind": "rename_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "age",
+        "to": "years",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-1.1.1/1727100006000-RenameProperty.ts",
+          "line": 7,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" RENAME COLUMN \"age\" TO \"years\""
+      }
+    ]
+  }
+]

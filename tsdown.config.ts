@@ -26,4 +26,12 @@ export default defineConfig([
     dts: false,
     clean: false,
   },
+  {
+    // Internal: lets the installed-package smoke test load the SQL parsers.
+    ...shared,
+    entry: { 'internal-sql-check': 'src/internal/sql-check.ts' },
+    format: ['esm', 'cjs'],
+    dts: false,
+    clean: false,
+  },
 ])

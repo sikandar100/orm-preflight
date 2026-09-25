@@ -1,0 +1,15 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/query-params.ts",
+    "id": "QueryParams1727200000004",
+    "timestamp": 1727200000004,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "QueryParams1727200000004"
+    },
+    "up": []
+  }
+]

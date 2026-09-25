@@ -1,0 +1,49 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/postgres-16/typeorm-1.1.1/js-esm/1727100001000-WidenVarchar.js",
+    "id": "WidenVarchar1727100001000",
+    "timestamp": 1727100001000,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "WidenVarchar1727100001000",
+      "name": "WidenVarchar1727100001000"
+    },
+    "up": [
+      {
+        "kind": "drop_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "name",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-1.1.1/js-esm/1727100001000-WidenVarchar.js",
+          "line": 17,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" DROP COLUMN \"name\""
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "name",
+        "notNull": true,
+        "type": "varchar(255)",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-1.1.1/js-esm/1727100001000-WidenVarchar.js",
+          "line": 18,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"name\" character varying(255) NOT NULL"
+      }
+    ]
+  }
+]

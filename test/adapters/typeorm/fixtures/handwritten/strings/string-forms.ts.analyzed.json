@@ -1,0 +1,188 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/string-forms.ts",
+    "id": "StringForms1727200000001",
+    "timestamp": 1727200000001,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "StringForms1727200000001",
+      "name": "StringForms1727200000001"
+    },
+    "up": [
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "a",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 12,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"a\" integer"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "b",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 13,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"b\" integer"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "c",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 14,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"c\" integer"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "d",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 16,
+          "column": 8
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"d\" integer"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "email",
+        "notNull": false,
+        "type": "text",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 5,
+          "column": 20
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"email\" text"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "email",
+        "notNull": false,
+        "type": "text",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 5,
+          "column": 20
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"email\" text"
+      },
+      {
+        "kind": "create_index",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "unique": false,
+        "concurrently": false,
+        "name": "IDX_a",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 21,
+          "column": 20
+        },
+        "origin": "sql",
+        "sql": "CREATE INDEX \"IDX_a\" ON \"users\" (\"a\")"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "e",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 24,
+          "column": 7
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"e\" integer",
+        "batch": {
+          "index": 0,
+          "size": 2
+        }
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "f",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 25,
+          "column": 7
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"f\" integer",
+        "batch": {
+          "index": 1,
+          "size": 2
+        }
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built from a template literal with ${...} expressions",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 27,
+          "column": 11
+        },
+        "origin": "sql"
+      }
+    ]
+  }
+]

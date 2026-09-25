@@ -1,0 +1,150 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/docs-pattern.ts",
+    "id": "QuestionRefactoringTIMESTAMP",
+    "timestamp": null,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "QuestionRefactoringTIMESTAMP"
+    },
+    "up": [
+      {
+        "kind": "create_table",
+        "table": {
+          "schema": "public",
+          "name": "question"
+        },
+        "loc": {
+          "file": "handwritten/builder/docs-pattern.ts",
+          "line": 6,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "create_index",
+        "table": {
+          "schema": "public",
+          "name": "question"
+        },
+        "unique": false,
+        "concurrently": false,
+        "name": "IDX_QUESTION_NAME",
+        "loc": {
+          "file": "handwritten/builder/docs-pattern.ts",
+          "line": 17,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "create_table",
+        "table": {
+          "schema": "public",
+          "name": "answer"
+        },
+        "loc": {
+          "file": "handwritten/builder/docs-pattern.ts",
+          "line": 22,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "answer"
+        },
+        "column": "questionId",
+        "notNull": true,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/builder/docs-pattern.ts",
+          "line": 34,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_constraint",
+        "table": {
+          "schema": "public",
+          "name": "answer"
+        },
+        "type": "foreign_key",
+        "notValid": false,
+        "references": {
+          "schema": "public",
+          "name": "question"
+        },
+        "loc": {
+          "file": "handwritten/builder/docs-pattern.ts",
+          "line": 39,
+          "column": 11
+        },
+        "origin": "builder"
+      }
+    ]
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/docs-pattern.ts",
+    "id": "FindColumn1727200000019",
+    "timestamp": 1727200000019,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "FindColumn1727200000019"
+    },
+    "up": [
+      {
+        "kind": "drop_constraint",
+        "table": {
+          "schema": "public",
+          "name": "answer"
+        },
+        "type": "foreign_key",
+        "loc": {
+          "file": "handwritten/builder/docs-pattern.ts",
+          "line": 65,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "drop_column",
+        "table": {
+          "schema": "public",
+          "name": "answer"
+        },
+        "column": "questionId",
+        "loc": {
+          "file": "handwritten/builder/docs-pattern.ts",
+          "line": 66,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "typeorm.change_column",
+        "table": {
+          "schema": "public",
+          "name": "answer"
+        },
+        "column": "name",
+        "recreates": "unknown",
+        "loc": {
+          "file": "handwritten/builder/docs-pattern.ts",
+          "line": 67,
+          "column": 11
+        },
+        "origin": "builder"
+      }
+    ]
+  }
+]

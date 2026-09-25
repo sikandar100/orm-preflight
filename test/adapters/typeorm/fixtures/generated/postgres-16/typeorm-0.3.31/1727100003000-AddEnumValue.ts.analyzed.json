@@ -1,0 +1,68 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+    "id": "AddEnumValue1727100003000",
+    "timestamp": 1727100003000,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddEnumValue1727100003000",
+      "name": "AddEnumValue1727100003000"
+    },
+    "up": [
+      {
+        "kind": "enum_rename",
+        "from": "public.users_status_enum",
+        "to": "users_status_enum_old",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "line": 7,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TYPE \"public\".\"users_status_enum\" RENAME TO \"users_status_enum_old\""
+      },
+      {
+        "kind": "enum_create",
+        "name": "public.users_status_enum",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "line": 8,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "CREATE TYPE \"public\".\"users_status_enum\" AS ENUM('active', 'inactive', 'banned')"
+      },
+      {
+        "kind": "alter_column_type",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "status",
+        "to": "public.users_status_enum",
+        "using": true,
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "line": 9,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ALTER COLUMN \"status\" TYPE \"public\".\"users_status_enum\" USING \"status\"::\"text\"::\"public\".\"users_status_enum\""
+      },
+      {
+        "kind": "enum_drop",
+        "name": "public.users_status_enum_old",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "line": 10,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "DROP TYPE \"public\".\"users_status_enum_old\""
+      }
+    ]
+  }
+]

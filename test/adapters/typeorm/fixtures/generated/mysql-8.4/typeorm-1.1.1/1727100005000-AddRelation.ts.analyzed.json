@@ -1,0 +1,36 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-1.1.1/1727100005000-AddRelation.ts",
+    "id": "AddRelation1727100005000",
+    "timestamp": 1727100005000,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddRelation1727100005000",
+      "name": "AddRelation1727100005000"
+    },
+    "up": [
+      {
+        "kind": "add_constraint",
+        "table": {
+          "name": "posts"
+        },
+        "name": "FK_c5a322ad12a7bf95460c958e80e",
+        "type": "foreign_key",
+        "notValid": false,
+        "references": {
+          "name": "users"
+        },
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100005000-AddRelation.ts",
+          "line": 7,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE `posts` ADD CONSTRAINT `FK_c5a322ad12a7bf95460c958e80e` FOREIGN KEY (`authorId`) REFERENCES `users`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION"
+      }
+    ]
+  }
+]

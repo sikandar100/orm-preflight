@@ -1,0 +1,15 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/export-default.ts",
+    "id": "ExportDefault1727200000033",
+    "timestamp": 1727200000033,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "ExportDefault1727200000033"
+    },
+    "up": []
+  }
+]

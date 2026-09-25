@@ -1,0 +1,29 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/dialect-branches-mysql.ts",
+    "id": "DialectBranchesMysql1727200000030",
+    "timestamp": 1727200000030,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DialectBranchesMysql1727200000030"
+    },
+    "up": [
+      {
+        "kind": "create_table",
+        "table": {
+          "name": "t"
+        },
+        "loc": {
+          "file": "handwritten/flow/dialect-branches-mysql.ts",
+          "line": 81,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "CREATE TABLE `t` (`id` int AUTO_INCREMENT PRIMARY KEY)"
+      }
+    ]
+  }
+]

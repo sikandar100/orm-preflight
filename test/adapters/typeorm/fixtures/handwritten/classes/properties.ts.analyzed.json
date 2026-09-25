@@ -1,0 +1,59 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/properties.ts",
+    "id": "NameWins1727200000050",
+    "timestamp": 1727200000099,
+    "runsInTransaction": false,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "NameWins1727200000050",
+      "name": "RenamedMigration1727200000099",
+      "declaredTransaction": false
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/properties.ts",
+    "id": "DynamicName1727200000051",
+    "timestamp": null,
+    "runsInTransaction": "unknown",
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DynamicName1727200000051",
+      "name": null,
+      "declaredTransaction": "unknown"
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/properties.ts",
+    "id": "NoTimestamp",
+    "timestamp": null,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "NoTimestamp",
+      "declaredTransaction": true
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/properties.ts",
+    "id": "Anonymous",
+    "timestamp": null,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Anonymous"
+    },
+    "up": []
+  }
+]

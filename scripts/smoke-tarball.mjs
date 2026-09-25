@@ -8,6 +8,7 @@ import { execFileSync, spawnSync } from 'node:child_process'
 import { copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { parseArgs } from 'node:util'
 
 const { values } = parseArgs({
@@ -97,6 +98,39 @@ try {
     { cwd: project, encoding: 'utf8' },
   )
   check('import() loads the ESM build', imported === expected, imported)
+
+  // The SQL parsers load lazily, and PostgreSQL's is WebAssembly. Prove both module formats
+  // can load and run it from the installed package. The internal entry is not exported, so
+  // it is loaded by file path.
+  const dist = path.join(project, 'node_modules', 'orm-preflight', 'dist')
+  const probe = `
+    const parse = await m.loadParser('postgres')
+    const result = parse('CREATE INDEX CONCURRENTLY "i" ON "t" ("a")')
+    const op = result.ok ? result.statements[0].ops[0] : undefined
+    let mysql = 'loaded'
+    try { await m.loadParser('mysql') } catch (e) { mysql = e.name + ': ' + e.message }
+    process.stdout.write(JSON.stringify({ kind: op?.kind, concurrently: op?.concurrently, mysql }))`
+  const esmProbe = `const m = await import(${JSON.stringify(pathToFileURL(path.join(dist, 'internal-sql-check.mjs')).href)});${probe}`
+  const cjsProbe = `const m = require(${JSON.stringify(path.join(dist, 'internal-sql-check.cjs'))}); (async () => {${probe}})()`
+  const expectedProbe = JSON.stringify({
+    kind: 'create_index',
+    concurrently: true,
+    mysql:
+      'MissingParserError: MySQL support needs the node-sql-parser package. Install it with: npm install --save-dev node-sql-parser',
+  })
+  /** @type {Array<[string, string[]]>} */
+  const probes = [
+    ['ESM', ['--input-type=module', '-e', esmProbe]],
+    ['CJS', ['-e', cjsProbe]],
+  ]
+  for (const [label, args] of probes) {
+    const out = execFileSync(process.execPath, args, { cwd: project, encoding: 'utf8' })
+    check(
+      `${label}: PostgreSQL parser runs, missing MySQL parser is explained`,
+      out === expectedProbe,
+      out,
+    )
+  }
 } catch (error) {
   console.error(error instanceof Error ? error.message : error)
   failures.push('setup')

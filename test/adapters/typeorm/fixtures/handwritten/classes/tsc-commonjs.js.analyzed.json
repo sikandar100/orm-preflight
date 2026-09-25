@@ -1,0 +1,35 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/tsc-commonjs.js",
+    "id": "CompiledMigration1727200000036",
+    "timestamp": 1727200000036,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "CompiledMigration1727200000036",
+      "name": "CompiledMigration1727200000036",
+      "declaredTransaction": false
+    },
+    "up": [
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "compiled",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/classes/tsc-commonjs.js",
+          "line": 20,
+          "column": 38
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"compiled\" integer"
+      }
+    ]
+  }
+]

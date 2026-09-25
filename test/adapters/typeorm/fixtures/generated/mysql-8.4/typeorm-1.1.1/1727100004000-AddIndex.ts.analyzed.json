@@ -1,0 +1,33 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-1.1.1/1727100004000-AddIndex.ts",
+    "id": "AddIndex1727100004000",
+    "timestamp": 1727100004000,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddIndex1727100004000",
+      "name": "AddIndex1727100004000"
+    },
+    "up": [
+      {
+        "kind": "create_index",
+        "table": {
+          "name": "users"
+        },
+        "unique": false,
+        "concurrently": false,
+        "name": "IDX_users_email",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100004000-AddIndex.ts",
+          "line": 7,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "CREATE INDEX `IDX_users_email` ON `users` (`email`)"
+      }
+    ]
+  }
+]
