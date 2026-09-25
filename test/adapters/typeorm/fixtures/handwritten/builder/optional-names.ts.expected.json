@@ -1,0 +1,109 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/optional-names.ts",
+    "id": "OptionalNames1727200000027",
+    "timestamp": 1727200000027,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "organizations"
+          },
+          "type": "unique",
+          "notValid": false,
+          "loc": {
+            "file": "handwritten/builder/optional-names.ts",
+            "line": 6,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "create_index",
+          "table": {
+            "name": "organizations"
+          },
+          "unique": false,
+          "concurrently": false,
+          "loc": {
+            "file": "handwritten/builder/optional-names.ts",
+            "line": 10,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "orders"
+          },
+          "type": "foreign_key",
+          "notValid": false,
+          "loc": {
+            "file": "handwritten/builder/optional-names.ts",
+            "line": 11,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_index",
+          "concurrently": false,
+          "loc": {
+            "file": "handwritten/builder/optional-names.ts",
+            "line": 19,
+            "column": 13
+          },
+          "origin": "builder",
+          "conditional": true
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "dropIndex(): Could not resolve option \"isConcurrent\"",
+          "loc": {
+            "file": "handwritten/builder/optional-names.ts",
+            "line": 22,
+            "column": 11
+          },
+          "origin": "builder",
+          "conditional": true
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "createIndex(): Could not resolve option \"isUnique\"",
+          "loc": {
+            "file": "handwritten/builder/optional-names.ts",
+            "line": 23,
+            "column": 11
+          },
+          "origin": "builder",
+          "conditional": true
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "OptionalNames1727200000027"
+    }
+  }
+]

@@ -58,7 +58,7 @@ export type OperationBody =
   | { kind: 'validate_constraint'; table: TableRef; name: string }
   | { kind: 'drop_constraint'; table: TableRef; name?: string; type?: ConstraintType }
   | { kind: 'create_index'; table: TableRef; name?: string; unique: boolean; concurrently: boolean }
-  | { kind: 'drop_index'; name: string; concurrently: boolean }
+  | { kind: 'drop_index'; name?: string; concurrently: boolean }
   | { kind: 'truncate'; tables: TableRef[] }
   | { kind: 'enum_rename'; from: string; to: string }
   | { kind: 'enum_create'; name: string }

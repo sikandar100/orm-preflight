@@ -113,8 +113,8 @@
       {
         "kind": "operation",
         "operation": {
-          "kind": "unanalyzable",
-          "reason": "dropIndex(): Could not resolve the index name",
+          "kind": "drop_index",
+          "concurrently": false,
           "loc": {
             "file": "handwritten/builder/unresolved.ts",
             "line": 17,

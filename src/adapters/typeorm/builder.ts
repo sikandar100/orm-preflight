@@ -90,13 +90,18 @@ export const BUILDER_METHODS: Readonly<Record<string, Handler>> = {
     tableArg(table, 'table')
     if (index?.kind === 'string')
       return [{ kind: 'drop_index', name: index.value, concurrently: false }]
+    if (index?.kind !== 'object') {
+      // An index that cannot be resolved usually comes from getTable(), for example
+      // `table.indices.find(...)`. Indexes read from the database never have isConcurrent
+      // set, so TypeORM drops them without CONCURRENTLY.
+      return [{ kind: 'drop_index', concurrently: false }]
+    }
     const o = object(index, 'index')
     return [
-      {
-        kind: 'drop_index',
-        name: str(o.props.get('name'), 'index name') ?? fail('Could not resolve the index name'),
-        concurrently: bool(o, 'isConcurrent'),
-      },
+      withName(
+        { kind: 'drop_index', concurrently: bool(o, 'isConcurrent') },
+        optional(o.props.get('name')),
+      ),
     ]
   },
   createForeignKey: ([table, fk]) => [foreignKey(tableArg(table, 'table'), fk)],
@@ -117,13 +122,13 @@ export const BUILDER_METHODS: Readonly<Record<string, Handler>> = {
         type: 'primary_key',
         notValid: false,
       },
-      optionalName(name),
+      optional(name),
     ),
   ],
   dropPrimaryKey: ([table, name]) => [
     withName(
       { kind: 'drop_constraint', table: tableArg(table, 'table'), type: 'primary_key' },
-      optionalName(name),
+      optional(name),
     ),
   ],
   createUniqueConstraint: ([table, unique]) => [
@@ -206,8 +211,12 @@ function nameOf(v: Value | undefined, what: string): string {
   return name ?? fail(`The ${what} has no name`)
 }
 
-function optionalName(v: Value | undefined): string | undefined {
-  return str(v, 'constraint name')
+/**
+ * A name that only labels an object (index, constraint, foreign key). When it cannot be
+ * resolved, for example because it is an imported constant, the operation is still known.
+ */
+function optional(v: Value | undefined): string | undefined {
+  return v?.kind === 'string' ? v.value : undefined
 }
 
 function withName<T extends object>(op: T, name: string | undefined): T & { name?: string } {
@@ -393,17 +402,17 @@ function createIndex(table: TableRef, index: Value | undefined): OperationBody {
       unique: bool(o, 'isUnique'),
       concurrently: bool(o, 'isConcurrent'),
     },
-    str(o.props.get('name'), 'index name'),
+    optional(o.props.get('name')),
   )
 }
 
 function foreignKey(table: TableRef, fk: Value | undefined): OperationBody {
   const o = object(fk, 'foreign key')
-  const referenced = str(o.props.get('referencedTableName'), 'referenced table')
-  const schema = str(o.props.get('referencedSchema'), 'referenced schema')
+  const referenced = optional(o.props.get('referencedTableName'))
+  const schema = optional(o.props.get('referencedSchema'))
   const op: Extract<OperationBody, { kind: 'add_constraint' }> = withName(
     { kind: 'add_constraint', table, type: 'foreign_key', notValid: false },
-    str(o.props.get('name'), 'foreign key name'),
+    optional(o.props.get('name')),
   )
   if (referenced !== undefined) {
     const ref = parseTableName(referenced)
@@ -420,7 +429,7 @@ function constraint(
   const o = object(v, type === 'unique' ? 'unique constraint' : 'check constraint')
   return withName(
     { kind: 'add_constraint', table, type, notValid: false },
-    str(o.props.get('name'), 'constraint name'),
+    optional(o.props.get('name')),
   )
 }
 

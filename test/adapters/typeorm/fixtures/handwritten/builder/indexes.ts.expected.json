@@ -95,8 +95,8 @@
         "kind": "operation",
         "operation": {
           "kind": "drop_index",
-          "name": "IDX_older",
           "concurrently": true,
+          "name": "IDX_older",
           "loc": {
             "file": "handwritten/builder/indexes.ts",
             "line": 17,
