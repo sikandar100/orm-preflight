@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "orm-preflight configuration",
+  "description": "Configuration for orm-preflight. JSON only, so a pull request cannot run code through the config.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path or URL of this schema, for editor autocomplete."
+    },
+    "orm": {
+      "enum": ["typeorm"],
+      "default": "typeorm",
+      "description": "The ORM whose migrations are checked."
+    },
+    "dialect": {
+      "enum": ["postgres", "mysql"],
+      "default": "postgres",
+      "description": "The database the migrations run on."
+    },
+    "postgresVersion": {
+      "type": "integer",
+      "minimum": 12,
+      "default": 16,
+      "description": "The PostgreSQL major version the migrations run on. Some advice depends on it."
+    },
+    "migrations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Globs of migration files, relative to the project root. Defaults to the ORM's usual location."
+    },
+    "startAfter": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "A migration timestamp. Migrations at or before it are ignored, so existing projects can adopt orm-preflight without fixing their history."
+    },
+    "defaultSchema": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The schema of tables named without one. Defaults to public for PostgreSQL."
+    },
+    "typeorm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transactionMode": {
+          "enum": ["all", "each", "none"],
+          "default": "all",
+          "description": "The transaction mode your migrations actually run with: the DataSource option migrationsTransactionMode, or the -t flag of \"typeorm migration:run\" when you pass one."
+        }
+      },
+      "description": "Options for the TypeORM adapter."
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Severity overrides, by rule ID: error, warn, or off.",
+      "properties": {
+        "no-drop-and-recreate-column": {
+          "$ref": "#/definitions/severity"
+        },
+        "possible-rename-data-loss": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-drop-column": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-drop-table": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-truncate": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-rename-column": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-rename-table": {
+          "$ref": "#/definitions/severity"
+        },
+        "unanalyzable-statement": {
+          "$ref": "#/definitions/severity"
+        },
+        "invalid-suppression": {
+          "$ref": "#/definitions/severity"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "severity": {
+      "enum": ["error", "warn", "off"]
+    }
+  }
+}
