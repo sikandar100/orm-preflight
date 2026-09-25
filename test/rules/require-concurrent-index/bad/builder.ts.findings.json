@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "require-concurrent-index",
+    "severity": "error",
+    "category": "locking",
+    "file": "require-concurrent-index/bad/builder.ts",
+    "line": 5,
+    "column": 11,
+    "message": "Creating index \"IDX_email\" without CONCURRENTLY blocks writes to \"users\" until the build finishes.",
+    "why": "CREATE INDEX holds a SHARE lock on the table for the whole build, which blocks INSERT, UPDATE, and DELETE. On a large table that can take minutes.",
+    "safeAlternative": "Use CREATE INDEX CONCURRENTLY (or isConcurrent: true on a TableIndex) in a migration that runs outside a transaction: with TypeORM, set transaction = false on the migration and migrationsTransactionMode: \"each\" in the DataSource. If a concurrent build fails it leaves an INVALID index; drop it before retrying.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index.md",
+    "suppressed": null
+  }
+]

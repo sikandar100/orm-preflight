@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "require-not-valid-foreign-key",
+    "severity": "error",
+    "category": "locking",
+    "file": "require-not-valid-foreign-key/bad/builder.ts",
+    "line": 5,
+    "column": 11,
+    "message": "Adding a foreign key on \"posts\" checks every row while blocking writes to \"posts\" and \"users\".",
+    "why": "Adding a foreign key validates every existing row while holding a SHARE ROW EXCLUSIVE lock on both tables, which blocks INSERT, UPDATE, and DELETE until the check finishes.",
+    "safeAlternative": "Add the constraint with NOT VALID, then run ALTER TABLE ... VALIDATE CONSTRAINT in a separate migration. VALIDATE holds only a SHARE UPDATE EXCLUSIVE lock, which does not block writes. TypeORM builder calls cannot add NOT VALID, so use queryRunner.query().",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-foreign-key.md",
+    "suppressed": null
+  }
+]

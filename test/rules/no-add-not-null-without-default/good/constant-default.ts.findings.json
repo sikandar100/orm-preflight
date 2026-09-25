@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-volatile-default",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-add-not-null-without-default/good/constant-default.ts",
+    "line": 6,
+    "column": 30,
+    "message": "\"users\".\"id2\" is added as an identity column, which rewrites the whole \"users\" table while blocking reads and writes.",
+    "why": "The new value must be computed for every existing row, so PostgreSQL rewrites the table under an ACCESS EXCLUSIVE lock. A constant default, or a stable one such as now(), does not need a rewrite.",
+    "safeAlternative": "Add a plain nullable column, fill it in batches (for identity: attach a sequence as the default first), and switch the application to it. Avoid adding computed columns to large tables in place.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md",
+    "suppressed": null
+  }
+]

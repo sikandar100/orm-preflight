@@ -11,5 +11,18 @@
     "safeAlternative": "Remove the property from the entity and deploy that first. Drop the column in a later release, then suppress this finding with a reason.",
     "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md",
     "suppressed": null
+  },
+  {
+    "ruleId": "no-volatile-default",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-drop-and-recreate-column/good/generated-column.ts",
+    "line": 6,
+    "column": 30,
+    "message": "\"exif\".\"searchable\" is added as a stored generated column, which rewrites the whole \"exif\" table while blocking reads and writes.",
+    "why": "The new value must be computed for every existing row, so PostgreSQL rewrites the table under an ACCESS EXCLUSIVE lock. A constant default, or a stable one such as now(), does not need a rewrite.",
+    "safeAlternative": "Add a plain nullable column, fill it in batches (for identity: attach a sequence as the default first), and switch the application to it. Avoid adding computed columns to large tables in place.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md",
+    "suppressed": null
   }
 ]
