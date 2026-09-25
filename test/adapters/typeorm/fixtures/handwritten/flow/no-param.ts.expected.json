@@ -1,0 +1,15 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/no-param.ts",
+    "id": "NoParam1727200000025",
+    "timestamp": 1727200000025,
+    "runsInTransaction": true,
+    "up": [],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "NoParam1727200000025"
+    }
+  }
+]

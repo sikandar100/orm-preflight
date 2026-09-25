@@ -1,0 +1,35 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/decorators.ts",
+    "id": "Decorated1727200000043",
+    "timestamp": 1727200000043,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS decorated",
+        "loc": {
+          "file": "handwritten/classes/decorators.ts",
+          "line": 14,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/decorators.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 14,
+              "column": 41
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Decorated1727200000043"
+    }
+  }
+]

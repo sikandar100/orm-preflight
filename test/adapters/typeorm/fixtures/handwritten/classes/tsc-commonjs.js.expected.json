@@ -1,0 +1,57 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/tsc-commonjs.js",
+    "id": "CompiledMigration1727200000036",
+    "timestamp": 1727200000036,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"compiled\" integer",
+        "loc": {
+          "file": "handwritten/classes/tsc-commonjs.js",
+          "line": 20,
+          "column": 19
+        },
+        "map": {
+          "file": "handwritten/classes/tsc-commonjs.js",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 20,
+              "column": 38
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "INSERT INTO \"users\" DEFAULT VALUES",
+        "loc": {
+          "file": "handwritten/classes/tsc-commonjs.js",
+          "line": 22,
+          "column": 23
+        },
+        "map": {
+          "file": "handwritten/classes/tsc-commonjs.js",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 22,
+              "column": 42
+            }
+          ]
+        },
+        "conditional": true
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "CompiledMigration1727200000036",
+      "name": "CompiledMigration1727200000036",
+      "declaredTransaction": false
+    }
+  }
+]

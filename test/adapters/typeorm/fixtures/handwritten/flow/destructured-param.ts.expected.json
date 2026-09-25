@@ -1,0 +1,29 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/destructured-param.ts",
+    "id": "DestructuredParam1727200000024",
+    "timestamp": 1727200000024,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "The up() parameter is destructured, so QueryRunner calls cannot be followed",
+          "loc": {
+            "file": "handwritten/flow/destructured-param.ts",
+            "line": 4,
+            "column": 19
+          },
+          "origin": "builder"
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DestructuredParam1727200000024"
+    }
+  }
+]

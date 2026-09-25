@@ -1,0 +1,120 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/unresolvable.ts",
+    "id": "Unresolvable1727200000003",
+    "timestamp": 1727200000003,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL is built from a template literal with ${...} expressions",
+          "loc": {
+            "file": "handwritten/strings/unresolvable.ts",
+            "line": 14,
+            "column": 11
+          },
+          "origin": "sql"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL comes from \"mutable\", which is not a constant string in this file",
+          "loc": {
+            "file": "handwritten/strings/unresolvable.ts",
+            "line": 15,
+            "column": 11
+          },
+          "origin": "sql"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL comes from \"SHARED_SQL\", which is imported from another file",
+          "loc": {
+            "file": "handwritten/strings/unresolvable.ts",
+            "line": 16,
+            "column": 11
+          },
+          "origin": "sql"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL comes from a function call",
+          "loc": {
+            "file": "handwritten/strings/unresolvable.ts",
+            "line": 17,
+            "column": 11
+          },
+          "origin": "sql"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL comes from a property read",
+          "loc": {
+            "file": "handwritten/strings/unresolvable.ts",
+            "line": 18,
+            "column": 11
+          },
+          "origin": "sql"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "query() is called without SQL",
+          "loc": {
+            "file": "handwritten/strings/unresolvable.ts",
+            "line": 19,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL is built by an expression the extractor cannot follow",
+          "loc": {
+            "file": "handwritten/strings/unresolvable.ts",
+            "line": 20,
+            "column": 11
+          },
+          "origin": "sql"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL comes from \"MODULE_SQL\", which is not a constant string in this file",
+          "loc": {
+            "file": "handwritten/strings/unresolvable.ts",
+            "line": 23,
+            "column": 13
+          },
+          "origin": "sql"
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Unresolvable1727200000003"
+    }
+  }
+]

@@ -1,0 +1,172 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/unresolved.ts",
+    "id": "Unresolved1727200000017",
+    "timestamp": 1727200000017,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "Unsupported QueryRunner method \"createView\"",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 9,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "addColumn(): Could not resolve the column (it comes from a function call)",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 10,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "addColumn(): Could not resolve every option of the column (spread or computed keys)",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 11,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "addColumn(): Could not resolve option \"isNullable\"",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 12,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "addColumn(): Could not resolve option \"default\"",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 13,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "dropColumn(): Could not resolve the table (\"tableName\" is not a constant in this file)",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 14,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "dropColumns(): Could not resolve the column (it uses spread syntax)",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 15,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "addColumns(): Could not resolve the columns list",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 16,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "dropIndex(): Could not resolve the index name",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 17,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "addColumn(): The column has no name",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 18,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "dropColumn(): Could not resolve the column (it uses spread syntax)",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 19,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "Unsupported QueryRunner method \"release\"",
+          "loc": {
+            "file": "handwritten/builder/unresolved.ts",
+            "line": 20,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Unresolved1727200000017"
+    }
+  }
+]

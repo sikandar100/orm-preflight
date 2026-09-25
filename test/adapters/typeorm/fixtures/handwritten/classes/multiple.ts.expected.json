@@ -1,0 +1,68 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/multiple.ts",
+    "id": "First1727200000030",
+    "timestamp": 1727200000030,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS first",
+        "loc": {
+          "file": "handwritten/classes/multiple.ts",
+          "line": 5,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/multiple.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "First1727200000030"
+    }
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/multiple.ts",
+    "id": "Second1727200000032",
+    "timestamp": 1727200000032,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 3 AS second",
+        "loc": {
+          "file": "handwritten/classes/multiple.ts",
+          "line": 27,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/multiple.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 27,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Second1727200000032"
+    }
+  }
+]

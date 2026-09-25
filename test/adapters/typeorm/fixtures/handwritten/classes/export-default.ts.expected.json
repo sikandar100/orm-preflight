@@ -1,0 +1,35 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/export-default.ts",
+    "id": "ExportDefault1727200000033",
+    "timestamp": 1727200000033,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS default_export",
+        "loc": {
+          "file": "handwritten/classes/export-default.ts",
+          "line": 5,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/export-default.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "ExportDefault1727200000033"
+    }
+  }
+]

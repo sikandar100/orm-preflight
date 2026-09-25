@@ -1,0 +1,68 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/compiled-helpers.js",
+    "id": "HelperImport1727200000044",
+    "timestamp": 1727200000044,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS tslib_awaiter",
+        "loc": {
+          "file": "handwritten/classes/compiled-helpers.js",
+          "line": 19,
+          "column": 19
+        },
+        "map": {
+          "file": "handwritten/classes/compiled-helpers.js",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 19,
+              "column": 38
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "HelperImport1727200000044",
+      "name": "HelperImport1727200000044",
+      "declaredTransaction": "unknown"
+    }
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/compiled-helpers.js",
+    "id": "compiled-helpers",
+    "timestamp": null,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 2 AS anonymous_export",
+        "loc": {
+          "file": "handwritten/classes/compiled-helpers.js",
+          "line": 26,
+          "column": 15
+        },
+        "map": {
+          "file": "handwritten/classes/compiled-helpers.js",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 26,
+              "column": 34
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {}
+  }
+]

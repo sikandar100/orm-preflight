@@ -1,0 +1,392 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/conditionals.ts",
+    "id": "Conditionals1727200000020",
+    "timestamp": 1727200000020,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS always",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 8,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 8,
+              "column": 30
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 2 AS in_if",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 10,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 10,
+              "column": 32
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 3 AS in_else",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 12,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 12,
+              "column": 32
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 4 AS ternary",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 14,
+          "column": 18
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 14,
+              "column": 37
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 5 AS and_right",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 15,
+          "column": 20
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 15,
+              "column": 39
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 6 AS or_right",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 16,
+          "column": 54
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 16,
+              "column": 73
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 7 AS in_switch",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 19,
+          "column": 15
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 19,
+              "column": 34
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 8 AS in_for",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 24,
+          "column": 39
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 24,
+              "column": 58
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 9 AS in_for_of",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 25,
+          "column": 37
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 25,
+              "column": 56
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 10 AS in_for_in",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 26,
+          "column": 36
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 26,
+              "column": 55
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 11 AS in_while",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 27,
+          "column": 24
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 27,
+              "column": 43
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 12 AS in_do_while",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 29,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 29,
+              "column": 32
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 13 AS in_try",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 32,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 32,
+              "column": 32
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 14 AS in_catch",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 34,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 34,
+              "column": 32
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 15 AS in_finally",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 36,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 36,
+              "column": 32
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 16 AS in_callback",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 38,
+          "column": 43
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 38,
+              "column": 62
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 17 AS in_function_callback",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 40,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 40,
+              "column": 32
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 18 AS still_always",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 42,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 42,
+              "column": 30
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 19 AS after_early_return",
+        "loc": {
+          "file": "handwritten/flow/conditionals.ts",
+          "line": 44,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/conditionals.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 44,
+              "column": 30
+            }
+          ]
+        },
+        "conditional": true
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Conditionals1727200000020"
+    }
+  }
+]

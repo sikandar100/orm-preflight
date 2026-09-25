@@ -1,0 +1,29 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/transaction-none.ts",
+    "id": "DefaultNone1727200000052",
+    "timestamp": 1727200000052,
+    "runsInTransaction": false,
+    "up": [],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DefaultNone1727200000052"
+    }
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/transaction-none.ts",
+    "id": "OptIn1727200000053",
+    "timestamp": 1727200000053,
+    "runsInTransaction": true,
+    "up": [],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "OptIn1727200000053",
+      "declaredTransaction": true
+    }
+  }
+]

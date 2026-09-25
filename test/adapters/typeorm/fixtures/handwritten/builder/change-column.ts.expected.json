@@ -1,0 +1,219 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/change-column.ts",
+    "id": "ChangeColumn1727200000012",
+    "timestamp": 1727200000012,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "name",
+          "recreates": "unknown",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 8,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "name",
+          "recreates": "yes",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 10,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "email",
+          "recreates": "no",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 16,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "rename_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "email",
+          "to": "email_address",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 16,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "phone",
+          "recreates": "no",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 22,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "set_not_null",
+          "table": {
+            "name": "users"
+          },
+          "column": "phone",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 22,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "unique",
+          "notValid": false,
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 22,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "code",
+          "recreates": "yes",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 28,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "orders"
+          },
+          "column": "total",
+          "recreates": "yes",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 34,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "tags",
+          "recreates": "yes",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 40,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "title",
+          "recreates": "unknown",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 46,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "typeorm.change_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "a",
+          "recreates": "yes",
+          "loc": {
+            "file": "handwritten/builder/change-column.ts",
+            "line": 51,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "ChangeColumn1727200000012"
+    }
+  }
+]

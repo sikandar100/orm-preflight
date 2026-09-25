@@ -1,0 +1,36 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/esm.mjs",
+    "id": "EsmMigration1727200000040",
+    "timestamp": 1727200000040,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"esm\" integer",
+        "loc": {
+          "file": "handwritten/classes/esm.mjs",
+          "line": 5,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/esm.mjs",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "EsmMigration1727200000040",
+      "name": "EsmMigration1727200000040"
+    }
+  }
+]
