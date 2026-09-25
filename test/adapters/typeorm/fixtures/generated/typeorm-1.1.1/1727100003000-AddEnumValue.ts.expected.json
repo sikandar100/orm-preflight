@@ -1,0 +1,36 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+    "id": "AddEnumValue1727100003000",
+    "timestamp": 1727100003000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TYPE \"public\".\"users_status_enum\" ADD VALUE 'banned'",
+        "loc": {
+          "file": "generated/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddEnumValue1727100003000",
+      "name": "AddEnumValue1727100003000"
+    }
+  }
+]
