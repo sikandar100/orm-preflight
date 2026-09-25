@@ -65,13 +65,34 @@ export function canonicalPostgresType(name: string): string {
  * Qualified user types (`"public"."status_enum"`) keep their schema and lose their quotes.
  */
 export function normalizePostgresType(type: string): string {
-  const match = /^(.*?)\s*(\(\s*[^)]*\))?\s*((?:\[\s*\d*\s*\])*)$/.exec(type.trim())
-  if (!match) return type
-  const [, base = '', mods = '', arrays = ''] = match
-  const name = base.includes('"') ? base.replace(/"/g, '') : canonicalPostgresType(base)
-  const modifiers = mods.replace(/\s+/g, '')
-  const dims = (arrays.match(/\[/g) ?? []).length
+  // Scans from the end instead of using one regular expression: type strings come from
+  // untrusted migration files, and a backtracking pattern could be made to run for hours.
+  let rest = type.trim()
+
+  let dims = 0
+  while (rest.endsWith(']')) {
+    const open = rest.lastIndexOf('[')
+    if (open === -1 || !isDigits(rest.slice(open + 1, -1).trim())) break
+    dims++
+    rest = rest.slice(0, open).trimEnd()
+  }
+
+  let modifiers = ''
+  if (rest.endsWith(')')) {
+    const open = rest.lastIndexOf('(')
+    if (open !== -1) {
+      modifiers = `(${rest.slice(open + 1, -1).replace(/\s+/g, '')})`
+      rest = rest.slice(0, open).trimEnd()
+    }
+  }
+
+  const name = rest.includes('"') ? rest.replace(/"/g, '') : canonicalPostgresType(rest)
   return `${name}${modifiers}${'[]'.repeat(dims)}`
+}
+
+function isDigits(text: string): boolean {
+  for (const ch of text) if (ch < '0' || ch > '9') return false
+  return true
 }
 
 /** MySQL type names are case-insensitive; lowercase them and remove spaces in modifiers. */

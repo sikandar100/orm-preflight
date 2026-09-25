@@ -25,6 +25,23 @@ describe('normalizePostgresType', () => {
   })
 })
 
+describe('regular expression safety', () => {
+  // CodeQL flagged exponential backtracking on strings like '[ ][ ][ ...'. Type strings
+  // come from untrusted migration files, so every normalizer must stay linear.
+  it.each([
+    ['[', `${' ][ '.repeat(20_000)}x`],
+    ['(', `${' '.repeat(50_000)}x`],
+    ['int', `${'[ '.repeat(20_000)}x`],
+    ['x', `${' (('.repeat(20_000)}x`],
+  ])('handles %j followed by a long adversarial suffix quickly', (prefix, suffix) => {
+    const input = prefix + suffix
+    const started = performance.now()
+    normalizePostgresType(input)
+    normalizeMysqlType(input)
+    expect(performance.now() - started).toBeLessThan(500)
+  })
+})
+
 describe('normalizeMysqlType', () => {
   it.each([
     ['VARCHAR(255)', 'varchar(255)'],
