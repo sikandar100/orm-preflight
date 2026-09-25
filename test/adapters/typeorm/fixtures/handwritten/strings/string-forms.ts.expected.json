@@ -1,0 +1,280 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/string-forms.ts",
+    "id": "StringForms1727200000001",
+    "timestamp": 1727200000001,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"a\" integer",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 12,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 12,
+              "column": 30
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"b\" integer",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 13,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 13,
+              "column": 30
+            },
+            {
+              "offset": 13,
+              "line": 13,
+              "column": 44
+            },
+            {
+              "offset": 19,
+              "line": 13,
+              "column": 51
+            },
+            {
+              "offset": 25,
+              "line": 13,
+              "column": 58
+            },
+            {
+              "offset": 27,
+              "line": 13,
+              "column": 61
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"c\" integer",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 14,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 14,
+              "column": 30
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"d\" integer",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 15,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 16,
+              "column": 8
+            },
+            {
+              "offset": 20,
+              "line": 17,
+              "column": 10
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"email\" text",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 19,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 20
+            },
+            {
+              "offset": 12,
+              "line": 3,
+              "column": 16
+            },
+            {
+              "offset": 19,
+              "line": 5,
+              "column": 45
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"email\" text",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 20,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 20
+            },
+            {
+              "offset": 12,
+              "line": 3,
+              "column": 16
+            },
+            {
+              "offset": 19,
+              "line": 5,
+              "column": 45
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "CREATE INDEX \"IDX_a\" ON \"users\" (\"a\")",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 22,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 21,
+              "column": 20
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "\n      ALTER TABLE \"users\" ADD \"e\" integer;\n      ALTER TABLE \"users\" ADD \"f\" integer;\n    ",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 23,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 23,
+              "column": 30
+            },
+            {
+              "offset": 1,
+              "line": 24,
+              "column": 1
+            },
+            {
+              "offset": 44,
+              "line": 25,
+              "column": 1
+            },
+            {
+              "offset": 87,
+              "line": 26,
+              "column": 1
+            }
+          ]
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL is built from a template literal with ${...} expressions",
+          "loc": {
+            "file": "handwritten/strings/string-forms.ts",
+            "line": 27,
+            "column": 11
+          },
+          "origin": "sql"
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 1",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 28,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 28,
+              "column": 38
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 2",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 29,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 29,
+              "column": 31
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "StringForms1727200000001",
+      "name": "StringForms1727200000001"
+    }
+  }
+]

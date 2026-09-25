@@ -1,0 +1,69 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/export-specifiers.ts",
+    "id": "Specified1727200000034",
+    "timestamp": 1727200000034,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS export_specifier",
+        "loc": {
+          "file": "handwritten/classes/export-specifiers.ts",
+          "line": 5,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/export-specifiers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Specified1727200000034"
+    }
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/export-specifiers.ts",
+    "id": "Expression1727200000035",
+    "timestamp": 1727200000035,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 2 AS exported_class_expression",
+        "loc": {
+          "file": "handwritten/classes/export-specifiers.ts",
+          "line": 15,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/export-specifiers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 15,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Expression1727200000035",
+      "name": "Expression1727200000035"
+    }
+  }
+]

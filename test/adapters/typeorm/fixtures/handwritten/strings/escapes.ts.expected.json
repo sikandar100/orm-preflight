@@ -1,0 +1,147 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/escapes.ts",
+    "id": "Escapes1727200000002",
+    "timestamp": 1727200000002,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "COMMENT ON COLUMN \"users\".\"bio\" IS 'uses ` and ${x} and \\ here'",
+        "loc": {
+          "file": "handwritten/strings/escapes.ts",
+          "line": 5,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/escapes.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 30
+            },
+            {
+              "offset": 42,
+              "line": 5,
+              "column": 73
+            },
+            {
+              "offset": 48,
+              "line": 5,
+              "column": 80
+            },
+            {
+              "offset": 57,
+              "line": 5,
+              "column": 90
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"note\" text DEFAULT E'line\\nbreak'",
+        "loc": {
+          "file": "handwritten/strings/escapes.ts",
+          "line": 6,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/escapes.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 6,
+              "column": 30
+            },
+            {
+              "offset": 46,
+              "line": 6,
+              "column": 77
+            },
+            {
+              "offset": 51,
+              "line": 6,
+              "column": 83
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 'été', 'A', '😀' AS x",
+        "loc": {
+          "file": "handwritten/strings/escapes.ts",
+          "line": 7,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/escapes.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 30
+            },
+            {
+              "offset": 9,
+              "line": 7,
+              "column": 44
+            },
+            {
+              "offset": 11,
+              "line": 7,
+              "column": 51
+            },
+            {
+              "offset": 16,
+              "line": 7,
+              "column": 59
+            },
+            {
+              "offset": 21,
+              "line": 7,
+              "column": 63
+            },
+            {
+              "offset": 22,
+              "line": 7,
+              "column": 72
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS continued",
+        "loc": {
+          "file": "handwritten/strings/escapes.ts",
+          "line": 8,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/escapes.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 8,
+              "column": 30
+            },
+            {
+              "offset": 9,
+              "line": 9,
+              "column": 1
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Escapes1727200000002"
+    }
+  }
+]

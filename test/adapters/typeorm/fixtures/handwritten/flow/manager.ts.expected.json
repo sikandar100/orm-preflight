@@ -1,0 +1,119 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/manager.ts",
+    "id": "Manager1727200000022",
+    "timestamp": 1727200000022,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "UPDATE \"users\" SET \"active\" = true",
+        "loc": {
+          "file": "handwritten/flow/manager.ts",
+          "line": 7,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/manager.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 38
+            }
+          ]
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/manager.ts",
+            "line": 8,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/manager.ts",
+            "line": 9,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/manager.ts",
+            "line": 10,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/manager.ts",
+            "line": 11,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/manager.ts",
+            "line": 12,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 2 AS postgres_only",
+        "loc": {
+          "file": "handwritten/flow/manager.ts",
+          "line": 16,
+          "column": 27
+        },
+        "map": {
+          "file": "handwritten/flow/manager.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 16,
+              "column": 46
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Manager1727200000022"
+    }
+  }
+]

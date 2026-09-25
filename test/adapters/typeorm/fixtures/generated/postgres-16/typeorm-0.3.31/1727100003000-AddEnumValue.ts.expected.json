@@ -1,0 +1,93 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+    "id": "AddEnumValue1727100003000",
+    "timestamp": 1727100003000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TYPE \"public\".\"users_status_enum\" RENAME TO \"users_status_enum_old\"",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "CREATE TYPE \"public\".\"users_status_enum\" AS ENUM('active', 'inactive', 'banned')",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "line": 8,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 8,
+              "column": 34
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ALTER COLUMN \"status\" TYPE \"public\".\"users_status_enum\" USING \"status\"::\"text\"::\"public\".\"users_status_enum\"",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "line": 9,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 9,
+              "column": 34
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "DROP TYPE \"public\".\"users_status_enum_old\"",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "line": 10,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100003000-AddEnumValue.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 10,
+              "column": 34
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddEnumValue1727100003000",
+      "name": "AddEnumValue1727100003000"
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-0.3.31/1727100007000-AddNotNullColumn.ts",
+    "id": "AddNotNullColumn1727100007000",
+    "timestamp": 1727100007000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE `users` ADD `nickname` varchar(255) NOT NULL",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-0.3.31/1727100007000-AddNotNullColumn.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/mysql-8.4/typeorm-0.3.31/1727100007000-AddNotNullColumn.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            },
+            {
+              "offset": 13,
+              "line": 7,
+              "column": 48
+            },
+            {
+              "offset": 19,
+              "line": 7,
+              "column": 55
+            },
+            {
+              "offset": 25,
+              "line": 7,
+              "column": 62
+            },
+            {
+              "offset": 34,
+              "line": 7,
+              "column": 72
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddNotNullColumn1727100007000",
+      "name": "AddNotNullColumn1727100007000"
+    }
+  }
+]

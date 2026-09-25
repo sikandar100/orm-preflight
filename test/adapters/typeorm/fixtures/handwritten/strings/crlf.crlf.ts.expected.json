@@ -1,0 +1,69 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/crlf.crlf.ts",
+    "id": "Crlf1727200000005",
+    "timestamp": 1727200000005,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "\n      ALTER TABLE \"users\" ADD \"a\" integer;\n      ALTER TABLE \"users\" ADD \"b\" integer;\n    ",
+        "loc": {
+          "file": "handwritten/strings/crlf.crlf.ts",
+          "line": 5,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/crlf.crlf.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 30
+            },
+            {
+              "offset": 1,
+              "line": 6,
+              "column": 1
+            },
+            {
+              "offset": 44,
+              "line": 7,
+              "column": 1
+            },
+            {
+              "offset": 87,
+              "line": 8,
+              "column": 1
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"c\" integer",
+        "loc": {
+          "file": "handwritten/strings/crlf.crlf.ts",
+          "line": 9,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/crlf.crlf.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 9,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Crlf1727200000005"
+    }
+  }
+]

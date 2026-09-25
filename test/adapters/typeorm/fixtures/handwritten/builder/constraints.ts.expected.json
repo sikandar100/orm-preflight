@@ -1,0 +1,281 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/constraints.ts",
+    "id": "Constraints1727200000015",
+    "timestamp": 1727200000015,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "posts"
+          },
+          "type": "foreign_key",
+          "notValid": false,
+          "references": {
+            "name": "users"
+          },
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 5,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "comments"
+          },
+          "type": "foreign_key",
+          "notValid": false,
+          "name": "FK_comments_post",
+          "references": {
+            "schema": "content",
+            "name": "posts"
+          },
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 9,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_constraint",
+          "table": {
+            "name": "posts"
+          },
+          "type": "foreign_key",
+          "name": "FK_old",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 18,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_constraint",
+          "table": {
+            "name": "posts"
+          },
+          "type": "foreign_key",
+          "name": "FK_older",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 19,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "tags"
+          },
+          "type": "primary_key",
+          "notValid": false,
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 20,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "tags"
+          },
+          "type": "primary_key",
+          "notValid": false,
+          "name": "PK_tags",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 21,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_constraint",
+          "table": {
+            "name": "tags"
+          },
+          "type": "primary_key",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 22,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "unique",
+          "notValid": false,
+          "name": "UQ_users_email",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 23,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "unique",
+          "notValid": false,
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 24,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "unique",
+          "name": "UQ_old",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 25,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "unique",
+          "name": "UQ_older",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 26,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "check",
+          "notValid": false,
+          "name": "CHK_age",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 27,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "check",
+          "notValid": false,
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 28,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "check",
+          "name": "CHK_old",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 29,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_constraint",
+          "table": {
+            "name": "users"
+          },
+          "type": "check",
+          "name": "CHK_older",
+          "loc": {
+            "file": "handwritten/builder/constraints.ts",
+            "line": 30,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Constraints1727200000015"
+    }
+  }
+]

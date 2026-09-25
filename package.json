@@ -64,6 +64,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",
+    "@babel/types": "7.29.8",
     "@changesets/changelog-github": "1.0.1",
     "@changesets/cli": "3.0.3",
     "@commitlint/cli": "21.2.3",
@@ -90,5 +91,8 @@
   "publishConfig": {
     "access": "public",
     "provenance": true
+  },
+  "dependencies": {
+    "@babel/parser": "7.29.9"
   }
 }

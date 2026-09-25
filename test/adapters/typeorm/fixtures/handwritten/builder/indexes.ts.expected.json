@@ -1,0 +1,116 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/indexes.ts",
+    "id": "Indexes1727200000014",
+    "timestamp": 1727200000014,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "create_index",
+          "table": {
+            "name": "users"
+          },
+          "unique": false,
+          "concurrently": false,
+          "name": "IDX_email",
+          "loc": {
+            "file": "handwritten/builder/indexes.ts",
+            "line": 7,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "create_index",
+          "table": {
+            "name": "users"
+          },
+          "unique": true,
+          "concurrently": true,
+          "name": "IDX_email_unique",
+          "loc": {
+            "file": "handwritten/builder/indexes.ts",
+            "line": 8,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "create_index",
+          "table": {
+            "name": "orders"
+          },
+          "unique": false,
+          "concurrently": false,
+          "loc": {
+            "file": "handwritten/builder/indexes.ts",
+            "line": 12,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "create_index",
+          "table": {
+            "name": "orders"
+          },
+          "unique": false,
+          "concurrently": true,
+          "name": "IDX_orders_created",
+          "loc": {
+            "file": "handwritten/builder/indexes.ts",
+            "line": 12,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_index",
+          "name": "IDX_old",
+          "concurrently": false,
+          "loc": {
+            "file": "handwritten/builder/indexes.ts",
+            "line": 16,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "drop_index",
+          "concurrently": true,
+          "name": "IDX_older",
+          "loc": {
+            "file": "handwritten/builder/indexes.ts",
+            "line": 17,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Indexes1727200000014",
+      "declaredTransaction": false
+    }
+  }
+]

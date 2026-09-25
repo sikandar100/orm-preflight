@@ -1,0 +1,35 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/param-name.ts",
+    "id": "ParamName1727200000023",
+    "timestamp": 1727200000023,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS custom_param_name",
+        "loc": {
+          "file": "handwritten/flow/param-name.ts",
+          "line": 7,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/param-name.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 21
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "ParamName1727200000023"
+    }
+  }
+]

@@ -1,0 +1,55 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/postgres-16/typeorm-0.3.31/1727100001000-WidenVarchar.ts",
+    "id": "WidenVarchar1727100001000",
+    "timestamp": 1727100001000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" DROP COLUMN \"name\"",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100001000-WidenVarchar.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100001000-WidenVarchar.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"name\" character varying(255) NOT NULL",
+        "loc": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100001000-WidenVarchar.ts",
+          "line": 8,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/postgres-16/typeorm-0.3.31/1727100001000-WidenVarchar.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 8,
+              "column": 34
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "WidenVarchar1727100001000",
+      "name": "WidenVarchar1727100001000"
+    }
+  }
+]

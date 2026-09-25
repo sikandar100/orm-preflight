@@ -1,0 +1,86 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-0.3.31/1727100005000-AddRelation.ts",
+    "id": "AddRelation1727100005000",
+    "timestamp": 1727100005000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE `posts` ADD CONSTRAINT `FK_c5a322ad12a7bf95460c958e80e` FOREIGN KEY (`authorId`) REFERENCES `users`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-0.3.31/1727100005000-AddRelation.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/mysql-8.4/typeorm-0.3.31/1727100005000-AddRelation.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            },
+            {
+              "offset": 13,
+              "line": 7,
+              "column": 48
+            },
+            {
+              "offset": 19,
+              "line": 7,
+              "column": 55
+            },
+            {
+              "offset": 36,
+              "line": 7,
+              "column": 73
+            },
+            {
+              "offset": 67,
+              "line": 7,
+              "column": 105
+            },
+            {
+              "offset": 82,
+              "line": 7,
+              "column": 121
+            },
+            {
+              "offset": 91,
+              "line": 7,
+              "column": 131
+            },
+            {
+              "offset": 105,
+              "line": 7,
+              "column": 146
+            },
+            {
+              "offset": 111,
+              "line": 7,
+              "column": 153
+            },
+            {
+              "offset": 113,
+              "line": 7,
+              "column": 156
+            },
+            {
+              "offset": 116,
+              "line": 7,
+              "column": 160
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddRelation1727100005000",
+      "name": "AddRelation1727100005000"
+    }
+  }
+]

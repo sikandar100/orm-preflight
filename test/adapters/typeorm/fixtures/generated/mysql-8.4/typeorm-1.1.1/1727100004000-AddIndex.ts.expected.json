@@ -1,0 +1,66 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-1.1.1/1727100004000-AddIndex.ts",
+    "id": "AddIndex1727100004000",
+    "timestamp": 1727100004000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "CREATE INDEX `IDX_users_email` ON `users` (`email`)",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100004000-AddIndex.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100004000-AddIndex.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            },
+            {
+              "offset": 14,
+              "line": 7,
+              "column": 49
+            },
+            {
+              "offset": 30,
+              "line": 7,
+              "column": 66
+            },
+            {
+              "offset": 35,
+              "line": 7,
+              "column": 72
+            },
+            {
+              "offset": 41,
+              "line": 7,
+              "column": 79
+            },
+            {
+              "offset": 44,
+              "line": 7,
+              "column": 83
+            },
+            {
+              "offset": 50,
+              "line": 7,
+              "column": 90
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddIndex1727100004000",
+      "name": "AddIndex1727100004000"
+    }
+  }
+]

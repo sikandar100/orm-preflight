@@ -1,0 +1,26 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/syntax-error.ts",
+    "id": "syntax-error",
+    "timestamp": null,
+    "runsInTransaction": "unknown",
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "Could not parse the file: Unexpected token, expected \",\"",
+          "loc": {
+            "file": "handwritten/classes/syntax-error.ts",
+            "line": 6,
+            "column": 3
+          },
+          "origin": "builder"
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": []
+  }
+]

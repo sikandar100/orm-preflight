@@ -1,0 +1,100 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/module-exports.cjs",
+    "id": "ObjectExportA1727200000037",
+    "timestamp": 1727200000037,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS object_export_a",
+        "loc": {
+          "file": "handwritten/classes/module-exports.cjs",
+          "line": 5,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/module-exports.cjs",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "ObjectExportA1727200000037"
+    }
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/module-exports.cjs",
+    "id": "ObjectExportB1727200000038",
+    "timestamp": 1727200000038,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "add_column",
+          "table": {
+            "name": "users"
+          },
+          "column": "b",
+          "notNull": false,
+          "type": "int",
+          "loc": {
+            "file": "handwritten/classes/module-exports.cjs",
+            "line": 12,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "ObjectExportB1727200000038"
+    }
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/module-exports.cjs",
+    "id": "PropertyExport1727200000039",
+    "timestamp": 1727200000039,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "SELECT 3 AS property_export",
+        "loc": {
+          "file": "handwritten/classes/module-exports.cjs",
+          "line": 20,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/classes/module-exports.cjs",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 20,
+              "column": 30
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "PropertyExport1727200000039"
+    }
+  }
+]
