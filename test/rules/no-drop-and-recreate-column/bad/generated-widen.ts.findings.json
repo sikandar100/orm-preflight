@@ -11,5 +11,18 @@
     "safeAlternative": "Change the type in place: ALTER TABLE \"users\" ALTER COLUMN \"name\" TYPE varchar(255). Widening a varchar, or changing varchar to text, does not rewrite the table. For other type changes, add a new column, backfill it, switch the code, and drop the old column in a later release.",
     "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-and-recreate-column.md",
     "suppressed": null
+  },
+  {
+    "ruleId": "no-add-not-null-without-default",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-drop-and-recreate-column/bad/generated-widen.ts",
+    "line": 8,
+    "column": 34,
+    "message": "\"users\".\"name\" is added as NOT NULL without a default. The migration fails as soon as \"users\" has any rows.",
+    "why": "PostgreSQL fills a new column with its default for every existing row. With no default that value is NULL, which the NOT NULL constraint rejects.",
+    "safeAlternative": "Add the column as nullable, backfill it in batches, then enforce NOT NULL without a long lock (see no-set-not-null). Or add it with a constant default, which PostgreSQL 11 and later add without rewriting the table.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-add-not-null-without-default.md",
+    "suppressed": null
   }
 ]

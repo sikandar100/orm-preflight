@@ -1,0 +1,27 @@
+PostgreSQL 14.24
+create index                    | child=ShareLock | no rewrite 
+add column constant default     | child=AccessExclusiveLock | no rewrite 
+add column volatile default     | child=AccessExclusiveLock, child=ShareLock | REWRITE 
+add column now() default        | child=AccessExclusiveLock | no rewrite 
+add column serial               | child=AccessExclusiveLock, child=AccessShareLock, child=ShareLock | REWRITE 
+add column identity             | child=AccessExclusiveLock, child=AccessShareLock, child=ShareLock | REWRITE 
+add column stored generated     | child=AccessExclusiveLock, child=ShareLock | REWRITE 
+type varchar(100)->varchar(255) | child=AccessExclusiveLock | no rewrite 
+type varchar(100)->text         | child=AccessExclusiveLock | no rewrite 
+type varchar(100)->varchar      | child=AccessExclusiveLock | no rewrite 
+type varchar(100)->varchar(50)  | child=AccessExclusiveLock, child=ShareLock | REWRITE 
+type int->bigint                | child=AccessExclusiveLock, child=ShareLock | REWRITE 
+add foreign key                 | child=AccessShareLock, child=ShareRowExclusiveLock, parent=AccessShareLock, parent=RowShareLock, parent=ShareRowExclusiveLock | no rewrite 
+add foreign key NOT VALID       | child=AccessShareLock, child=ShareRowExclusiveLock, parent=AccessShareLock, parent=ShareRowExclusiveLock | no rewrite 
+validate constraint             | child=AccessShareLock, child=ShareUpdateExclusiveLock, parent=AccessShareLock, parent=RowShareLock | no rewrite 
+set not null                    | child=AccessExclusiveLock | no rewrite 
+add check NOT VALID             | child=AccessExclusiveLock | no rewrite 
+--- errors
+NOT NULL without default, rows exist | ERROR:  column "c" of relation "child" contains null values 
+CONCURRENTLY inside BEGIN            | ERROR:  CREATE INDEX CONCURRENTLY cannot run inside a transaction block 
+CONCURRENTLY in multi-statement query| ERROR:  CREATE INDEX CONCURRENTLY cannot run inside a transaction block 
+DROP INDEX CONCURRENTLY inside BEGIN | ERROR:  DROP INDEX CONCURRENTLY cannot run inside a transaction block 
+REINDEX CONCURRENTLY inside BEGIN    | ERROR:  REINDEX CONCURRENTLY cannot run inside a transaction block 
+CONCURRENTLY alone (autocommit)      | ok
+SET NOT NULL uses valid CHECK        | DEBUG:  existing constraints on column "child.email" are sufficient to prove that it does not contain nulls
+

@@ -12,19 +12,32 @@ import { lintSources } from '../../src/lint.js'
  * reviewed snapshot next to it. An optional first line sets the config:
  * `// fixture: {"dialect":"mysql","rules":{...}}`
  */
-const root = fileURLToPath(new URL('./', import.meta.url))
+const roots = [
+  fileURLToPath(new URL('./', import.meta.url)),
+  // TypeORM adapter rules: test/adapters/typeorm/rules/<name>/{bad,good} for typeorm/<name>.
+  fileURLToPath(new URL('../adapters/typeorm/rules/', import.meta.url)),
+]
+const rootOf = new Map<string, string>()
 
-const cases = readdirSync(root)
-  .filter((ruleId) => statSync(path.join(root, ruleId)).isDirectory())
-  .flatMap((ruleId) =>
-    (['bad', 'good'] as const).flatMap((kind) => {
-      const dir = path.join(root, ruleId, kind)
-      const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.ts')) : []
-      return files.sort().map((file) => ({ ruleId, kind, file: `${ruleId}/${kind}/${file}` }))
+const cases = roots.flatMap((root) =>
+  (existsSync(root) ? readdirSync(root) : [])
+    .filter((dir) => statSync(path.join(root, dir)).isDirectory())
+    .flatMap((dir) => {
+      const ruleId = root === roots[0] ? dir : `typeorm/${dir}`
+      return (['bad', 'good'] as const).flatMap((kind) => {
+        const folder = path.join(root, dir, kind)
+        const files = existsSync(folder) ? readdirSync(folder).filter((f) => f.endsWith('.ts')) : []
+        return files.sort().map((file) => {
+          const fixture = `${dir}/${kind}/${file}`
+          rootOf.set(fixture, root)
+          return { ruleId, kind, file: fixture }
+        })
+      })
     }),
-  )
+)
 
 async function findingsFor(file: string) {
+  const root = rootOf.get(file) ?? ''
   const text = readFileSync(path.join(root, file), 'utf8')
   const header = /^\/\/ fixture: (\{.*\})/.exec(text)?.[1]
   const config = resolveConfig(
@@ -49,7 +62,7 @@ describe('rule fixtures', () => {
     if (kind === 'bad') expect(own.length).toBeGreaterThan(0)
     else expect(own).toEqual([])
     await expect(`${JSON.stringify(findings, null, 2)}\n`).toMatchFileSnapshot(
-      path.join(root, `${file}.findings.json`),
+      path.join(rootOf.get(file) ?? '', `${file}.findings.json`),
     )
   })
 })

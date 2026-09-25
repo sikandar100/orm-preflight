@@ -26,6 +26,9 @@
       }
     ],
     "downIsEmpty": false,
-    "suppressions": []
+    "suppressions": [],
+    "adapterData": {
+      "parseError": true
+    }
   }
 ]

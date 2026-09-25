@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "typeorm/transaction-override-forbidden",
+    "severity": "error",
+    "category": "correctness",
+    "file": "transaction-override-forbidden/bad/mode-all.ts",
+    "line": 3,
+    "column": 8,
+    "message": "This migration sets transaction = false, but migrations run with migrationsTransactionMode \"all\". TypeORM throws ForbiddenTransactionModeOverrideError and no pending migration runs.",
+    "why": "In transaction mode \"all\", TypeORM wraps every pending migration in one transaction and refuses to start when any of them sets its own transaction property, true or false.",
+    "safeAlternative": "Set migrationsTransactionMode: \"each\" in the DataSource and \"typeorm\": { \"transactionMode\": \"each\" } in the orm-preflight config. Or remove the transaction property from the migration.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/transaction-override-forbidden.md",
+    "suppressed": null
+  }
+]

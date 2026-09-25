@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "typeorm/invalid-migration-name",
+    "severity": "error",
+    "category": "correctness",
+    "file": "invalid-migration-name/bad/name-property.ts",
+    "line": 3,
+    "column": 8,
+    "message": "\"AddUsersEmail\" does not end with a 13-digit timestamp. TypeORM refuses to load it (\"migration name is wrong\") and no pending migration runs.",
+    "why": "TypeORM reads a migration's timestamp from the last 13 characters of its name property, or of the class name when name is not set, and throws when they are not a number.",
+    "safeAlternative": "Name the class, or set name, so it ends with the timestamp, for example AddUsersEmail1727200000000. typeorm migration:generate and migration:create do this for you.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/invalid-migration-name.md",
+    "suppressed": null
+  }
+]

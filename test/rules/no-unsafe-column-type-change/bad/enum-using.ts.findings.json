@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-unsafe-column-type-change",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-unsafe-column-type-change/bad/enum-using.ts",
+    "line": 5,
+    "column": 30,
+    "message": "Changing the type of \"users\".\"status\" to public.users_status_enum with a USING expression rewrites the whole \"users\" table while blocking reads and writes.",
+    "why": "ALTER COLUMN ... TYPE holds an ACCESS EXCLUSIVE lock and rewrites the table and its indexes, unless the old and new types store values the same way (such as a longer varchar, or varchar to text).",
+    "safeAlternative": "Expand and contract: add a column with the new type, backfill it in batches, switch the code to it, and drop the old column in a later release.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-unsafe-column-type-change.md",
+    "suppressed": null
+  }
+]

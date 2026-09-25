@@ -1,0 +1,28 @@
+[
+  {
+    "ruleId": "concurrent-index-transaction",
+    "severity": "error",
+    "category": "locking",
+    "file": "concurrent-index-transaction/bad/each-without-opt-out.ts",
+    "line": 6,
+    "column": 30,
+    "message": "CREATE INDEX CONCURRENTLY runs inside the migration's transaction, and PostgreSQL rejects it: \"cannot run inside a transaction block\".",
+    "why": "PostgreSQL cannot run this statement inside a transaction block. A query() string with several statements also runs as one implicit transaction.",
+    "safeAlternative": "Run the statement on its own, in its own query() call, in a migration that runs outside a transaction. With TypeORM: set transaction = false on the migration and migrationsTransactionMode: \"each\" in the DataSource (and in the typeorm.transactionMode config).",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/concurrent-index-transaction.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "concurrent-index-transaction",
+    "severity": "error",
+    "category": "locking",
+    "file": "concurrent-index-transaction/bad/each-without-opt-out.ts",
+    "line": 7,
+    "column": 30,
+    "message": "DROP INDEX CONCURRENTLY runs inside the migration's transaction, and PostgreSQL rejects it: \"cannot run inside a transaction block\".",
+    "why": "PostgreSQL cannot run this statement inside a transaction block. A query() string with several statements also runs as one implicit transaction.",
+    "safeAlternative": "Run the statement on its own, in its own query() call, in a migration that runs outside a transaction. With TypeORM: set transaction = false on the migration and migrationsTransactionMode: \"each\" in the DataSource (and in the typeorm.transactionMode config).",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/concurrent-index-transaction.md",
+    "suppressed": null
+  }
+]

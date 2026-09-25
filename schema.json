@@ -82,10 +82,40 @@
         "no-rename-table": {
           "$ref": "#/definitions/severity"
         },
+        "require-concurrent-index": {
+          "$ref": "#/definitions/severity"
+        },
+        "concurrent-index-transaction": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-add-not-null-without-default": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-volatile-default": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-unsafe-column-type-change": {
+          "$ref": "#/definitions/severity"
+        },
+        "require-not-valid-foreign-key": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-set-not-null": {
+          "$ref": "#/definitions/severity"
+        },
         "unanalyzable-statement": {
           "$ref": "#/definitions/severity"
         },
         "invalid-suppression": {
+          "$ref": "#/definitions/severity"
+        },
+        "typeorm/no-changecolumn-recreate": {
+          "$ref": "#/definitions/severity"
+        },
+        "typeorm/transaction-override-forbidden": {
+          "$ref": "#/definitions/severity"
+        },
+        "typeorm/invalid-migration-name": {
           "$ref": "#/definitions/severity"
         }
       }

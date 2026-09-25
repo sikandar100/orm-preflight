@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-volatile-default",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-volatile-default/bad/builder.ts",
+    "line": 5,
+    "column": 11,
+    "message": "\"users\".\"token\" is added with a volatile default (uuid_generate_v4()), which rewrites the whole \"users\" table while blocking reads and writes.",
+    "why": "The new value must be computed for every existing row, so PostgreSQL rewrites the table under an ACCESS EXCLUSIVE lock. A constant default, or a stable one such as now(), does not need a rewrite.",
+    "safeAlternative": "Add the column without a default. Set the default in a separate statement (ALTER COLUMN ... SET DEFAULT, which applies only to new rows), then backfill existing rows in batches.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md",
+    "suppressed": null
+  }
+]

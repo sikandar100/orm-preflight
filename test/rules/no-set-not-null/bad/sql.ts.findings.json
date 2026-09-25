@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-set-not-null",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-set-not-null/bad/sql.ts",
+    "line": 5,
+    "column": 30,
+    "message": "\"users\".\"email\" is set to NOT NULL, which scans the whole \"users\" table while blocking reads and writes.",
+    "why": "SET NOT NULL holds an ACCESS EXCLUSIVE lock and checks every row, unless a validated CHECK constraint already proves the column has no NULLs.",
+    "safeAlternative": "Add CHECK (\"email\" IS NOT NULL) NOT VALID, validate it in a separate migration, then SET NOT NULL (PostgreSQL skips the scan because the CHECK proves it) and drop the CHECK.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-set-not-null.md",
+    "suppressed": null
+  }
+]

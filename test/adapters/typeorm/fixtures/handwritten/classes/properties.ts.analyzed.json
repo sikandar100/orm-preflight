@@ -37,7 +37,18 @@
       "name": null,
       "declaredTransaction": "unknown"
     },
-    "up": []
+    "up": [
+      {
+        "kind": "unanalyzable",
+        "reason": "The migration name is not a constant, so its timestamp cannot be checked",
+        "loc": {
+          "file": "handwritten/classes/properties.ts",
+          "line": 15,
+          "column": 8
+        },
+        "origin": "builder"
+      }
+    ]
   },
   {
     "adapter": "typeorm",

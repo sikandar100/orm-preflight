@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-set-not-null",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-set-not-null/bad/postgres-18.ts",
+    "line": 6,
+    "column": 30,
+    "message": "\"users\".\"email\" is set to NOT NULL, which scans the whole \"users\" table while blocking reads and writes.",
+    "why": "SET NOT NULL holds an ACCESS EXCLUSIVE lock and checks every row, unless a validated CHECK constraint already proves the column has no NULLs.",
+    "safeAlternative": "PostgreSQL 18: add the constraint without checking rows, then validate it in a separate migration: ALTER TABLE \"users\" ADD CONSTRAINT <name> NOT NULL \"email\" NOT VALID, then ALTER TABLE \"users\" VALIDATE CONSTRAINT <name>. VALIDATE does not block writes.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-set-not-null.md",
+    "suppressed": null
+  }
+]

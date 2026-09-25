@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "typeorm/no-changecolumn-recreate",
+    "severity": "warn",
+    "category": "data-loss",
+    "file": "no-changecolumn-recreate/bad/old-column-by-name.ts",
+    "line": 5,
+    "column": 11,
+    "message": "changeColumn gets \"users\".\"name\" as the old column, so orm-preflight cannot compare it. If its type, length, or array flag changes, TypeORM drops and re-adds the column and every existing value is lost.",
+    "why": "TypeORM's changeColumn does not alter a column in place when its type, length, or array flag changes. It drops the column and adds it again (\"To avoid data conversion, we just recreate column\").",
+    "safeAlternative": "For a longer varchar or varchar to text, run ALTER TABLE ... ALTER COLUMN ... TYPE with queryRunner.query(). For other changes, expand and contract: add a new column, backfill it, switch the code, and drop the old column in a later release.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/no-changecolumn-recreate.md",
+    "suppressed": null
+  }
+]

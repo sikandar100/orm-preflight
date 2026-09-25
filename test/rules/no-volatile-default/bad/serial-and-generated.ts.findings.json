@@ -1,0 +1,41 @@
+[
+  {
+    "ruleId": "no-volatile-default",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-volatile-default/bad/serial-and-generated.ts",
+    "line": 5,
+    "column": 30,
+    "message": "\"orders\".\"seq\" is added as a serial column, which rewrites the whole \"orders\" table while blocking reads and writes.",
+    "why": "The new value must be computed for every existing row, so PostgreSQL rewrites the table under an ACCESS EXCLUSIVE lock. A constant default, or a stable one such as now(), does not need a rewrite.",
+    "safeAlternative": "Add the column as a plain integer, create a sequence, and set the default with ALTER COLUMN ... SET DEFAULT nextval(...), which applies only to new rows. Then backfill existing rows in batches.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "no-volatile-default",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-volatile-default/bad/serial-and-generated.ts",
+    "line": 6,
+    "column": 30,
+    "message": "\"orders\".\"total\" is added as a stored generated column, which rewrites the whole \"orders\" table while blocking reads and writes.",
+    "why": "The new value must be computed for every existing row, so PostgreSQL rewrites the table under an ACCESS EXCLUSIVE lock. A constant default, or a stable one such as now(), does not need a rewrite.",
+    "safeAlternative": "Add a plain nullable column, fill it in batches (for identity: attach a sequence as the default first), and switch the application to it. Avoid adding computed columns to large tables in place.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "no-volatile-default",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-volatile-default/bad/serial-and-generated.ts",
+    "line": 7,
+    "column": 30,
+    "message": "\"orders\".\"num\" is added as an identity column, which rewrites the whole \"orders\" table while blocking reads and writes.",
+    "why": "The new value must be computed for every existing row, so PostgreSQL rewrites the table under an ACCESS EXCLUSIVE lock. A constant default, or a stable one such as now(), does not need a rewrite.",
+    "safeAlternative": "Add a plain nullable column, fill it in batches (for identity: attach a sequence as the default first), and switch the application to it. Avoid adding computed columns to large tables in place.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md",
+    "suppressed": null
+  }
+]
