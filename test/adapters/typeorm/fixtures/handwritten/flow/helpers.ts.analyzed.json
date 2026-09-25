@@ -1,0 +1,76 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/helpers.ts",
+    "id": "Helpers1727200000021",
+    "timestamp": 1727200000021,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Helpers1727200000021"
+    },
+    "up": [
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/helpers.ts",
+          "line": 12,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/helpers.ts",
+          "line": 14,
+          "column": 5
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/helpers.ts",
+          "line": 17,
+          "column": 5
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/helpers.ts",
+          "line": 18,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/helpers.ts",
+          "line": 19,
+          "column": 19
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/helpers.ts",
+          "line": 20,
+          "column": 19
+        },
+        "origin": "builder"
+      }
+    ]
+  }
+]

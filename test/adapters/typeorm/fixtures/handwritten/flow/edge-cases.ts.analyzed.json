@@ -1,0 +1,138 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/edge-cases.ts",
+    "id": "EdgeCases1727200000026",
+    "timestamp": 1727200000026,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "EdgeCases1727200000026"
+    },
+    "up": [
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL comes from \"FIRST_SQL\", which is not a constant string in this file",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 23,
+          "column": 11
+        },
+        "origin": "sql"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL comes from \"A_SQL\", which is not a constant string in this file",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 24,
+          "column": 11
+        },
+        "origin": "sql"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built from a chain of constants that is too deep to follow",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 25,
+          "column": 11
+        },
+        "origin": "sql"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "A QueryRunner method chosen at runtime cannot be analyzed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 29,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 30,
+          "column": 29
+        },
+        "origin": "builder",
+        "conditional": true
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 32,
+          "column": 7
+        },
+        "origin": "builder",
+        "conditional": true
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 35,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 36,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "n",
+        "notNull": true,
+        "type": "int4",
+        "default": {
+          "expr": "-1",
+          "volatile": false
+        },
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 37,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "addColumn(): The column has no name",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 38,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built by an expression the extractor cannot follow",
+        "loc": {
+          "file": "handwritten/flow/edge-cases.ts",
+          "line": 39,
+          "column": 11
+        },
+        "origin": "sql"
+      }
+    ]
+  }
+]

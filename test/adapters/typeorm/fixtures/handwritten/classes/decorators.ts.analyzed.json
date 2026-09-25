@@ -1,0 +1,15 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/decorators.ts",
+    "id": "Decorated1727200000043",
+    "timestamp": 1727200000043,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Decorated1727200000043"
+    },
+    "up": []
+  }
+]

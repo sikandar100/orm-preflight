@@ -1,0 +1,29 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/export-specifiers.ts",
+    "id": "Specified1727200000034",
+    "timestamp": 1727200000034,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Specified1727200000034"
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/export-specifiers.ts",
+    "id": "Expression1727200000035",
+    "timestamp": 1727200000035,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Expression1727200000035",
+      "name": "Expression1727200000035"
+    },
+    "up": []
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/manager.ts",
+    "id": "Manager1727200000022",
+    "timestamp": 1727200000022,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Manager1727200000022"
+    },
+    "up": [
+      {
+        "kind": "unanalyzable",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/manager.ts",
+          "line": 8,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/manager.ts",
+          "line": 9,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/manager.ts",
+          "line": 10,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/manager.ts",
+          "line": 11,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/manager.ts",
+          "line": 12,
+          "column": 11
+        },
+        "origin": "builder"
+      }
+    ]
+  }
+]

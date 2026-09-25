@@ -1,0 +1,75 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/crlf.crlf.ts",
+    "id": "Crlf1727200000005",
+    "timestamp": 1727200000005,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Crlf1727200000005"
+    },
+    "up": [
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "a",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/crlf.crlf.ts",
+          "line": 6,
+          "column": 7
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"a\" integer",
+        "batch": {
+          "index": 0,
+          "size": 2
+        }
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "b",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/crlf.crlf.ts",
+          "line": 7,
+          "column": 7
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"b\" integer",
+        "batch": {
+          "index": 1,
+          "size": 2
+        }
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "c",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/strings/crlf.crlf.ts",
+          "line": 9,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"c\" integer"
+      }
+    ]
+  }
+]

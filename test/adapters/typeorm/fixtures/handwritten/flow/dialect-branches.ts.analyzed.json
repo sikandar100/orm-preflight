@@ -1,0 +1,30 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/dialect-branches.ts",
+    "id": "DialectBranches1727200000029",
+    "timestamp": 1727200000029,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DialectBranches1727200000029"
+    },
+    "up": [
+      {
+        "kind": "create_table",
+        "table": {
+          "schema": "public",
+          "name": "t"
+        },
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 76,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "CREATE TABLE \"t\" (\"id\" SERIAL PRIMARY KEY)"
+      }
+    ]
+  }
+]

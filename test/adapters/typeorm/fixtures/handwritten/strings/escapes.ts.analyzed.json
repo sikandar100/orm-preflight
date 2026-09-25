@@ -1,0 +1,37 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/escapes.ts",
+    "id": "Escapes1727200000002",
+    "timestamp": 1727200000002,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Escapes1727200000002"
+    },
+    "up": [
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "note",
+        "notNull": false,
+        "type": "text",
+        "default": {
+          "expr": "E'line\\nbreak'",
+          "volatile": false
+        },
+        "loc": {
+          "file": "handwritten/strings/escapes.ts",
+          "line": 6,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"note\" text DEFAULT E'line\\nbreak'"
+      }
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-0.3.31/1727100002000-IntToBigint.ts",
+    "id": "IntToBigint1727100002000",
+    "timestamp": 1727100002000,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "IntToBigint1727100002000",
+      "name": "IntToBigint1727100002000"
+    },
+    "up": [
+      {
+        "kind": "drop_column",
+        "table": {
+          "name": "users"
+        },
+        "column": "age",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-0.3.31/1727100002000-IntToBigint.ts",
+          "line": 7,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE `users` DROP COLUMN `age`"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "name": "users"
+        },
+        "column": "age",
+        "type": "bigint",
+        "notNull": true,
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-0.3.31/1727100002000-IntToBigint.ts",
+          "line": 8,
+          "column": 34
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE `users` ADD `age` bigint NOT NULL"
+      }
+    ]
+  }
+]

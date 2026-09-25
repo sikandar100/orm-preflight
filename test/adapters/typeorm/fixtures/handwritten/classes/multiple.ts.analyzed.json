@@ -1,0 +1,28 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/multiple.ts",
+    "id": "First1727200000030",
+    "timestamp": 1727200000030,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "First1727200000030"
+    },
+    "up": []
+  },
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/classes/multiple.ts",
+    "id": "Second1727200000032",
+    "timestamp": 1727200000032,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Second1727200000032"
+    },
+    "up": []
+  }
+]

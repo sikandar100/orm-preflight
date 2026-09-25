@@ -1,0 +1,159 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/same-file-helpers.ts",
+    "id": "SameFileHelpers1727200000028",
+    "timestamp": 1727200000028,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "SameFileHelpers1727200000028"
+    },
+    "up": [
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "from_class_method",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 29,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_class_method\" integer"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "from_nested_arrow_property",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 34,
+          "column": 21
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_nested_arrow_property\" integer"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "from_module_function",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 5,
+          "column": 23
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_module_function\" integer"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "from_arrow_const",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 9,
+          "column": 19
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_arrow_const\" integer"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "A helper calls itself recursively, so its SQL cannot be listed statically; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 42,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 19,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 20,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "from_class_method",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 29,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_class_method\" integer"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "from_nested_arrow_property",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 34,
+          "column": 21
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_nested_arrow_property\" integer"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 24,
+          "column": 12
+        },
+        "origin": "builder",
+        "conditional": true
+      }
+    ]
+  }
+]

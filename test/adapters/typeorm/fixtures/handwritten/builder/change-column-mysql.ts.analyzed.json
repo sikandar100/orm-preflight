@@ -1,0 +1,86 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/change-column-mysql.ts",
+    "id": "ChangeColumnMysql1727200000013",
+    "timestamp": 1727200000013,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "ChangeColumnMysql1727200000013"
+    },
+    "up": [
+      {
+        "kind": "typeorm.change_column",
+        "table": {
+          "name": "users"
+        },
+        "column": "id",
+        "recreates": "no",
+        "loc": {
+          "file": "handwritten/builder/change-column-mysql.ts",
+          "line": 6,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "typeorm.change_column",
+        "table": {
+          "name": "users"
+        },
+        "column": "n",
+        "recreates": "yes",
+        "loc": {
+          "file": "handwritten/builder/change-column-mysql.ts",
+          "line": 11,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "typeorm.change_column",
+        "table": {
+          "name": "users"
+        },
+        "column": "v",
+        "recreates": "yes",
+        "loc": {
+          "file": "handwritten/builder/change-column-mysql.ts",
+          "line": 16,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "typeorm.change_column",
+        "table": {
+          "name": "users"
+        },
+        "column": "w",
+        "recreates": "yes",
+        "loc": {
+          "file": "handwritten/builder/change-column-mysql.ts",
+          "line": 21,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "typeorm.change_column",
+        "table": {
+          "name": "users"
+        },
+        "column": "s",
+        "recreates": "no",
+        "loc": {
+          "file": "handwritten/builder/change-column-mysql.ts",
+          "line": 27,
+          "column": 11
+        },
+        "origin": "builder"
+      }
+    ]
+  }
+]

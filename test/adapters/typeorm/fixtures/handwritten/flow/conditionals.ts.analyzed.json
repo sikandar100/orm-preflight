@@ -1,0 +1,15 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/conditionals.ts",
+    "id": "Conditionals1727200000020",
+    "timestamp": 1727200000020,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Conditionals1727200000020"
+    },
+    "up": []
+  }
+]

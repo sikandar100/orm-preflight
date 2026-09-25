@@ -1,0 +1,53 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/transaction-control.ts",
+    "id": "TransactionControl1727200000018",
+    "timestamp": 1727200000018,
+    "runsInTransaction": true,
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "TransactionControl1727200000018"
+    },
+    "up": [
+      {
+        "kind": "transaction_control",
+        "action": "commit",
+        "loc": {
+          "file": "handwritten/builder/transaction-control.ts",
+          "line": 6,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "create_index",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "unique": false,
+        "concurrently": true,
+        "name": "IDX_users_email",
+        "loc": {
+          "file": "handwritten/builder/transaction-control.ts",
+          "line": 7,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "CREATE INDEX CONCURRENTLY \"IDX_users_email\" ON \"users\" (\"email\")"
+      },
+      {
+        "kind": "transaction_control",
+        "action": "start",
+        "loc": {
+          "file": "handwritten/builder/transaction-control.ts",
+          "line": 8,
+          "column": 11
+        },
+        "origin": "builder"
+      }
+    ]
+  }
+]

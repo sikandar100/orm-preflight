@@ -1,0 +1,290 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/builder/columns.ts",
+    "id": "Columns1727200000010",
+    "timestamp": 1727200000010,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Columns1727200000010"
+    },
+    "up": [
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "age",
+        "notNull": true,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 7,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "bio",
+        "notNull": false,
+        "type": "text",
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 8,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "nickname",
+        "notNull": false,
+        "type": "varchar(50)",
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 9,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "status",
+        "notNull": true,
+        "type": "varchar",
+        "default": {
+          "expr": "'active'",
+          "volatile": false
+        },
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 10,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "score",
+        "notNull": true,
+        "type": "int4",
+        "default": {
+          "expr": "0",
+          "volatile": false
+        },
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 11,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "token",
+        "notNull": true,
+        "type": "uuid",
+        "default": {
+          "expr": "gen_random_uuid()",
+          "volatile": true
+        },
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 12,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "created",
+        "notNull": true,
+        "type": "timestamptz",
+        "default": {
+          "expr": "now()",
+          "volatile": false
+        },
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 13,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "orders"
+        },
+        "column": "seq",
+        "notNull": true,
+        "type": "int4",
+        "default": {
+          "expr": "nextval (serial)",
+          "volatile": true
+        },
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 14,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "orders"
+        },
+        "column": "ref",
+        "notNull": true,
+        "type": "uuid",
+        "default": {
+          "expr": "uuid_generate_v4()",
+          "volatile": true
+        },
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 14,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "orders"
+        },
+        "column": "num",
+        "notNull": true,
+        "type": "int4",
+        "generated": "identity",
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 14,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "orders"
+        },
+        "column": "total",
+        "notNull": true,
+        "type": "numeric",
+        "generated": "stored",
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 14,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "orders"
+        },
+        "column": "tags",
+        "notNull": false,
+        "type": "text[]",
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 14,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "orders"
+        },
+        "column": "legacy",
+        "notNull": true,
+        "type": "int4",
+        "default": {
+          "expr": "nextval (serial)",
+          "volatile": true
+        },
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 14,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "flag",
+        "notNull": true,
+        "type": "bool",
+        "default": {
+          "expr": "false",
+          "volatile": false
+        },
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 22,
+          "column": 11
+        },
+        "origin": "builder"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "empty",
+        "notNull": false,
+        "type": "int4",
+        "loc": {
+          "file": "handwritten/builder/columns.ts",
+          "line": 23,
+          "column": 11
+        },
+        "origin": "builder"
+      }
+    ]
+  }
+]
