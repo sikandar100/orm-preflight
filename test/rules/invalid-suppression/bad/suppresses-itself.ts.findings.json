@@ -1,0 +1,41 @@
+[
+  {
+    "ruleId": "invalid-suppression",
+    "severity": "error",
+    "category": "correctness",
+    "file": "invalid-suppression/bad/suppresses-itself.ts",
+    "line": 1,
+    "column": 1,
+    "message": "\"invalid-suppression\" cannot be suppressed with a comment. Fix the suppression it reports, or change its severity in the config.",
+    "why": "Every suppression needs a known rule and a reason, so suppressions form an audit trail. An invalid suppression suppresses nothing.",
+    "safeAlternative": "Write it as: // preflight safety-assured <rule-id> -- <reason>",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/invalid-suppression.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "invalid-suppression",
+    "severity": "error",
+    "category": "correctness",
+    "file": "invalid-suppression/bad/suppresses-itself.ts",
+    "line": 6,
+    "column": 5,
+    "message": "This suppression names \"no-drop-colum\", which is not a known rule. Did you mean \"no-drop-column\"?",
+    "why": "Every suppression needs a known rule and a reason, so suppressions form an audit trail. An invalid suppression suppresses nothing.",
+    "safeAlternative": "Write it as: // preflight safety-assured <rule-id> -- <reason>",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/invalid-suppression.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "no-drop-column",
+    "severity": "error",
+    "category": "data-loss",
+    "file": "invalid-suppression/bad/suppresses-itself.ts",
+    "line": 7,
+    "column": 30,
+    "message": "\"users\".\"bio\" is dropped, which deletes every value in it.",
+    "why": "Dropping a column deletes its data immediately. Application code that still reads or writes the column fails until every running instance has the new version.",
+    "safeAlternative": "Remove the property from the entity and deploy that first. Drop the column in a later release, then suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md",
+    "suppressed": null
+  }
+]

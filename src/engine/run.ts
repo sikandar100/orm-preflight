@@ -92,6 +92,12 @@ export function runRules(
   return sortFindings(dedupe(findings, rules))
 }
 
+/**
+ * Reports broken suppression comments, so a comment must not be able to hide it. Only the
+ * config can turn it off.
+ */
+export const UNSUPPRESSIBLE = 'invalid-suppression'
+
 /** Indexes of suppressions that name a known rule and give a reason. */
 function validSuppressions(
   suppressions: readonly Suppression[],
@@ -99,7 +105,7 @@ function validSuppressions(
 ): Set<number> {
   const valid = new Set<number>()
   suppressions.forEach((s, i) => {
-    if (s.reason !== '' && known.has(s.ruleId)) valid.add(i)
+    if (s.reason !== '' && known.has(s.ruleId) && s.ruleId !== UNSUPPRESSIBLE) valid.add(i)
   })
   return valid
 }

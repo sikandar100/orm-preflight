@@ -1,4 +1,5 @@
 import { closest } from '../config/validate.js'
+import { UNSUPPRESSIBLE } from '../engine/run.js'
 import { docsUrl } from './helpers.js'
 import type { Rule, RuleFinding } from './types.js'
 
@@ -18,6 +19,8 @@ export const invalidSuppression: Rule = {
       else if (!ctx.knownRuleIds.has(s.ruleId)) {
         const suggestion = closest(s.ruleId, [...ctx.knownRuleIds])
         message = `This suppression names "${s.ruleId}", which is not a known rule.${suggestion === undefined ? '' : ` Did you mean "${suggestion}"?`}`
+      } else if (s.ruleId === UNSUPPRESSIBLE) {
+        message = `"${s.ruleId}" cannot be suppressed with a comment. Fix the suppression it reports, or change its severity in the config.`
       } else if (s.reason === '') message = `This suppression of "${s.ruleId}" gives no reason.`
       if (message === undefined) continue
       findings.push({
