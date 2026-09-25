@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/transaction-none.ts",
     "id": "DefaultNone1727200000052",
+    "loc": {
+      "file": "handwritten/classes/transaction-none.ts",
+      "line": 4,
+      "column": 8
+    },
     "timestamp": 1727200000052,
     "runsInTransaction": false,
     "downIsEmpty": true,
@@ -16,6 +21,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/transaction-none.ts",
     "id": "OptIn1727200000053",
+    "loc": {
+      "file": "handwritten/classes/transaction-none.ts",
+      "line": 9,
+      "column": 8
+    },
     "timestamp": 1727200000053,
     "runsInTransaction": true,
     "downIsEmpty": true,

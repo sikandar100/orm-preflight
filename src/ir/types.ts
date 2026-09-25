@@ -23,6 +23,8 @@ export interface OpBase {
    * such a batch in one implicit transaction.
    */
   batch?: { index: number; size: number }
+  /** Indexes into the migration's `suppressions` that apply to this operation. */
+  suppressions?: number[]
 }
 
 export type ConstraintType = 'foreign_key' | 'check' | 'unique' | 'primary_key'
@@ -84,6 +86,8 @@ export type OperationBody =
     }
   /** BEGIN, COMMIT, or ROLLBACK, from SQL or from QueryRunner transaction methods. */
   | { kind: 'transaction_control'; action: 'start' | 'commit' | 'rollback' }
+  /** INSERT, UPDATE, DELETE, or MERGE on a table, such as a backfill. */
+  | { kind: 'data_change'; table: TableRef; statement: 'insert' | 'update' | 'delete' | 'merge' }
   /** An explicit LOCK TABLE statement. */
   | { kind: 'lock_table'; tables: TableRef[]; mode: string }
   | { kind: 'unanalyzable'; reason: string }
@@ -107,11 +111,15 @@ export interface SqlSourceMap {
   runs: SqlSourceRun[]
 }
 
-/** A suppression comment. Parsed from source in M3. */
+/**
+ * A `preflight safety-assured` comment. `ruleId` or `reason` is empty when the comment
+ * leaves it out, which the invalid-suppression rule reports.
+ */
 export interface Suppression {
   ruleId: string
   reason: string
   loc: Loc
+  /** `next`: the next statement in the source. `file`: every operation in the file. */
   scope: 'next' | 'file'
 }
 
@@ -124,6 +132,8 @@ export type ExtractedStep =
       loc: Loc
       conditional?: boolean
       map: SqlSourceMap
+      /** Indexes into the migration's `suppressions` that apply to this step. */
+      suppressions?: number[]
     }
   | { kind: 'operation'; operation: Operation }
 
@@ -131,6 +141,8 @@ interface MigrationBase {
   adapter: string
   file: string
   id: string
+  /** Where the migration class is declared. */
+  loc: Loc
   /** Null when the name does not end with a valid timestamp. */
   timestamp: number | null
   runsInTransaction: boolean | 'unknown'

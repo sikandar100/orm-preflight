@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/strings/query-params.ts",
     "id": "QueryParams1727200000004",
+    "loc": {
+      "file": "handwritten/strings/query-params.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000004,
     "runsInTransaction": true,
     "downIsEmpty": true,
@@ -10,6 +15,37 @@
     "adapterData": {
       "className": "QueryParams1727200000004"
     },
-    "up": []
+    "up": [
+      {
+        "kind": "data_change",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "statement": "update",
+        "loc": {
+          "file": "handwritten/strings/query-params.ts",
+          "line": 5,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "UPDATE \"users\" SET \"status\" = $1 WHERE \"status\" IS NULL"
+      },
+      {
+        "kind": "data_change",
+        "table": {
+          "schema": "public",
+          "name": "sessions"
+        },
+        "statement": "delete",
+        "loc": {
+          "file": "handwritten/strings/query-params.ts",
+          "line": 6,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "DELETE FROM \"sessions\" WHERE \"expires\" < $1"
+      }
+    ]
   }
 ]

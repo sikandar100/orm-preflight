@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/tsc-commonjs.js",
     "id": "CompiledMigration1727200000036",
+    "loc": {
+      "file": "handwritten/classes/tsc-commonjs.js",
+      "line": 13,
+      "column": 1
+    },
     "timestamp": 1727200000036,
     "runsInTransaction": true,
     "up": [

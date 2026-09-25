@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/export-specifiers.ts",
     "id": "Specified1727200000034",
+    "loc": {
+      "file": "handwritten/classes/export-specifiers.ts",
+      "line": 3,
+      "column": 1
+    },
     "timestamp": 1727200000034,
     "runsInTransaction": true,
     "downIsEmpty": true,
@@ -16,6 +21,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/export-specifiers.ts",
     "id": "Expression1727200000035",
+    "loc": {
+      "file": "handwritten/classes/export-specifiers.ts",
+      "line": 11,
+      "column": 40
+    },
     "timestamp": 1727200000035,
     "runsInTransaction": true,
     "downIsEmpty": true,

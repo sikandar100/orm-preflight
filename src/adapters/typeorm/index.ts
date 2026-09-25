@@ -1,13 +1,14 @@
 import type * as t from '@babel/types'
-import type { ExtractedMigration } from '../../ir/types.js'
+import { parseSuppressionComment } from '../../engine/suppression-comments.js'
+import type { ExtractedMigration, Suppression } from '../../ir/types.js'
 import type { AdapterContext, OrmAdapter, SourceFile } from '../types.js'
 import { typeormConfigSchema } from './config.js'
 import { findMigrationClasses, type MigrationClass } from './extract/classes.js'
 import { LineIndex } from './extract/lines.js'
-import { parseSource, unwrap } from './extract/parse.js'
+import { parseSource, span, unwrap } from './extract/parse.js'
 import { Scope } from './extract/scope.js'
 import { resolveValue } from './extract/values.js'
-import { walkUp } from './extract/walk.js'
+import { type SuppressionComment, walkUp } from './extract/walk.js'
 import {
   type DeclaredTransaction,
   resolveTransactionMode,
@@ -37,6 +38,7 @@ export function extractTypeorm(file: SourceFile, ctx: AdapterContext): Extracted
         adapter: 'typeorm',
         file: file.path,
         id: baseName(file.path),
+        loc: { file: file.path, line: 1, column: 1 },
         timestamp: null,
         runsInTransaction: 'unknown',
         up: [
@@ -60,6 +62,25 @@ export function extractTypeorm(file: SourceFile, ctx: AdapterContext): Extracted
   const moduleScope = new Scope()
   moduleScope.declareStatements(program.body)
 
+  // Every `preflight safety-assured` comment in the file. Each migration gets the same list,
+  // so a step's suppression indexes mean the same thing everywhere in the file.
+  const suppressions: Suppression[] = []
+  const comments: SuppressionComment[] = []
+  for (const comment of parsed.ast.comments ?? []) {
+    const parsedComment = parseSuppressionComment(comment.value)
+    if (parsedComment === undefined) continue
+    const start = comment.start ?? 0
+    const end = comment.end ?? start
+    const index = suppressions.length
+    suppressions.push({
+      ruleId: parsedComment.ruleId,
+      reason: parsedComment.reason,
+      loc: { file: file.path, ...lines.position(start) },
+      scope: parsedComment.scope,
+    })
+    if (parsedComment.scope === 'next') comments.push({ index, start, end })
+  }
+
   return findMigrationClasses(program).map((migration) => {
     const name = literalString(migration.name, file.text, moduleScope)
     const declared = declaredTransaction(migration.transaction)
@@ -72,6 +93,7 @@ export function extractTypeorm(file: SourceFile, ctx: AdapterContext): Extracted
       adapter: 'typeorm',
       file: file.path,
       id: migration.className ?? (typeof name === 'string' ? name : baseName(file.path)),
+      loc: { file: file.path, ...lines.position(span(migration.node).start) },
       timestamp: timestampOf(migration, name),
       runsInTransaction: runsInTransaction(mode, declared),
       up: walkUp(migration.up, {
@@ -81,9 +103,10 @@ export function extractTypeorm(file: SourceFile, ctx: AdapterContext): Extracted
         dialect: ctx.dialect,
         moduleScope,
         methods: migration.methods,
+        comments,
       }),
       downIsEmpty: isEmpty(migration.down),
-      suppressions: [],
+      suppressions,
       adapterData,
     }
   })

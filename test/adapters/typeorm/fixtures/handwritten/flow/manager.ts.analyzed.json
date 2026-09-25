@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/manager.ts",
     "id": "Manager1727200000022",
+    "loc": {
+      "file": "handwritten/flow/manager.ts",
+      "line": 5,
+      "column": 8
+    },
     "timestamp": 1727200000022,
     "runsInTransaction": true,
     "downIsEmpty": true,
@@ -12,8 +17,23 @@
     },
     "up": [
       {
+        "kind": "data_change",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "statement": "update",
+        "loc": {
+          "file": "handwritten/flow/manager.ts",
+          "line": 7,
+          "column": 38
+        },
+        "origin": "sql",
+        "sql": "UPDATE \"users\" SET \"active\" = true"
+      },
+      {
         "kind": "unanalyzable",
-        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be read statically",
         "loc": {
           "file": "handwritten/flow/manager.ts",
           "line": 8,
@@ -23,7 +43,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be read statically",
         "loc": {
           "file": "handwritten/flow/manager.ts",
           "line": 9,
@@ -33,7 +53,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be read statically",
         "loc": {
           "file": "handwritten/flow/manager.ts",
           "line": 10,
@@ -43,7 +63,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be read statically",
         "loc": {
           "file": "handwritten/flow/manager.ts",
           "line": 11,
@@ -53,7 +73,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be read statically",
         "loc": {
           "file": "handwritten/flow/manager.ts",
           "line": 12,

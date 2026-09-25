@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/multiple.ts",
     "id": "First1727200000030",
+    "loc": {
+      "file": "handwritten/classes/multiple.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000030,
     "runsInTransaction": true,
     "up": [
@@ -36,6 +41,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/multiple.ts",
     "id": "Second1727200000032",
+    "loc": {
+      "file": "handwritten/classes/multiple.ts",
+      "line": 25,
+      "column": 8
+    },
     "timestamp": 1727200000032,
     "runsInTransaction": true,
     "up": [

@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/strings/query-params.ts",
     "id": "QueryParams1727200000004",
+    "loc": {
+      "file": "handwritten/strings/query-params.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000004,
     "runsInTransaction": true,
     "up": [

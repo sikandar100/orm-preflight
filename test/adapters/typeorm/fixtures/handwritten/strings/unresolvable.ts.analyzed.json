@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/strings/unresolvable.ts",
     "id": "Unresolvable1727200000003",
+    "loc": {
+      "file": "handwritten/strings/unresolvable.ts",
+      "line": 11,
+      "column": 8
+    },
     "timestamp": 1727200000003,
     "runsInTransaction": true,
     "downIsEmpty": true,

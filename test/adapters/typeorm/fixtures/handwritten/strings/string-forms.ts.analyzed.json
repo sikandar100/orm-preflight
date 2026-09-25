@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/strings/string-forms.ts",
     "id": "StringForms1727200000001",
+    "loc": {
+      "file": "handwritten/strings/string-forms.ts",
+      "line": 8,
+      "column": 8
+    },
     "timestamp": 1727200000001,
     "runsInTransaction": true,
     "downIsEmpty": false,

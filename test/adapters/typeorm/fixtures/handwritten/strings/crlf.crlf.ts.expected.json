@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/strings/crlf.crlf.ts",
     "id": "Crlf1727200000005",
+    "loc": {
+      "file": "handwritten/strings/crlf.crlf.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000005,
     "runsInTransaction": true,
     "up": [

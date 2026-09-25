@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/change-column.ts",
     "id": "ChangeColumn1727200000012",
+    "loc": {
+      "file": "handwritten/builder/change-column.ts",
+      "line": 5,
+      "column": 8
+    },
     "timestamp": 1727200000012,
     "runsInTransaction": true,
     "downIsEmpty": true,

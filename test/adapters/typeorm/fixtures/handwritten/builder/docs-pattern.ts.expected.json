@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/docs-pattern.ts",
     "id": "QuestionRefactoringTIMESTAMP",
+    "loc": {
+      "file": "handwritten/builder/docs-pattern.ts",
+      "line": 4,
+      "column": 8
+    },
     "timestamp": null,
     "runsInTransaction": true,
     "up": [
@@ -103,6 +108,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/docs-pattern.ts",
     "id": "FindColumn1727200000019",
+    "loc": {
+      "file": "handwritten/builder/docs-pattern.ts",
+      "line": 61,
+      "column": 8
+    },
     "timestamp": 1727200000019,
     "runsInTransaction": true,
     "up": [

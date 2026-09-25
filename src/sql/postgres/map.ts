@@ -14,10 +14,6 @@ export interface MapContext {
 /** Statements that are understood and cannot cause any hazard the rules check. */
 const NO_OP_STATEMENTS = new Set([
   'SelectStmt',
-  'InsertStmt',
-  'UpdateStmt',
-  'DeleteStmt',
-  'MergeStmt',
   'CommentStmt',
   'GrantStmt',
   'GrantRoleStmt',
@@ -99,8 +95,8 @@ const LOCK_MODES = [
   'ACCESS EXCLUSIVE',
 ]
 
-const DO_REASON = 'DO blocks are not analyzed; use --execute or suppress with a reason'
-const FUNCTION_REASON = 'Function bodies are not analyzed; suppress with a reason'
+const DO_REASON = 'DO blocks are not analyzed'
+const FUNCTION_REASON = 'Function bodies are not analyzed'
 
 const unanalyzable = (reason: string): OperationBody => ({ kind: 'unanalyzable', reason })
 
@@ -197,12 +193,23 @@ export function mapStatement(node: Node, ctx: MapContext): OperationBody[] {
     const tables = (l.relations ?? []).flatMap((r) => ('RangeVar' in r ? [table(r.RangeVar)] : []))
     return [{ kind: 'lock_table', tables, mode: LOCK_MODES[l.mode ?? 8] ?? 'ACCESS EXCLUSIVE' }]
   }
+  if ('InsertStmt' in node) return dataChange(node.InsertStmt.relation, 'insert')
+  if ('UpdateStmt' in node) return dataChange(node.UpdateStmt.relation, 'update')
+  if ('DeleteStmt' in node) return dataChange(node.DeleteStmt.relation, 'delete')
+  if ('MergeStmt' in node) return dataChange(node.MergeStmt.relation, 'merge')
   if ('DoStmt' in node) return [unanalyzable(DO_REASON)]
   if ('CreateFunctionStmt' in node) return [unanalyzable(FUNCTION_REASON)]
 
   const [type] = Object.keys(node)
   if (type !== undefined && NO_OP_STATEMENTS.has(type)) return []
   return [unanalyzable(`This kind of statement (${type ?? 'unknown'}) is not analyzed`)]
+}
+
+function dataChange(
+  relation: RangeVar | undefined,
+  statement: 'insert' | 'update' | 'delete' | 'merge',
+): OperationBody[] {
+  return relation === undefined ? [] : [{ kind: 'data_change', table: table(relation), statement }]
 }
 
 function mapDrop(drop: import('libpg-query').DropStmt): OperationBody[] {

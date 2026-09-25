@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "generated/postgres-16/typeorm-1.1.1/1727100004000-AddIndex.ts",
     "id": "AddIndex1727100004000",
+    "loc": {
+      "file": "generated/postgres-16/typeorm-1.1.1/1727100004000-AddIndex.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727100004000,
     "runsInTransaction": true,
     "downIsEmpty": false,

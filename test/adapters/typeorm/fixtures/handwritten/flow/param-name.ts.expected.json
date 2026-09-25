@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/param-name.ts",
     "id": "ParamName1727200000023",
+    "loc": {
+      "file": "handwritten/flow/param-name.ts",
+      "line": 5,
+      "column": 8
+    },
     "timestamp": 1727200000023,
     "runsInTransaction": true,
     "up": [

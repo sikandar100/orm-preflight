@@ -265,6 +265,16 @@ describe('PostgreSQL statements to operations', () => {
       [{ kind: 'lock_table', tables: [users, { schema: 's', name: 't' }], mode: 'SHARE' }],
     ],
     ['LOCK users', [{ kind: 'lock_table', tables: [users], mode: 'ACCESS EXCLUSIVE' }]],
+    ['UPDATE users SET a = 1', [{ kind: 'data_change', table: users, statement: 'update' }]],
+    [
+      'INSERT INTO s.users (a) SELECT 1',
+      [{ kind: 'data_change', table: { schema: 's', name: 'users' }, statement: 'insert' }],
+    ],
+    ['DELETE FROM users WHERE a = 1', [{ kind: 'data_change', table: users, statement: 'delete' }]],
+    [
+      'MERGE INTO users u USING src s ON u.id = s.id WHEN MATCHED THEN UPDATE SET a = s.a',
+      [{ kind: 'data_change', table: users, statement: 'merge' }],
+    ],
     [
       'ALTER TABLE posts ADD author int REFERENCES users (id), ADD code text UNIQUE, ADD n int CHECK (n > 0)',
       [
@@ -312,9 +322,6 @@ describe('PostgreSQL statements to operations', () => {
   })
 
   it.each([
-    'UPDATE users SET a = 1',
-    'INSERT INTO users (a) VALUES (1)',
-    'DELETE FROM users WHERE a = 1',
     'SELECT 1',
     "COMMENT ON TABLE users IS 'x'",
     'GRANT SELECT ON users TO app',

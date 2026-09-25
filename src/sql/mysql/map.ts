@@ -17,16 +17,13 @@ type Obj = Record<string, unknown>
 const MYSQL_VOLATILE = new Set([...VOLATILE_FUNCTIONS, 'uuid', 'uuid_short', 'rand', 'sysdate'])
 
 /** Statements that are understood and cannot cause any hazard the rules check. */
-const NO_OP_TYPES = new Set([
-  'select',
-  'insert',
-  'replace',
-  'update',
-  'delete',
-  'show',
-  'use',
-  'desc',
-])
+const NO_OP_TYPES = new Set(['select', 'show', 'use', 'desc'])
+const DATA_CHANGES: Readonly<Record<string, 'insert' | 'update' | 'delete'>> = {
+  insert: 'insert',
+  replace: 'insert',
+  update: 'update',
+  delete: 'delete',
+}
 const NO_OP_OBJECTS = new Set([
   'view',
   'trigger',
@@ -84,6 +81,16 @@ export function mapStatement(ast: MysqlAst): OperationBody[] {
         const [from, to] = pair as unknown[]
         return [{ kind: 'rename_table', table: tableRef(from), to: tableRef(to).name }]
       })
+    case 'insert':
+    case 'replace':
+    case 'update':
+    case 'delete': {
+      const target = first(ast.table)
+      const statement = DATA_CHANGES[type]
+      return target === undefined || statement === undefined
+        ? []
+        : [{ kind: 'data_change', table: tableRef(target), statement }]
+    }
     case 'truncate':
       return [{ kind: 'truncate', tables: list(ast.name).map(tableRef) }]
     case 'set':

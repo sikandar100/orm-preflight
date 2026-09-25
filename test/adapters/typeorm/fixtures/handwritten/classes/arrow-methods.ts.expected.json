@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/arrow-methods.ts",
     "id": "ArrowMethods1727200000041",
+    "loc": {
+      "file": "handwritten/classes/arrow-methods.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000041,
     "runsInTransaction": true,
     "up": [
@@ -36,6 +41,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/arrow-methods.ts",
     "id": "FunctionProperty1727200000042",
+    "loc": {
+      "file": "handwritten/classes/arrow-methods.ts",
+      "line": 11,
+      "column": 8
+    },
     "timestamp": 1727200000042,
     "runsInTransaction": true,
     "up": [

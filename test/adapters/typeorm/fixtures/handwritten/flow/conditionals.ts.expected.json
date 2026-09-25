@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/conditionals.ts",
     "id": "Conditionals1727200000020",
+    "loc": {
+      "file": "handwritten/flow/conditionals.ts",
+      "line": 6,
+      "column": 8
+    },
     "timestamp": 1727200000020,
     "runsInTransaction": true,
     "up": [
