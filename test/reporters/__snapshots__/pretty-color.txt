@@ -1,0 +1,20 @@
+[4msrc/migrations/1727600000000-DropBio.ts[24m
+  [2m5:30[22m  [31merror[39m  [1mno-drop-column[22m
+        "users"."bio" is dropped, which deletes every value in it.
+        [2mWhy: [22m Dropping a column deletes its data immediately.
+        [2mSafe:[22m Drop the column in a later release.
+        [2mDocs:[22m https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md
+
+  [2m12:5[22m  [33mwarn [39m  [1munanalyzable-statement[22m
+        This statement could not be analyzed.
+        [2mWhy: [22m Dropping a column deletes its data immediately.
+        [2mDocs:[22m https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md
+
+[4msrc/migrations/1727800000000-Table.ts[24m
+  [2m5:30[22m  [31merror[39m  [1mno-drop-table[22m
+        "users"."bio" is dropped, which deletes every value in it.
+        [2mWhy: [22m Dropping a column deletes its data immediately.
+        [2mSafe:[22m Drop the column in a later release.
+        [2mDocs:[22m https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md
+
+[31m[1m2 errors, 1 warning in 3 migrations (1 suppressed)[22m[39m
