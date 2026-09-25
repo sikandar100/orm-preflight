@@ -51,6 +51,7 @@ Stage files by name (`git add <path>`) instead of `git add -A`.
 - The core (IR, SQL parsing, core rules, engine, reporters, CLI) must not import from `src/adapters/`. Only `src/index.ts` and `src/cli/` may import the adapter registry, `src/adapters/index.ts`. ESLint enforces this.
 - Nothing may import `typeorm`. orm-preflight never loads the user's ORM.
 - Static mode must never import or execute migration files.
+- SQL parsers load lazily, on first use. `libpg-query` (PostgreSQL, WebAssembly) is a dependency; `node-sql-parser` (MySQL) is an optional peer dependency, installed for development. Every SQL statement must be mapped to operations, listed as irrelevant, or reported as unanalyzable, never dropped silently.
 - New runtime dependencies need maintainer approval.
 
 ## Public API
