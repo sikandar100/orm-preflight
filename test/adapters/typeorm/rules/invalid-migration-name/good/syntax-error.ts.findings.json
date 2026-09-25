@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "unanalyzable-statement",
+    "severity": "warn",
+    "category": "correctness",
+    "file": "invalid-migration-name/good/syntax-error.ts",
+    "line": 4,
+    "column": 3,
+    "message": "This statement could not be analyzed: Could not parse the file: Unexpected token, expected \",\".",
+    "why": "orm-preflight never passes what it could not read. The statement may contain any of the hazards the other rules check.",
+    "safeAlternative": "Write the SQL as a constant string or a builder call orm-preflight can read, or check the statement by hand and suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/unanalyzable-statement.md",
+    "suppressed": null
+  }
+]

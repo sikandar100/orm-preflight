@@ -12,6 +12,9 @@
     "runsInTransaction": "unknown",
     "downIsEmpty": false,
     "suppressions": [],
+    "adapterData": {
+      "parseError": true
+    },
     "up": [
       {
         "kind": "unanalyzable",

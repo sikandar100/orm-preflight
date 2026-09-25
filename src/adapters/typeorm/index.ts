@@ -3,6 +3,7 @@ import { parseSuppressionComment } from '../../engine/suppression-comments.js'
 import type { ExtractedMigration, Suppression } from '../../ir/types.js'
 import type { AdapterContext, OrmAdapter, SourceFile } from '../types.js'
 import { typeormConfigSchema } from './config.js'
+import { typeormRules } from './rules/index.js'
 import { findMigrationClasses, type MigrationClass } from './extract/classes.js'
 import { LineIndex } from './extract/lines.js'
 import { parseSource, span, unwrap } from './extract/parse.js'
@@ -23,7 +24,7 @@ export const typeormAdapter: OrmAdapter = {
   ],
   configSchema: typeormConfigSchema,
   extract: extractTypeorm,
-  rules: [],
+  rules: [...typeormRules],
 }
 
 /** Statically extracts every TypeORM migration class from a file. Never runs the file. */
@@ -54,6 +55,7 @@ export function extractTypeorm(file: SourceFile, ctx: AdapterContext): Extracted
         ],
         downIsEmpty: false,
         suppressions: [],
+        adapterData: { parseError: true },
       },
     ]
   }
@@ -89,22 +91,37 @@ export function extractTypeorm(file: SourceFile, ctx: AdapterContext): Extracted
     if (name !== undefined) adapterData.name = name
     if (declared !== undefined) adapterData.declaredTransaction = declared
 
+    const loc = { file: file.path, ...lines.position(span(migration.node).start) }
+    const up = walkUp(migration.up, {
+      file: file.path,
+      text: file.text,
+      lines,
+      dialect: ctx.dialect,
+      moduleScope,
+      methods: migration.methods,
+      comments,
+    })
+    if (name === null) {
+      // TypeORM takes the timestamp from the name at runtime; it cannot be checked here.
+      up.unshift({
+        kind: 'operation',
+        operation: {
+          kind: 'unanalyzable',
+          reason: 'The migration name is not a constant, so its timestamp cannot be checked',
+          loc,
+          origin: 'builder',
+        },
+      })
+    }
+
     return {
       adapter: 'typeorm',
       file: file.path,
       id: migration.className ?? (typeof name === 'string' ? name : baseName(file.path)),
-      loc: { file: file.path, ...lines.position(span(migration.node).start) },
+      loc,
       timestamp: timestampOf(migration, name),
       runsInTransaction: runsInTransaction(mode, declared),
-      up: walkUp(migration.up, {
-        file: file.path,
-        text: file.text,
-        lines,
-        dialect: ctx.dialect,
-        moduleScope,
-        methods: migration.methods,
-        comments,
-      }),
+      up,
       downIsEmpty: isEmpty(migration.down),
       suppressions,
       adapterData,
