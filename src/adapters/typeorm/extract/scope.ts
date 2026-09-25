@@ -7,6 +7,10 @@ export type Binding =
   | { kind: 'import' }
   | { kind: 'queryRunner' }
   | { kind: 'table'; table: TableRef }
+  /** `this` inside the migration class, so `this.helper(queryRunner)` can be followed. */
+  | { kind: 'instance' }
+  /** A function declared in the file, so `helper(queryRunner)` can be followed. */
+  | { kind: 'function'; node: t.FunctionDeclaration; scope: Scope }
 
 /** Lexical scope, just detailed enough to resolve const strings and QueryRunner aliases. */
 export class Scope {
@@ -43,6 +47,8 @@ export class Scope {
         }
         break
       case 'FunctionDeclaration':
+        if (node.id) this.declare(node.id.name, { kind: 'function', node, scope: this })
+        break
       case 'ClassDeclaration':
         if (node.id) this.declare(node.id.name, { kind: 'mutable' })
         break
@@ -51,6 +57,7 @@ export class Scope {
           this.declare(specifier.local.name, { kind: 'import' })
         break
       case 'ExportNamedDeclaration':
+      case 'ExportDefaultDeclaration':
         if (node.declaration) this.declareStatement(node.declaration)
         break
       default:

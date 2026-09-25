@@ -1,0 +1,203 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/same-file-helpers.ts",
+    "id": "SameFileHelpers1727200000028",
+    "timestamp": 1727200000028,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_class_method\" integer",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 29,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 29,
+              "column": 30
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_nested_arrow_property\" integer",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 34,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 34,
+              "column": 21
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_module_function\" integer",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 5,
+          "column": 9
+        },
+        "map": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 5,
+              "column": 23
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_arrow_const\" integer",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 9,
+          "column": 9
+        },
+        "map": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 9,
+              "column": 19
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "INSERT INTO \"users\" DEFAULT VALUES",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 38,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 38,
+              "column": 30
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "A helper calls itself recursively, so its SQL cannot be listed statically; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/same-file-helpers.ts",
+            "line": 42,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/same-file-helpers.ts",
+            "line": 19,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/same-file-helpers.ts",
+            "line": 20,
+            "column": 11
+          },
+          "origin": "builder"
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_class_method\" integer",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 29,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 29,
+              "column": 30
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"from_nested_arrow_property\" integer",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 34,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 34,
+              "column": 21
+            }
+          ]
+        }
+      },
+      {
+        "kind": "operation",
+        "operation": {
+          "kind": "unanalyzable",
+          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+          "loc": {
+            "file": "handwritten/flow/same-file-helpers.ts",
+            "line": 24,
+            "column": 12
+          },
+          "origin": "builder",
+          "conditional": true
+        }
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "SameFileHelpers1727200000028"
+    }
+  }
+]

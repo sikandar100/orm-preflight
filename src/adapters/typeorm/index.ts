@@ -74,11 +74,13 @@ export function extractTypeorm(file: SourceFile, ctx: AdapterContext): Extracted
       id: migration.className ?? (typeof name === 'string' ? name : baseName(file.path)),
       timestamp: timestampOf(migration, name),
       runsInTransaction: runsInTransaction(mode, declared),
-      up: walkUp(migration.up, moduleScope, {
+      up: walkUp(migration.up, {
         file: file.path,
         text: file.text,
         lines,
         dialect: ctx.dialect,
+        moduleScope,
+        methods: migration.methods,
       }),
       downIsEmpty: isEmpty(migration.down),
       suppressions: [],

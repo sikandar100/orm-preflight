@@ -1,0 +1,208 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/dialect-branches.ts",
+    "id": "DialectBranches1727200000029",
+    "timestamp": 1727200000029,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "CREATE TABLE \"t\" (\"id\" SERIAL PRIMARY KEY)",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 76,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 76,
+              "column": 30
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 1 AS if_postgres",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 24,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 24,
+              "column": 32
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 3 AS not_sqlite_and_not_mssql",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 33,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 33,
+              "column": 32
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 4 AS ternary_other",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 37,
+          "column": 15
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 37,
+              "column": 34
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 5 AS unknown_comparison",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 39,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 39,
+              "column": 32
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 6 AS shared_case",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 44,
+          "column": 15
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 44,
+              "column": 34
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 6 AS fall_through",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 46,
+          "column": 15
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 46,
+              "column": 34
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 7 AS default_branch",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 56,
+          "column": 15
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 56,
+              "column": 34
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 9 AS data_source_postgres",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 59,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 59,
+              "column": 32
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "SELECT 8 AS unresolvable_case",
+        "loc": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "line": 67,
+          "column": 15
+        },
+        "map": {
+          "file": "handwritten/flow/dialect-branches.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 67,
+              "column": 34
+            }
+          ]
+        },
+        "conditional": true
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "DialectBranches1727200000029"
+    }
+  }
+]

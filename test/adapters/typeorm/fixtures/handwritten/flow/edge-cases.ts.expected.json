@@ -128,7 +128,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "Writes through queryRunner.manager or queryRunner.connection cannot be analyzed statically; use --execute or suppress with a reason",
+          "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
           "loc": {
             "file": "handwritten/flow/edge-cases.ts",
             "line": 35,
@@ -141,7 +141,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "Writes through queryRunner.manager or queryRunner.connection cannot be analyzed statically; use --execute or suppress with a reason",
+          "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
           "loc": {
             "file": "handwritten/flow/edge-cases.ts",
             "line": 36,

@@ -15,6 +15,8 @@ export interface MigrationClass {
   transaction: t.Node | undefined
   up: MigrationFunction
   down: MigrationFunction | undefined
+  /** Instance methods and function-valued properties, for following `this.helper(...)`. */
+  methods: ReadonlyMap<string, MigrationFunction>
 }
 
 /**
@@ -116,6 +118,7 @@ function toMigration(node: ClassNode, className: string | undefined): MigrationC
   let down: MigrationFunction | undefined
   let name: t.Node | undefined
   let transaction: t.Node | undefined
+  const methods = new Map<string, MigrationFunction>()
 
   for (const member of node.body.body) {
     if (member.type === 'ClassMethod' && !member.static) {
@@ -127,21 +130,25 @@ function toMigration(node: ClassNode, className: string | undefined): MigrationC
           if (assigned?.key === 'name') name = assigned.value
           if (assigned?.key === 'transaction') transaction = assigned.value
         }
-      } else if (member.kind === 'method' && key === 'up') up = member
-      else if (member.kind === 'method' && key === 'down') down = member
+      } else if (member.kind === 'method' && key !== undefined) {
+        methods.set(key, member)
+        if (key === 'up') up = member
+        if (key === 'down') down = member
+      }
     } else if (member.type === 'ClassProperty' && !member.static && member.value) {
       const key = keyName(member.key, member.computed)
       const value = unwrap(member.value)
       if (key === 'name') name = member.value
       else if (key === 'transaction') transaction = member.value
-      else if ((key === 'up' || key === 'down') && isFunction(value)) {
+      else if (key !== undefined && isFunction(value)) {
+        methods.set(key, value)
         if (key === 'up') up = value
-        else down = value
+        if (key === 'down') down = value
       }
     }
   }
   if (up === undefined) return undefined
-  return { node, className, name, transaction, up, down }
+  return { node, className, name, transaction, up, down, methods }
 }
 
 function isFunction(node: t.Node): node is t.FunctionExpression | t.ArrowFunctionExpression {

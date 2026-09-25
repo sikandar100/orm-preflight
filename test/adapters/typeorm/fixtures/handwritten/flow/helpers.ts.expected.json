@@ -20,16 +20,22 @@
         }
       },
       {
-        "kind": "operation",
-        "operation": {
-          "kind": "unanalyzable",
-          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
-          "loc": {
-            "file": "handwritten/flow/helpers.ts",
-            "line": 13,
-            "column": 11
-          },
-          "origin": "builder"
+        "kind": "sql",
+        "sql": "SELECT 3 AS inside_helper",
+        "loc": {
+          "file": "handwritten/flow/helpers.ts",
+          "line": 25,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/helpers.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 25,
+              "column": 30
+            }
+          ]
         }
       },
       {

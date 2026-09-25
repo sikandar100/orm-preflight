@@ -9,6 +9,8 @@ import type {
 import type { Dialect } from '../../../rules/types.js'
 import { mapBuilderCall, parseTableName, READ_METHODS, TRANSACTION_METHODS } from '../builder.js'
 import type { LineIndex } from './lines.js'
+import type { MigrationFunction } from './classes.js'
+import { evaluateCondition, switchBranch } from './dialect.js'
 import { keyName, span, unwrap } from './parse.js'
 import { patternNames, Scope } from './scope.js'
 import { resolveString, resolveValue } from './values.js'
@@ -18,14 +20,22 @@ export const ESCAPE_REASON =
   'queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason'
 export const DYNAMIC_REASON =
   'A QueryRunner method chosen at runtime cannot be analyzed statically; use --execute or suppress with a reason'
+export const RECURSIVE_REASON =
+  'A helper calls itself recursively, so its SQL cannot be listed statically; use --execute or suppress with a reason'
 export const MANAGER_REASON =
-  'Writes through queryRunner.manager or queryRunner.connection cannot be analyzed statically; use --execute or suppress with a reason'
+  'Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason'
 
 interface Context {
   file: string
   text: string
   lines: LineIndex
   dialect: Dialect
+  /** The file's top-level scope, where class methods are declared. */
+  moduleScope: Scope
+  /** Methods of the migration class, for following `this.helper(queryRunner)`. */
+  methods: ReadonlyMap<string, MigrationFunction>
+  /** Helpers being walked, to stop recursion. */
+  stack: t.Node[]
   steps: ExtractedStep[]
 }
 
@@ -68,15 +78,15 @@ type FunctionNode =
 
 /**
  * Walks a migration's up() in source order and returns its steps. `moduleScope` holds the
- * file's top-level declarations, so constants declared outside the class resolve.
+ * file's top-level declarations, so constants and helper functions outside the class resolve.
  */
 export function walkUp(
-  fn: t.ClassMethod | t.FunctionExpression | t.ArrowFunctionExpression,
-  moduleScope: Scope,
-  ctx: Omit<Context, 'steps'>,
+  fn: MigrationFunction,
+  ctx: Omit<Context, 'steps' | 'stack'>,
 ): ExtractedStep[] {
-  const context: Context = { ...ctx, steps: [] }
-  const scope = new Scope(moduleScope)
+  const context: Context = { ...ctx, stack: [fn], steps: [] }
+  const scope = new Scope(ctx.moduleScope)
+  scope.declare('this', { kind: 'instance' })
   const params = fn.params.filter((p) => !(p.type === 'Identifier' && p.name === 'this'))
   const [first] = params
   if (first !== undefined) {
@@ -117,7 +127,7 @@ function walkBlock(
   for (const statement of statements) {
     visit(statement, scope, ctx, cond)
     // Code after a branch that may return or throw only runs on some paths.
-    if (!cond && mayExitEarly(statement)) cond = true
+    if (!cond && mayExitEarly(statement, scope, ctx.dialect)) cond = true
   }
 }
 
@@ -128,20 +138,29 @@ function visit(node: t.Node, scope: Scope, ctx: Context, cond: boolean): void {
       walkBlock(node.body, scope, ctx, cond)
       return
     case 'IfStatement':
-      visit(node.test, scope, ctx, cond)
-      visit(node.consequent, scope, ctx, true)
-      if (node.alternate) visit(node.alternate, scope, ctx, true)
+    case 'ConditionalExpression': {
+      // A branch on the database type runs for sure, or never, on the configured dialect.
+      const taken = evaluateCondition(node.test, scope, ctx.dialect)
+      if (taken === true) visit(node.consequent, scope, ctx, cond)
+      else if (taken === false) {
+        if (node.alternate) visit(node.alternate, scope, ctx, cond)
+      } else {
+        visit(node.test, scope, ctx, cond)
+        visit(node.consequent, scope, ctx, true)
+        if (node.alternate) visit(node.alternate, scope, ctx, true)
+      }
       return
-    case 'ConditionalExpression':
-      visit(node.test, scope, ctx, cond)
-      visit(node.consequent, scope, ctx, true)
-      visit(node.alternate, scope, ctx, true)
-      return
+    }
     case 'LogicalExpression':
       visit(node.left, scope, ctx, cond)
       visit(node.right, scope, ctx, true)
       return
     case 'SwitchStatement': {
+      const run = switchBranch(node, scope, ctx.dialect)
+      if (run !== undefined) {
+        walkBlock(run, scope, ctx, cond)
+        return
+      }
       visit(node.discriminant, scope, ctx, cond)
       const inner = new Scope(scope)
       inner.declareStatements(node.cases.flatMap((c) => c.consequent))
@@ -182,7 +201,7 @@ function visit(node: t.Node, scope: Scope, ctx: Context, cond: boolean): void {
       visit(node.block, scope, ctx, cond)
       if (node.handler) {
         const { param, body } = node.handler
-        walkFunctionLike(param ? [param] : [], body, scope, ctx, true)
+        walkFunctionLike(param ? [param] : [], body, scope, ctx, true, false)
       }
       if (node.finalizer) visit(node.finalizer, scope, ctx, cond)
       return
@@ -234,7 +253,14 @@ function visit(node: t.Node, scope: Scope, ctx: Context, cond: boolean): void {
       if (FUNCTION_TYPES.has(node.type)) {
         const fn = node as FunctionNode
         // Callbacks may run any number of times, or not at all.
-        walkFunctionLike(fn.params, fn.body, scope, ctx, true)
+        walkFunctionLike(
+          fn.params,
+          fn.body,
+          scope,
+          ctx,
+          true,
+          fn.type !== 'ArrowFunctionExpression',
+        )
         return
       }
       visitChildren(node, scope, ctx, cond)
@@ -247,8 +273,11 @@ function walkFunctionLike(
   parent: Scope,
   ctx: Context,
   cond: boolean,
+  rebindsThis: boolean,
 ): void {
   const scope = new Scope(parent)
+  // Only arrow functions keep the migration's `this`.
+  if (rebindsThis) scope.declare('this', { kind: 'mutable' })
   for (const p of params) {
     // A parameter with the same name shadows queryRunner inside the function.
     for (const name of patternNames(p)) scope.declare(name, { kind: 'mutable' })
@@ -351,12 +380,18 @@ function visitCall(
   if (isAwaiter(node.callee)) {
     const body = node.arguments.at(-1)
     if (body?.type === 'FunctionExpression') {
-      walkFunctionLike(body.params, body.body, scope, ctx, cond)
+      // __awaiter applies the generator to the caller's `this`.
+      walkFunctionLike(body.params, body.body, scope, ctx, cond, false)
       return
     }
   }
 
   if (node.arguments.some((a) => isQueryRunner(a, scope))) {
+    const helper = resolveHelper(node.callee, scope, ctx)
+    if (helper !== undefined) {
+      followHelper(helper, node, scope, ctx, cond)
+      return
+    }
     unanalyzable(ctx, node, HELPER_REASON, cond)
     return
   }
@@ -440,7 +475,7 @@ function isDynamicQueryRunnerCall(
   )
 }
 
-/** Methods on queryRunner.connection that write or open another way to write. */
+/** Methods on queryRunner.connection (or .dataSource) that write or open another way to write. */
 const CONNECTION_WRITES = new Set([
   'query',
   'createQueryRunner',
@@ -450,7 +485,7 @@ const CONNECTION_WRITES = new Set([
   'getTreeRepository',
 ])
 
-/** Classifies `queryRunner.manager.x(...)` and `queryRunner.connection.x(...)` calls. */
+/** Classifies calls through `queryRunner.manager`, `.connection`, and `.dataSource`. */
 function managerOrConnectionCall(
   node: t.CallExpression | t.OptionalCallExpression,
   scope: Scope,
@@ -468,7 +503,8 @@ function managerOrConnectionCall(
   const [first, second] = path
   const method = keyName(callee.property, callee.computed)
   if (first === 'manager') return path.length === 1 && method === 'query' ? 'query' : 'other'
-  if (first !== 'connection') return undefined
+  // TypeORM 1.x renamed connection to dataSource and kept connection as an alias.
+  if (first !== 'connection' && first !== 'dataSource') return undefined
   if (second === 'manager') return 'other'
   // Reads such as connection.getMetadata(X) or connection.driver.escape(name) write nothing.
   return path.length === 1 && method !== undefined && CONNECTION_WRITES.has(method)
@@ -492,10 +528,108 @@ function isQueryRunner(node: t.Node, scope: Scope): boolean {
   return n.type === 'Identifier' && scope.lookup(n.name)?.kind === 'queryRunner'
 }
 
-/** True when a statement contains a return or throw outside nested functions. */
-function mayExitEarly(statement: t.Node): boolean {
+/**
+ * True when a statement contains a return or throw outside nested functions, looking only
+ * at the branches that run on the configured dialect.
+ */
+function mayExitEarly(statement: t.Node, scope: Scope, dialect: Dialect): boolean {
   if (statement.type === 'ReturnStatement' || statement.type === 'ThrowStatement') return false
+  if (statement.type === 'IfStatement') {
+    const taken = evaluateCondition(statement.test, scope, dialect)
+    if (taken === true) return containsExit(statement.consequent)
+    if (taken === false) return statement.alternate ? containsExit(statement.alternate) : false
+  }
+  if (statement.type === 'SwitchStatement') {
+    const run = switchBranch(statement, scope, dialect)
+    if (run !== undefined) return run.some(containsExit)
+  }
   return containsExit(statement)
+}
+
+interface Helper {
+  fn: MigrationFunction | t.FunctionDeclaration
+  scope: Scope
+  /** Class methods see the migration instance as `this`. */
+  instance: boolean
+}
+
+/** A helper defined in this file: `this.method(...)` on the migration, or a local function. */
+function resolveHelper(callee: t.Node, scope: Scope, ctx: Context): Helper | undefined {
+  const c = unwrap(callee)
+  if (c.type === 'MemberExpression' && isInstance(c.object, scope)) {
+    const name = keyName(c.property, c.computed)
+    const fn = name === undefined ? undefined : ctx.methods.get(name)
+    return fn === undefined ? undefined : { fn, scope: ctx.moduleScope, instance: true }
+  }
+  if (c.type !== 'Identifier') return undefined
+  const binding = scope.lookup(c.name)
+  if (binding?.kind === 'function')
+    return { fn: binding.node, scope: binding.scope, instance: false }
+  if (binding?.kind === 'const' && binding.init !== null) {
+    const init = unwrap(binding.init)
+    if (init.type === 'ArrowFunctionExpression' || init.type === 'FunctionExpression') {
+      return { fn: init, scope: binding.scope, instance: false }
+    }
+  }
+  return undefined
+}
+
+/** `this` of the migration class, or a constant alias such as `const self = this`. */
+function isInstance(node: t.Node, scope: Scope, depth = 0): boolean {
+  const n = unwrap(node)
+  if (n.type === 'ThisExpression') return scope.lookup('this')?.kind === 'instance'
+  if (n.type !== 'Identifier' || depth > 8) return false
+  const binding = scope.lookup(n.name)
+  return (
+    binding?.kind === 'const' &&
+    binding.init !== null &&
+    isInstance(binding.init, binding.scope, depth + 1)
+  )
+}
+
+/**
+ * Walks a same-file helper that receives queryRunner, as if its body were written at the
+ * call site. Steps keep the helper's own source locations.
+ */
+function followHelper(
+  helper: Helper,
+  call: t.CallExpression | t.OptionalCallExpression,
+  scope: Scope,
+  ctx: Context,
+  cond: boolean,
+): void {
+  if (ctx.stack.includes(helper.fn)) {
+    unanalyzable(ctx, call, RECURSIVE_REASON, cond)
+    return
+  }
+  const inner = new Scope(helper.scope)
+  inner.declare('this', helper.instance ? { kind: 'instance' } : { kind: 'mutable' })
+  const params = helper.fn.params.filter((p) => !(p.type === 'Identifier' && p.name === 'this'))
+  for (const [i, arg] of call.arguments.entries()) {
+    if (!isQueryRunner(arg, scope)) {
+      visit(arg, scope, ctx, cond)
+      continue
+    }
+    const param = params[i]
+    const id = param?.type === 'AssignmentPattern' ? param.left : param
+    if (id?.type !== 'Identifier') {
+      // A rest or destructured parameter hides how queryRunner is used.
+      unanalyzable(ctx, call, HELPER_REASON, cond)
+      return
+    }
+  }
+  for (const [i, param] of params.entries()) {
+    const id = param.type === 'AssignmentPattern' ? param.left : param
+    const arg = call.arguments[i]
+    if (id.type === 'Identifier' && arg !== undefined && isQueryRunner(arg, scope)) {
+      inner.declare(id.name, { kind: 'queryRunner' })
+    } else {
+      for (const name of patternNames(param)) inner.declare(name, { kind: 'mutable' })
+    }
+  }
+  ctx.stack.push(helper.fn)
+  walkFunctionBody(helper.fn.body, inner, ctx, cond)
+  ctx.stack.pop()
 }
 
 function containsExit(node: t.Node): boolean {
