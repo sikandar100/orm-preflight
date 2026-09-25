@@ -64,7 +64,8 @@
   },
   "dependencies": {
     "@babel/parser": "7.29.9",
-    "libpg-query": "18.1.5"
+    "libpg-query": "18.1.5",
+    "tinyglobby": "0.2.17"
   },
   "peerDependencies": {
     "node-sql-parser": "^5.4.0"

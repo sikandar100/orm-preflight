@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/export-default.ts",
     "id": "ExportDefault1727200000033",
+    "loc": {
+      "file": "handwritten/classes/export-default.ts",
+      "line": 3,
+      "column": 16
+    },
     "timestamp": 1727200000033,
     "runsInTransaction": true,
     "downIsEmpty": true,

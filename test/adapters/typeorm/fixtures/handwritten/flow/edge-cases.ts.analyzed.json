@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/edge-cases.ts",
     "id": "EdgeCases1727200000026",
+    "loc": {
+      "file": "handwritten/flow/edge-cases.ts",
+      "line": 16,
+      "column": 8
+    },
     "timestamp": 1727200000026,
     "runsInTransaction": true,
     "downIsEmpty": true,
@@ -43,7 +48,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "A QueryRunner method chosen at runtime cannot be analyzed statically; use --execute or suppress with a reason",
+        "reason": "A QueryRunner method is chosen at runtime",
         "loc": {
           "file": "handwritten/flow/edge-cases.ts",
           "line": 29,
@@ -53,7 +58,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+        "reason": "queryRunner is stored or passed on in a way the tool cannot follow",
         "loc": {
           "file": "handwritten/flow/edge-cases.ts",
           "line": 30,
@@ -64,7 +69,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+        "reason": "queryRunner is stored or passed on in a way the tool cannot follow",
         "loc": {
           "file": "handwritten/flow/edge-cases.ts",
           "line": 32,
@@ -75,7 +80,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be read statically",
         "loc": {
           "file": "handwritten/flow/edge-cases.ts",
           "line": 35,
@@ -85,7 +90,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason",
+        "reason": "Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be read statically",
         "loc": {
           "file": "handwritten/flow/edge-cases.ts",
           "line": 36,

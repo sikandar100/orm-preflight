@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/constraints.ts",
     "id": "Constraints1727200000015",
+    "loc": {
+      "file": "handwritten/builder/constraints.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000015,
     "runsInTransaction": true,
     "downIsEmpty": true,

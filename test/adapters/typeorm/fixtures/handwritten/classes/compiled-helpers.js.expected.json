@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/compiled-helpers.js",
     "id": "HelperImport1727200000044",
+    "loc": {
+      "file": "handwritten/classes/compiled-helpers.js",
+      "line": 9,
+      "column": 1
+    },
     "timestamp": 1727200000044,
     "runsInTransaction": true,
     "up": [
@@ -38,6 +43,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/compiled-helpers.js",
     "id": "compiled-helpers",
+    "loc": {
+      "file": "handwritten/classes/compiled-helpers.js",
+      "line": 24,
+      "column": 21
+    },
     "timestamp": null,
     "runsInTransaction": true,
     "up": [

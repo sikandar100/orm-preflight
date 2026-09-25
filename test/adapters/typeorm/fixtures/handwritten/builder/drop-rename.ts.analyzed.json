@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/drop-rename.ts",
     "id": "DropRename1727200000011",
+    "loc": {
+      "file": "handwritten/builder/drop-rename.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000011,
     "runsInTransaction": true,
     "downIsEmpty": true,

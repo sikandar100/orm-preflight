@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/esm.mjs",
     "id": "EsmMigration1727200000040",
+    "loc": {
+      "file": "handwritten/classes/esm.mjs",
+      "line": 1,
+      "column": 8
+    },
     "timestamp": 1727200000040,
     "runsInTransaction": true,
     "downIsEmpty": false,

@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/module-exports.cjs",
     "id": "ObjectExportA1727200000037",
+    "loc": {
+      "file": "handwritten/classes/module-exports.cjs",
+      "line": 3,
+      "column": 1
+    },
     "timestamp": 1727200000037,
     "runsInTransaction": true,
     "up": [
@@ -36,6 +41,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/module-exports.cjs",
     "id": "ObjectExportB1727200000038",
+    "loc": {
+      "file": "handwritten/classes/module-exports.cjs",
+      "line": 10,
+      "column": 1
+    },
     "timestamp": 1727200000038,
     "runsInTransaction": true,
     "up": [
@@ -68,6 +78,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/module-exports.cjs",
     "id": "PropertyExport1727200000039",
+    "loc": {
+      "file": "handwritten/classes/module-exports.cjs",
+      "line": 18,
+      "column": 46
+    },
     "timestamp": 1727200000039,
     "runsInTransaction": true,
     "up": [

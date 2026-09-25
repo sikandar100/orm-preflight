@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/unresolved.ts",
     "id": "Unresolved1727200000017",
+    "loc": {
+      "file": "handwritten/builder/unresolved.ts",
+      "line": 7,
+      "column": 8
+    },
     "timestamp": 1727200000017,
     "runsInTransaction": true,
     "up": [

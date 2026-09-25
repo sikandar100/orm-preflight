@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "generated/postgres-16/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
     "id": "AddEnumValue1727100003000",
+    "loc": {
+      "file": "generated/postgres-16/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727100003000,
     "runsInTransaction": true,
     "downIsEmpty": false,

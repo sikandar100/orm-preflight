@@ -280,22 +280,34 @@ describe('MySQL statements to operations', () => {
       ],
     ],
     ['ROLLBACK', [{ kind: 'transaction_control', action: 'rollback' }]],
+    [
+      'INSERT INTO `db`.`u` (`a`) VALUES (1)',
+      [{ kind: 'data_change', table: { schema: 'db', name: 'u' }, statement: 'insert' }],
+    ],
+    [
+      'REPLACE INTO `u` (`a`) VALUES (1)',
+      [{ kind: 'data_change', table: { name: 'u' }, statement: 'insert' }],
+    ],
+    [
+      'UPDATE `u` JOIN `v` ON 1 SET `u`.`a` = 1',
+      [{ kind: 'data_change', table: { name: 'u' }, statement: 'update' }],
+    ],
+    [
+      'DELETE FROM `u` WHERE `a` = 1',
+      [{ kind: 'data_change', table: { name: 'u' }, statement: 'delete' }],
+    ],
     ['START TRANSACTION', [{ kind: 'transaction_control', action: 'start' }]],
     ['COMMIT', [{ kind: 'transaction_control', action: 'commit' }]],
   ])('%s', (sql, expected) => {
     expect(ops(sql)).toEqual(expected)
   })
 
-  it.each([
-    'SELECT 1',
-    'INSERT INTO `u` (`a`) VALUES (1)',
-    'UPDATE `u` SET `a` = 1',
-    'DELETE FROM `u` WHERE `a` = 1',
-    'CREATE VIEW v AS SELECT 1',
-    'DROP VIEW v',
-  ])('%s produces no operation', (sql) => {
-    expect(ops(sql)).toEqual([])
-  })
+  it.each(['SELECT 1', 'CREATE VIEW v AS SELECT 1', 'DROP VIEW v'])(
+    '%s produces no operation',
+    (sql) => {
+      expect(ops(sql)).toEqual([])
+    },
+  )
 
   it('reports statements the mapper does not know as unanalyzable', () => {
     const [op] = ops('GRANT SELECT ON `u` TO app')

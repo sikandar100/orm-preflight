@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/change-column-mysql.ts",
     "id": "ChangeColumnMysql1727200000013",
+    "loc": {
+      "file": "handwritten/builder/change-column-mysql.ts",
+      "line": 4,
+      "column": 8
+    },
     "timestamp": 1727200000013,
     "runsInTransaction": true,
     "downIsEmpty": true,

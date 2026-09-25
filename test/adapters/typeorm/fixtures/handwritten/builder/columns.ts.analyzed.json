@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/columns.ts",
     "id": "Columns1727200000010",
+    "loc": {
+      "file": "handwritten/builder/columns.ts",
+      "line": 5,
+      "column": 8
+    },
     "timestamp": 1727200000010,
     "runsInTransaction": true,
     "downIsEmpty": true,

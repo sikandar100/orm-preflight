@@ -15,15 +15,13 @@ import { keyName, span, unwrap } from './parse.js'
 import { patternNames, Scope } from './scope.js'
 import { resolveString, resolveValue } from './values.js'
 
-export const HELPER_REASON = 'SQL is built in a helper; use --execute or suppress with a reason'
-export const ESCAPE_REASON =
-  'queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason'
-export const DYNAMIC_REASON =
-  'A QueryRunner method chosen at runtime cannot be analyzed statically; use --execute or suppress with a reason'
-export const RECURSIVE_REASON =
-  'A helper calls itself recursively, so its SQL cannot be listed statically; use --execute or suppress with a reason'
+// Each reason states what could not be read. The unanalyzable-statement rule says what to do.
+export const HELPER_REASON = 'SQL is built in a helper the tool cannot follow'
+export const ESCAPE_REASON = 'queryRunner is stored or passed on in a way the tool cannot follow'
+export const DYNAMIC_REASON = 'A QueryRunner method is chosen at runtime'
+export const RECURSIVE_REASON = 'A helper calls itself recursively, so its SQL cannot be listed'
 export const MANAGER_REASON =
-  'Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be analyzed statically; use --execute or suppress with a reason'
+  'Writes through queryRunner.manager, queryRunner.connection, or queryRunner.dataSource cannot be read statically'
 
 interface Context {
   file: string
@@ -36,7 +34,18 @@ interface Context {
   methods: ReadonlyMap<string, MigrationFunction>
   /** Helpers being walked, to stop recursion. */
   stack: t.Node[]
+  /** `preflight safety-assured` comments that apply to the next statement. */
+  comments: readonly SuppressionComment[]
+  /** Suppressions attached to the statements currently being walked. */
+  active: number[][]
   steps: ExtractedStep[]
+}
+
+/** A next-statement suppression comment: its index in the migration and its offsets. */
+export interface SuppressionComment {
+  index: number
+  start: number
+  end: number
 }
 
 /** Keys that never contain runtime code worth walking. */
@@ -82,9 +91,9 @@ type FunctionNode =
  */
 export function walkUp(
   fn: MigrationFunction,
-  ctx: Omit<Context, 'steps' | 'stack'>,
+  ctx: Omit<Context, 'steps' | 'stack' | 'active'>,
 ): ExtractedStep[] {
-  const context: Context = { ...ctx, stack: [fn], steps: [] }
+  const context: Context = { ...ctx, stack: [fn], active: [], steps: [] }
   const scope = new Scope(ctx.moduleScope)
   scope.declare('this', { kind: 'instance' })
   const params = fn.params.filter((p) => !(p.type === 'Identifier' && p.name === 'this'))
@@ -108,7 +117,8 @@ export function walkUp(
 }
 
 function walkFunctionBody(body: t.Node, scope: Scope, ctx: Context, conditional: boolean): void {
-  if (body.type === 'BlockStatement') walkBlock(body.body, scope, ctx, conditional)
+  if (body.type === 'BlockStatement')
+    walkBlock(body.body, scope, ctx, conditional, span(body).start)
   else {
     if (isQueryRunner(body, scope)) unanalyzable(ctx, body, ESCAPE_REASON, conditional)
     visit(body, scope, ctx, conditional)
@@ -120,12 +130,24 @@ function walkBlock(
   parent: Scope,
   ctx: Context,
   conditional: boolean,
+  /** Offset where the block starts, so comments before its first statement attach to it. */
+  from: number,
 ): void {
   const scope = new Scope(parent)
   scope.declareStatements(statements)
   let cond = conditional
+  let boundary = from
   for (const statement of statements) {
+    // A suppression comment applies to the next statement, and to every operation it
+    // produces, including inside helpers it calls.
+    const { start, end } = span(statement)
+    const attached = ctx.comments
+      .filter((c) => c.start >= boundary && c.end <= start)
+      .map((c) => c.index)
+    if (attached.length > 0) ctx.active.push(attached)
     visit(statement, scope, ctx, cond)
+    if (attached.length > 0) ctx.active.pop()
+    boundary = end
     // Code after a branch that may return or throw only runs on some paths.
     if (!cond && mayExitEarly(statement, scope, ctx.dialect)) cond = true
   }
@@ -135,7 +157,7 @@ function visit(node: t.Node, scope: Scope, ctx: Context, cond: boolean): void {
   switch (node.type) {
     case 'BlockStatement':
     case 'StaticBlock':
-      walkBlock(node.body, scope, ctx, cond)
+      walkBlock(node.body, scope, ctx, cond, span(node).start)
       return
     case 'IfStatement':
     case 'ConditionalExpression': {
@@ -158,7 +180,7 @@ function visit(node: t.Node, scope: Scope, ctx: Context, cond: boolean): void {
     case 'SwitchStatement': {
       const run = switchBranch(node, scope, ctx.dialect)
       if (run !== undefined) {
-        walkBlock(run, scope, ctx, cond)
+        walkBlock(run, scope, ctx, cond, span(node).start)
         return
       }
       visit(node.discriminant, scope, ctx, cond)
@@ -421,7 +443,7 @@ function handleQueryRunnerCall(
         map: sqlMap(ctx, resolved.offsets, span(sqlArg).start),
       }
       if (cond) step.conditional = true
-      ctx.steps.push(step)
+      push(ctx, step)
     } else {
       unanalyzable(ctx, node, resolved.reason, cond, 'sql')
     }
@@ -656,7 +678,17 @@ function locOf(ctx: Context, node: t.Node): Loc {
 
 function operation(ctx: Context, node: t.Node, body: OperationBody, cond: boolean): void {
   const op = { ...body, loc: locOf(ctx, node), origin: 'builder' as const }
-  ctx.steps.push({ kind: 'operation', operation: cond ? { ...op, conditional: true } : op })
+  push(ctx, { kind: 'operation', operation: cond ? { ...op, conditional: true } : op })
+}
+
+/** Records a step with the suppressions of the statements being walked. */
+function push(ctx: Context, step: ExtractedStep): void {
+  const suppressions = [...new Set(ctx.active.flat())]
+  if (suppressions.length > 0) {
+    if (step.kind === 'sql') step.suppressions = suppressions
+    else step.operation.suppressions = suppressions
+  }
+  ctx.steps.push(step)
 }
 
 function unanalyzable(
@@ -667,7 +699,7 @@ function unanalyzable(
   origin: 'sql' | 'builder' = 'builder',
 ): void {
   const op = { kind: 'unanalyzable' as const, reason, loc: locOf(ctx, node), origin }
-  ctx.steps.push({ kind: 'operation', operation: cond ? { ...op, conditional: true } : op })
+  push(ctx, { kind: 'operation', operation: cond ? { ...op, conditional: true } : op })
 }
 
 function sqlMap(ctx: Context, offsets: number[], fallback: number): SqlSourceMap {

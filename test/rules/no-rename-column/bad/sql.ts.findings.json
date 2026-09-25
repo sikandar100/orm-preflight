@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-rename-column",
+    "severity": "error",
+    "category": "deploy-safety",
+    "file": "no-rename-column/bad/sql.ts",
+    "line": 5,
+    "column": 30,
+    "message": "\"users\".\"age\" is renamed to \"years\". Running instances of the old code still use \"age\" and fail until they are replaced.",
+    "why": "During a rolling deploy, the old and new versions of the application run at the same time. Renaming a column breaks the old version immediately.",
+    "safeAlternative": "Expand and contract: add the new column, write to both, backfill, switch reads to the new column, and drop the old one in a later release.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-column.md",
+    "suppressed": null
+  }
+]

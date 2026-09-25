@@ -40,19 +40,23 @@ export async function parseMigrations(
     ...migration,
     up: up.flatMap((step): Operation[] => {
       if (step.kind === 'operation') {
-        const { loc, origin, conditional, ...body } = step.operation
+        const { loc, origin, conditional, suppressions, ...body } = step.operation
         return [
           {
             ...normalizeOperation(body as Operation, normalize),
             loc,
             origin,
             ...(conditional === true ? { conditional } : {}),
+            ...(suppressions === undefined ? {} : { suppressions }),
           },
         ]
       }
 
       if (parse === undefined) throw new Error('The SQL parser was not loaded')
-      const flags = step.conditional === true ? { conditional: true } : {}
+      const flags = {
+        ...(step.conditional === true ? { conditional: true } : {}),
+        ...(step.suppressions === undefined ? {} : { suppressions: step.suppressions }),
+      }
       const result = parse(step.sql)
       if (!result.ok) {
         return [

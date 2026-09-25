@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/dialect-branches.ts",
     "id": "DialectBranches1727200000029",
+    "loc": {
+      "file": "handwritten/flow/dialect-branches.ts",
+      "line": 6,
+      "column": 8
+    },
     "timestamp": 1727200000029,
     "runsInTransaction": true,
     "up": [

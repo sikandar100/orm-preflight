@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/dialect-branches-mysql.ts",
     "id": "DialectBranchesMysql1727200000030",
+    "loc": {
+      "file": "handwritten/flow/dialect-branches-mysql.ts",
+      "line": 7,
+      "column": 8
+    },
     "timestamp": 1727200000030,
     "runsInTransaction": true,
     "up": [

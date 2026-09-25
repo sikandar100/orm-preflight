@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/indexes.ts",
     "id": "Indexes1727200000014",
+    "loc": {
+      "file": "handwritten/builder/indexes.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000014,
     "runsInTransaction": true,
     "downIsEmpty": true,

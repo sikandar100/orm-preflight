@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "generated/mysql-8.4/typeorm-1.1.1/1727100002000-IntToBigint.ts",
     "id": "IntToBigint1727100002000",
+    "loc": {
+      "file": "generated/mysql-8.4/typeorm-1.1.1/1727100002000-IntToBigint.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727100002000,
     "runsInTransaction": true,
     "up": [

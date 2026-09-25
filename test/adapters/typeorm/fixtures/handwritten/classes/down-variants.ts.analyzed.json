@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/down-variants.ts",
     "id": "DownEmpty1727200000060",
+    "loc": {
+      "file": "handwritten/classes/down-variants.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000060,
     "runsInTransaction": true,
     "downIsEmpty": true,
@@ -16,6 +21,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/down-variants.ts",
     "id": "DownMissing1727200000061",
+    "loc": {
+      "file": "handwritten/classes/down-variants.ts",
+      "line": 10,
+      "column": 8
+    },
     "timestamp": 1727200000061,
     "runsInTransaction": true,
     "downIsEmpty": true,
@@ -29,6 +39,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/down-variants.ts",
     "id": "DownSemicolons1727200000062",
+    "loc": {
+      "file": "handwritten/classes/down-variants.ts",
+      "line": 14,
+      "column": 8
+    },
     "timestamp": 1727200000062,
     "runsInTransaction": true,
     "downIsEmpty": true,
@@ -42,6 +57,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/down-variants.ts",
     "id": "DownReal1727200000063",
+    "loc": {
+      "file": "handwritten/classes/down-variants.ts",
+      "line": 21,
+      "column": 8
+    },
     "timestamp": 1727200000063,
     "runsInTransaction": true,
     "downIsEmpty": false,

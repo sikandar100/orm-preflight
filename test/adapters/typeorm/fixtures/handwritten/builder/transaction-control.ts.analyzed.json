@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/transaction-control.ts",
     "id": "TransactionControl1727200000018",
+    "loc": {
+      "file": "handwritten/builder/transaction-control.ts",
+      "line": 4,
+      "column": 8
+    },
     "timestamp": 1727200000018,
     "runsInTransaction": true,
     "downIsEmpty": false,

@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/builder/get-table.ts",
     "id": "GetTable1727200000016",
+    "loc": {
+      "file": "handwritten/builder/get-table.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000016,
     "runsInTransaction": true,
     "up": [

@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/same-file-helpers.ts",
     "id": "SameFileHelpers1727200000028",
+    "loc": {
+      "file": "handwritten/flow/same-file-helpers.ts",
+      "line": 12,
+      "column": 8
+    },
     "timestamp": 1727200000028,
     "runsInTransaction": true,
     "up": [
@@ -106,7 +111,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "A helper calls itself recursively, so its SQL cannot be listed statically; use --execute or suppress with a reason",
+          "reason": "A helper calls itself recursively, so its SQL cannot be listed",
           "loc": {
             "file": "handwritten/flow/same-file-helpers.ts",
             "line": 42,
@@ -119,7 +124,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+          "reason": "SQL is built in a helper the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/same-file-helpers.ts",
             "line": 19,
@@ -132,7 +137,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+          "reason": "SQL is built in a helper the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/same-file-helpers.ts",
             "line": 20,
@@ -183,7 +188,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+          "reason": "SQL is built in a helper the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/same-file-helpers.ts",
             "line": 24,

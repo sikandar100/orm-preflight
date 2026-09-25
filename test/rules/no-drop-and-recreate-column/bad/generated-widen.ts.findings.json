@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-drop-and-recreate-column",
+    "severity": "error",
+    "category": "data-loss",
+    "file": "no-drop-and-recreate-column/bad/generated-widen.ts",
+    "line": 7,
+    "column": 34,
+    "message": "\"users\".\"name\" is dropped and re-added in the same migration. Every existing value in this column will be lost.",
+    "why": "TypeORM drops and re-adds a column when its type or length changes, instead of changing it in place. The new column starts empty.",
+    "safeAlternative": "Change the type in place: ALTER TABLE \"users\" ALTER COLUMN \"name\" TYPE varchar(255). Widening a varchar, or changing varchar to text, does not rewrite the table. For other type changes, add a new column, backfill it, switch the code, and drop the old column in a later release.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-and-recreate-column.md",
+    "suppressed": null
+  }
+]

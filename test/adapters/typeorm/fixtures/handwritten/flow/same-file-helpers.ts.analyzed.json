@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/same-file-helpers.ts",
     "id": "SameFileHelpers1727200000028",
+    "loc": {
+      "file": "handwritten/flow/same-file-helpers.ts",
+      "line": 12,
+      "column": 8
+    },
     "timestamp": 1727200000028,
     "runsInTransaction": true,
     "downIsEmpty": true,
@@ -80,8 +85,24 @@
         "sql": "ALTER TABLE \"users\" ADD \"from_arrow_const\" integer"
       },
       {
+        "kind": "data_change",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "statement": "insert",
+        "loc": {
+          "file": "handwritten/flow/same-file-helpers.ts",
+          "line": 38,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "INSERT INTO \"users\" DEFAULT VALUES",
+        "conditional": true
+      },
+      {
         "kind": "unanalyzable",
-        "reason": "A helper calls itself recursively, so its SQL cannot be listed statically; use --execute or suppress with a reason",
+        "reason": "A helper calls itself recursively, so its SQL cannot be listed",
         "loc": {
           "file": "handwritten/flow/same-file-helpers.ts",
           "line": 42,
@@ -91,7 +112,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+        "reason": "SQL is built in a helper the tool cannot follow",
         "loc": {
           "file": "handwritten/flow/same-file-helpers.ts",
           "line": 19,
@@ -101,7 +122,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+        "reason": "SQL is built in a helper the tool cannot follow",
         "loc": {
           "file": "handwritten/flow/same-file-helpers.ts",
           "line": 20,
@@ -145,7 +166,7 @@
       },
       {
         "kind": "unanalyzable",
-        "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+        "reason": "SQL is built in a helper the tool cannot follow",
         "loc": {
           "file": "handwritten/flow/same-file-helpers.ts",
           "line": 24,

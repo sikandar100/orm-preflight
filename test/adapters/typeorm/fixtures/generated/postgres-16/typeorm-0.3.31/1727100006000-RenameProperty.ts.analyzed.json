@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "generated/postgres-16/typeorm-0.3.31/1727100006000-RenameProperty.ts",
     "id": "RenameProperty1727100006000",
+    "loc": {
+      "file": "generated/postgres-16/typeorm-0.3.31/1727100006000-RenameProperty.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727100006000,
     "runsInTransaction": true,
     "downIsEmpty": false,

@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/classes/syntax-error.ts",
     "id": "syntax-error",
+    "loc": {
+      "file": "handwritten/classes/syntax-error.ts",
+      "line": 1,
+      "column": 1
+    },
     "timestamp": null,
     "runsInTransaction": "unknown",
     "downIsEmpty": false,

@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-rename-table",
+    "severity": "error",
+    "category": "deploy-safety",
+    "file": "no-rename-table/bad/builder.ts",
+    "line": 5,
+    "column": 11,
+    "message": "\"users\" is renamed to \"accounts\". Running instances of the old code still use the old name and fail until they are replaced.",
+    "why": "During a rolling deploy, the old and new versions of the application run at the same time. Renaming a table breaks the old version immediately.",
+    "safeAlternative": "Create the new table (or a view with the old name for compatibility), copy the data, switch the code, and drop the old table in a later release.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-table.md",
+    "suppressed": null
+  }
+]

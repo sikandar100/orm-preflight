@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/helpers.ts",
     "id": "Helpers1727200000021",
+    "loc": {
+      "file": "handwritten/flow/helpers.ts",
+      "line": 8,
+      "column": 8
+    },
     "timestamp": 1727200000021,
     "runsInTransaction": true,
     "up": [
@@ -10,7 +15,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+          "reason": "SQL is built in a helper the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/helpers.ts",
             "line": 12,
@@ -42,7 +47,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "SQL is built in a helper; use --execute or suppress with a reason",
+          "reason": "SQL is built in a helper the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/helpers.ts",
             "line": 14,
@@ -74,7 +79,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+          "reason": "queryRunner is stored or passed on in a way the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/helpers.ts",
             "line": 17,
@@ -87,7 +92,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+          "reason": "queryRunner is stored or passed on in a way the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/helpers.ts",
             "line": 18,
@@ -100,7 +105,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+          "reason": "queryRunner is stored or passed on in a way the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/helpers.ts",
             "line": 19,
@@ -113,7 +118,7 @@
         "kind": "operation",
         "operation": {
           "kind": "unanalyzable",
-          "reason": "queryRunner is stored or passed on in a way the extractor cannot follow; use --execute or suppress with a reason",
+          "reason": "queryRunner is stored or passed on in a way the tool cannot follow",
           "loc": {
             "file": "handwritten/flow/helpers.ts",
             "line": 20,

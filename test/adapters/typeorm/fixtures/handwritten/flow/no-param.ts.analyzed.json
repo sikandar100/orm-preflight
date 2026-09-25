@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/no-param.ts",
     "id": "NoParam1727200000025",
+    "loc": {
+      "file": "handwritten/flow/no-param.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000025,
     "runsInTransaction": true,
     "downIsEmpty": true,

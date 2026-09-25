@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/flow/destructured-param.ts",
     "id": "DestructuredParam1727200000024",
+    "loc": {
+      "file": "handwritten/flow/destructured-param.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000024,
     "runsInTransaction": true,
     "up": [

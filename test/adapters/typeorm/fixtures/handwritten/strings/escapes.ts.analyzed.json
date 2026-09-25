@@ -3,6 +3,11 @@
     "adapter": "typeorm",
     "file": "handwritten/strings/escapes.ts",
     "id": "Escapes1727200000002",
+    "loc": {
+      "file": "handwritten/strings/escapes.ts",
+      "line": 3,
+      "column": 8
+    },
     "timestamp": 1727200000002,
     "runsInTransaction": true,
     "downIsEmpty": true,
