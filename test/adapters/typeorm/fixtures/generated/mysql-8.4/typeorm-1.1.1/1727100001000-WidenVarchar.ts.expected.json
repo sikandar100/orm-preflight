@@ -1,0 +1,90 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-1.1.1/1727100001000-WidenVarchar.ts",
+    "id": "WidenVarchar1727100001000",
+    "timestamp": 1727100001000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE `users` DROP COLUMN `name`",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100001000-WidenVarchar.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100001000-WidenVarchar.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            },
+            {
+              "offset": 13,
+              "line": 7,
+              "column": 48
+            },
+            {
+              "offset": 19,
+              "line": 7,
+              "column": 55
+            },
+            {
+              "offset": 33,
+              "line": 7,
+              "column": 70
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE `users` ADD `name` varchar(255) NOT NULL",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100001000-WidenVarchar.ts",
+          "line": 8,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100001000-WidenVarchar.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 8,
+              "column": 34
+            },
+            {
+              "offset": 13,
+              "line": 8,
+              "column": 48
+            },
+            {
+              "offset": 19,
+              "line": 8,
+              "column": 55
+            },
+            {
+              "offset": 25,
+              "line": 8,
+              "column": 62
+            },
+            {
+              "offset": 30,
+              "line": 8,
+              "column": 68
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "WidenVarchar1727100001000",
+      "name": "WidenVarchar1727100001000"
+    }
+  }
+]

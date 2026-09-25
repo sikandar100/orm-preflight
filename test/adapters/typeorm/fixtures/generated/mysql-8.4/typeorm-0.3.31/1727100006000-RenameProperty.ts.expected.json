@@ -1,0 +1,66 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-0.3.31/1727100006000-RenameProperty.ts",
+    "id": "RenameProperty1727100006000",
+    "timestamp": 1727100006000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE `users` CHANGE `age` `years` int NOT NULL",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-0.3.31/1727100006000-RenameProperty.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/mysql-8.4/typeorm-0.3.31/1727100006000-RenameProperty.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            },
+            {
+              "offset": 13,
+              "line": 7,
+              "column": 48
+            },
+            {
+              "offset": 19,
+              "line": 7,
+              "column": 55
+            },
+            {
+              "offset": 28,
+              "line": 7,
+              "column": 65
+            },
+            {
+              "offset": 32,
+              "line": 7,
+              "column": 70
+            },
+            {
+              "offset": 34,
+              "line": 7,
+              "column": 73
+            },
+            {
+              "offset": 40,
+              "line": 7,
+              "column": 80
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "RenameProperty1727100006000",
+      "name": "RenameProperty1727100006000"
+    }
+  }
+]

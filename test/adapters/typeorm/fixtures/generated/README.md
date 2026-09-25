@@ -3,7 +3,9 @@
 These files are the unmodified output of `typeorm migration:generate`. Do not edit them.
 Each one has an `.expected.json` snapshot next to it.
 
-- Generated on 25 September 2026 against PostgreSQL 16.15 (`postgres:16-alpine`).
+- Generated on 25 September 2026.
+- `postgres-16/`: against PostgreSQL 16.15 (`postgres:16-alpine`).
+- `mysql-8.4/`: against MySQL 8.4.11 (`mysql:8.4`), with `mysql2` 3.24.4.
 - `typeorm-0.3.31/`: TypeORM 0.3.31 (the 0.3.x line, npm `legacy` tag).
 - `typeorm-1.1.1/`: TypeORM 1.1.1 (the 1.x line, npm `latest` tag).
 - `js-cjs/`: the same migration generated with `-o` (JavaScript, CommonJS).
@@ -30,11 +32,19 @@ SCENARIO=widen-varchar PHASE=after npx typeorm migration:generate out/WidenVarch
 | 1727100006000 | rename-property | property `age` renamed to `years` |
 | 1727100007000 | add-not-null-column | new non-nullable column `users.nickname` |
 
-Differences between the two lines: `AddEnumValue` (0.3.31 recreates the enum type, 1.1.1
-uses `ALTER TYPE ... ADD VALUE`) and `AddIndex` (1.1.1 emits an extra space).
+For MySQL, run the same commands with `DB=mysql`.
 
-Note: TypeORM detected the property rename and emitted `RENAME COLUMN` on both lines, not a
-drop plus add.
+Differences between the two TypeORM lines on PostgreSQL: `AddEnumValue` (0.3.31 recreates
+the enum type, 1.1.1 uses `ALTER TYPE ... ADD VALUE`) and `AddIndex` (1.1.1 emits an extra
+space). On MySQL both lines produce identical output.
+
+Notes:
+- TypeORM detected the property rename and emitted a rename (`RENAME COLUMN` on PostgreSQL,
+  `CHANGE` on MySQL) on both lines, not a drop plus add.
+- Widening a varchar and int to bigint are a drop plus add on MySQL too, so they delete the
+  column's data on both databases.
+- MySQL identifiers are backticks, which TypeORM escapes as `` \` `` inside the template
+  literal.
 
 `sync-before.cjs` initializes the data source with `PHASE=before`, then runs
 `dropDatabase()` and `synchronize()`. The entities (`data-source.cjs`):
@@ -79,8 +89,8 @@ const posts = new EntitySchema({
 
 module.exports = {
   default: new DataSource({
-    type: 'postgres',
-    url: 'postgres://postgres:postgres@127.0.0.1:55432/gen',
+    type: process.env.DB === 'mysql' ? 'mysql' : 'postgres',
+    url: process.env.DB === 'mysql' ? 'mysql://root:root@127.0.0.1:53306/gen' : 'postgres://postgres:postgres@127.0.0.1:55432/gen',
     entities: [users, posts],
     synchronize: false,
     logging: false,

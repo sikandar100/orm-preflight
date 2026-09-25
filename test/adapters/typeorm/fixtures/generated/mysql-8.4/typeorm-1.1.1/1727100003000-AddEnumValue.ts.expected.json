@@ -1,0 +1,66 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "generated/mysql-8.4/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+    "id": "AddEnumValue1727100003000",
+    "timestamp": 1727100003000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE `users` CHANGE `status` `status` enum ('active', 'inactive', 'banned') NOT NULL",
+        "loc": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+          "line": 7,
+          "column": 15
+        },
+        "map": {
+          "file": "generated/mysql-8.4/typeorm-1.1.1/1727100003000-AddEnumValue.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 7,
+              "column": 34
+            },
+            {
+              "offset": 13,
+              "line": 7,
+              "column": 48
+            },
+            {
+              "offset": 19,
+              "line": 7,
+              "column": 55
+            },
+            {
+              "offset": 28,
+              "line": 7,
+              "column": 65
+            },
+            {
+              "offset": 35,
+              "line": 7,
+              "column": 73
+            },
+            {
+              "offset": 37,
+              "line": 7,
+              "column": 76
+            },
+            {
+              "offset": 44,
+              "line": 7,
+              "column": 84
+            }
+          ]
+        }
+      }
+    ],
+    "downIsEmpty": false,
+    "suppressions": [],
+    "adapterData": {
+      "className": "AddEnumValue1727100003000",
+      "name": "AddEnumValue1727100003000"
+    }
+  }
+]

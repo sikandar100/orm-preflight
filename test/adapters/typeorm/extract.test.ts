@@ -15,18 +15,26 @@ const fixtures = readdirSync(root, { recursive: true, encoding: 'utf8' })
   .filter((f) => /\.(ts|js|mjs|cjs)$/.test(f))
   .sort()
 
-/** Optional first line: `// fixture: {"dialect":"mysql","transactionMode":"each"}` */
-function fixtureOptions(text: string): { dialect: Dialect; options: Record<string, unknown> } {
+/**
+ * Options come from an optional first line, `// fixture: {"dialect":"mysql"}`. Generated
+ * fixtures must stay byte-exact, so for them the dialect comes from the folder name.
+ */
+function fixtureOptions(
+  fixture: string,
+  text: string,
+): { dialect: Dialect; options: Record<string, unknown> } {
   const match = /^\/\/ fixture: (\{.*\})/.exec(text)
-  const { dialect = 'postgres', ...options } = (
-    match ? JSON.parse(match[1] ?? '{}') : {}
-  ) as Record<string, unknown> & { dialect?: Dialect }
+  const fromPath: Dialect = fixture.includes('/mysql-') ? 'mysql' : 'postgres'
+  const { dialect = fromPath, ...options } = (match ? JSON.parse(match[1] ?? '{}') : {}) as Record<
+    string,
+    unknown
+  > & { dialect?: Dialect }
   return { dialect, options }
 }
 
 function extract(fixture: string) {
   const text = readFileSync(path.join(root, fixture), 'utf8')
-  return { text, result: extractTypeorm({ path: fixture, text }, fixtureOptions(text)) }
+  return { text, result: extractTypeorm({ path: fixture, text }, fixtureOptions(fixture, text)) }
 }
 
 describe('TypeORM static extraction', () => {
