@@ -1,0 +1,28 @@
+[
+  {
+    "ruleId": "no-drop-column",
+    "severity": "error",
+    "category": "data-loss",
+    "file": "possible-rename-data-loss/bad/drop-and-add.ts",
+    "line": 5,
+    "column": 30,
+    "message": "\"users\".\"age\" is dropped, which deletes every value in it.",
+    "why": "Dropping a column deletes its data immediately. Application code that still reads or writes the column fails until every running instance has the new version.",
+    "safeAlternative": "Remove the property from the entity and deploy that first. Drop the column in a later release, then suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "possible-rename-data-loss",
+    "severity": "warn",
+    "category": "data-loss",
+    "file": "possible-rename-data-loss/bad/drop-and-add.ts",
+    "line": 5,
+    "column": 30,
+    "message": "\"users\".\"age\" is dropped and \"users\".\"years\" is added in the same migration. If this is a rename, every value in \"age\" is lost.",
+    "why": "A renamed property can turn into a migration that drops the old column and adds a new one. The data is not copied, and no statement in the migration copies it. The dropped column type is not known here, so check whether the columns match.",
+    "safeAlternative": "Rename through expand and contract: add the new column, backfill it from the old one, switch the code, and drop the old column in a later release.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/possible-rename-data-loss.md",
+    "suppressed": null
+  }
+]

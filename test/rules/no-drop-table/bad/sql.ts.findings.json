@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-drop-table",
+    "severity": "error",
+    "category": "data-loss",
+    "file": "no-drop-table/bad/sql.ts",
+    "line": 5,
+    "column": 30,
+    "message": "\"old_audit\" is dropped, which deletes all of its rows.",
+    "why": "Dropping a table deletes its data immediately. Application code that still uses the table fails until every running instance has the new version.",
+    "safeAlternative": "Remove the entity and deploy that first. Drop the table in a later release, then suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-table.md",
+    "suppressed": null
+  }
+]

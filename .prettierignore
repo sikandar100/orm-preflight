@@ -5,3 +5,5 @@ coverage/
 CHANGELOG.md
 # Test fixtures must stay byte-for-byte as written or generated
 test/**/fixtures/
+test/**/bad/
+test/**/good/

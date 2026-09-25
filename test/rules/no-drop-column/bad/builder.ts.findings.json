@@ -1,0 +1,41 @@
+[
+  {
+    "ruleId": "no-drop-column",
+    "severity": "error",
+    "category": "data-loss",
+    "file": "no-drop-column/bad/builder.ts",
+    "line": 5,
+    "column": 11,
+    "message": "\"users\".\"legacy_email\" is dropped, which deletes every value in it.",
+    "why": "Dropping a column deletes its data immediately. Application code that still reads or writes the column fails until every running instance has the new version.",
+    "safeAlternative": "Remove the property from the entity and deploy that first. Drop the column in a later release, then suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "no-drop-column",
+    "severity": "error",
+    "category": "data-loss",
+    "file": "no-drop-column/bad/builder.ts",
+    "line": 6,
+    "column": 11,
+    "message": "\"users\".\"a\" is dropped, which deletes every value in it.",
+    "why": "Dropping a column deletes its data immediately. Application code that still reads or writes the column fails until every running instance has the new version.",
+    "safeAlternative": "Remove the property from the entity and deploy that first. Drop the column in a later release, then suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "no-drop-column",
+    "severity": "error",
+    "category": "data-loss",
+    "file": "no-drop-column/bad/builder.ts",
+    "line": 6,
+    "column": 11,
+    "message": "\"users\".\"b\" is dropped, which deletes every value in it.",
+    "why": "Dropping a column deletes its data immediately. Application code that still reads or writes the column fails until every running instance has the new version.",
+    "safeAlternative": "Remove the property from the entity and deploy that first. Drop the column in a later release, then suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md",
+    "suppressed": null
+  }
+]

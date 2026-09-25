@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-truncate",
+    "severity": "error",
+    "category": "data-loss",
+    "file": "no-truncate/bad/builder.ts",
+    "line": 5,
+    "column": 11,
+    "message": "\"sessions\" is truncated, which deletes all of its rows.",
+    "why": "TRUNCATE removes every row at once and cannot be undone once committed. It also takes an ACCESS EXCLUSIVE lock on the table.",
+    "safeAlternative": "Delete the rows you mean to remove in batches with DELETE and a WHERE clause, or suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-truncate.md",
+    "suppressed": null
+  }
+]
