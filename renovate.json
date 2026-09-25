@@ -2,7 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", "helpers:pinGitHubActionDigests", ":semanticCommits"],
   "minimumReleaseAge": "3 days",
-  "lockFileMaintenance": { "enabled": true },
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "description": "Group non-major dev dependency updates into one PR",
@@ -24,6 +26,12 @@
       "description": "Keep Node types at the oldest Node line used for development, so newer APIs are not used by accident",
       "matchPackageNames": ["@types/node"],
       "allowedVersions": "<23"
+    },
+    {
+      "description": "@babel/types provides the AST types for @babel/parser, so both must stay on the same major version. @babel/parser 8 is not released yet; raise this when it is.",
+      "matchPackageNames": ["@babel/parser", "@babel/types"],
+      "groupName": "Babel",
+      "allowedVersions": "<8"
     }
   ]
 }
