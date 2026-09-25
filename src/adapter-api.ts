@@ -30,4 +30,8 @@ export interface OrmAdapter {
   extractDynamic?(path: string, ctx: AdapterContext): Promise<ExtractedMigration[]>
   /** Adapter rules. Every ID must be `<adapter-id>/<name>`. */
   rules: Rule[]
+  /** Written under the adapter's config key by `orm-preflight init`. */
+  starterOptions?: Record<string, unknown>
+  /** Printed by `orm-preflight init` after writing the config: what to check in it. */
+  starterNote?: string
 }

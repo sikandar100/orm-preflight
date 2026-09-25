@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../schema.json",
+  "migrations": ["src/migrations/*.ts"],
+  "startAfter": 1727000000000,
+  "typeorm": { "transactionMode": "each" }
+}

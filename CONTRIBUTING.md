@@ -62,11 +62,31 @@ New rules ship at `warn` severity in a minor release. A rule can become `error` 
 
 ## How to add a rule
 
-A step-by-step guide arrives with the rule engine in 0.1.0. In short, every rule needs:
+Work tests first. For a core rule `<id>` (an adapter rule lives under `src/adapters/<orm>/rules/`
+and `test/adapters/<orm>/rules/`, with the ID `<orm>/<name>`):
 
-1. Tests first: bad fixtures that must produce the expected findings, then good fixtures that must produce none.
-2. The rule implementation.
-3. A documentation page that cites the PostgreSQL or MySQL documentation section behind its claim.
+1. **Bad fixtures.** Add migrations to `test/rules/<id>/bad/` that must produce the rule's
+   finding. Prefer real `migration:generate` output, and cover SQL and builder calls. An optional
+   first line sets the config: `// fixture: {"postgresVersion": 18}`.
+2. **Good fixtures.** Add migrations to `test/rules/<id>/good/` that must not produce it,
+   including the safe alternative the rule suggests.
+3. **The rule.** Write `src/rules/<id>.ts` and add it to `coreRules` in `src/rules/index.ts`.
+   A rule reads the analyzed operations and returns findings; it never does I/O. Set `target`
+   so the engine can skip tables created in the same migration.
+4. **Snapshots.** Run `pnpm test -u` and review every `.findings.json` file it writes. Each one
+   holds the complete findings for its fixture.
+5. **Config schema.** Add the rule ID to `rules` in `schema.json`. A test checks that it lists
+   every rule.
+6. **Documentation.** Write `docs/rules/<id>.md` in the format of the existing pages: summary,
+   What happens, Bad, Safe, When to suppress, References. Cite the PostgreSQL or MySQL
+   documentation section behind every claim, and check that each link works. The Bad and Safe
+   examples are linted by `test/docs/rule-docs.test.ts`. Add the page to
+   `src/cli/rule-docs.ts` and to `docs/rules/README.md`.
+7. **Locking claims.** If the rule makes a claim about PostgreSQL locks or rewrites, add a check
+   to `test/verify/verify-locks.sh` and record the results.
+
+Run `pnpm test`, `pnpm lint`, and `pnpm typecheck` before opening the pull request, and add a
+changeset. A new rule ships at `warn` (see Public API above).
 
 ## Writing style
 

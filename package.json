@@ -65,6 +65,7 @@
   "dependencies": {
     "@babel/parser": "7.29.9",
     "libpg-query": "18.1.5",
+    "picocolors": "1.1.1",
     "tinyglobby": "0.2.17"
   },
   "peerDependencies": {

@@ -23,6 +23,8 @@ export default defineConfig([
     ...shared,
     entry: { cli: 'src/cli/index.ts' },
     format: ['esm'],
+    // Rule docs are embedded as text for `orm-preflight explain`.
+    loader: { '.md': 'text' },
     dts: false,
     clean: false,
   },

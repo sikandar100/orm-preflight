@@ -6,6 +6,17 @@ const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 
 }
 
 export default defineConfig({
+  // Rule docs are imported as text, as tsdown's `.md` loader does in the build.
+  plugins: [
+    {
+      name: 'markdown-as-text',
+      transform(code, id) {
+        return id.endsWith('.md')
+          ? { code: `export default ${JSON.stringify(code)}`, map: null }
+          : null
+      },
+    },
+  ],
   define: { __VERSION__: JSON.stringify(pkg.version) },
   test: {
     include: ['test/**/*.test.ts'],

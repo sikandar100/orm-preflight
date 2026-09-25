@@ -1,0 +1,21 @@
+src/migrations/1727100000000-WidenUserName.ts
+  7:30  error  no-drop-and-recreate-column
+        "users"."name" is dropped and re-added in the same migration. Every existing value in this column will be lost.
+        Why:  TypeORM drops and re-adds a column when its type or length changes, instead of changing it in place. The new column starts empty.
+        Safe: Change the type in place: ALTER TABLE "users" ALTER COLUMN "name" TYPE varchar(255). Widening a varchar, or changing varchar to text, does not rewrite the table. For other type changes, add a new column, backfill it, switch the code, and drop the old column in a later release.
+        Docs: https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-and-recreate-column.md
+
+  8:30  error  no-add-not-null-without-default
+        "users"."name" is added as NOT NULL without a default. The migration fails as soon as "users" has any rows.
+        Why:  PostgreSQL fills a new column with its default for every existing row. With no default that value is NULL, which the NOT NULL constraint rejects.
+        Safe: Add the column as nullable, backfill it in batches, then enforce NOT NULL without a long lock (see no-set-not-null). Or add it with a constant default, which PostgreSQL 11 and later add without rewriting the table.
+        Docs: https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-add-not-null-without-default.md
+
+src/migrations/1727300000000-DropBio.ts
+  6:30  warn   possible-rename-data-loss
+        "users"."bio" is dropped and "users"."nickname" is added in the same migration. If this is a rename, every value in "bio" is lost.
+        Why:  A renamed property can turn into a migration that drops the old column and adds a new one. The data is not copied, and no statement in the migration copies it. The dropped column type is not known here, so check whether the columns match.
+        Safe: Rename through expand and contract: add the new column, backfill it from the old one, switch the code, and drop the old column in a later release.
+        Docs: https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/possible-rename-data-loss.md
+
+2 errors, 1 warning in 3 migrations (1 suppressed)

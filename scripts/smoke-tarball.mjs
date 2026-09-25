@@ -5,7 +5,7 @@
 //   node scripts/smoke-tarball.mjs --tarball <path.tgz>
 //   node scripts/smoke-tarball.mjs --registry <url> --version <version>
 import { execFileSync, spawnSync } from 'node:child_process'
-import { copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -80,6 +80,27 @@ try {
 
   const bogus = npm(['exec', '--no', '--', 'orm-preflight', '--bogus'])
   check('bin exits 2 on an unknown option', bogus.status === 2, JSON.stringify(bogus))
+
+  // A real run from the installed package: a migration that drops a table must fail with
+  // exit code 1, and the embedded rule docs must be there for explain.
+  mkdirSync(path.join(project, 'migrations'))
+  writeFileSync(
+    path.join(project, 'migrations', '1727000000000-Drop.ts'),
+    'export class Drop1727000000000 {\n  async up(queryRunner) {\n    await queryRunner.query(`DROP TABLE "users"`)\n  }\n}\n',
+  )
+  const linted = npm(['exec', '--no', '--', 'orm-preflight', '--format', 'json'])
+  const findings = linted.stdout === '' ? [] : JSON.parse(linted.stdout).findings
+  check(
+    'bin lints a migration and exits 1 on an error',
+    linted.status === 1 && findings.length === 1 && findings[0].ruleId === 'no-drop-table',
+    JSON.stringify(linted),
+  )
+  const explained = npm(['exec', '--no', '--', 'orm-preflight', 'explain', 'no-drop-table'])
+  check(
+    'bin explains a rule from the embedded docs',
+    explained.status === 0 && explained.stdout.startsWith('# no-drop-table'),
+    JSON.stringify(explained),
+  )
 
   const required = execFileSync(
     process.execPath,
