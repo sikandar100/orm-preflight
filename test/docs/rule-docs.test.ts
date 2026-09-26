@@ -56,7 +56,13 @@ async function unsuppressed(
   raw: Record<string, unknown>,
   change?: FileChange,
 ) {
-  const config = resolveConfig(raw, 'doc example')
+  // Opt-in rules are switched on so their examples can be checked.
+  const rule = rules.find((r) => r.meta.id === ruleId)
+  const enabled =
+    rule?.meta.defaultSeverity === 'off'
+      ? { ...raw, rules: { ...(raw.rules as object | undefined), [ruleId]: 'warn' } }
+      : raw
+  const config = resolveConfig(enabled, 'doc example')
   const changes =
     change === undefined ? undefined : { ref: 'main', files: new Map([['example.ts', change]]) }
   const result = await lintSources(

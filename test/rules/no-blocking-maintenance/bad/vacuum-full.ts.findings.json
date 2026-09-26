@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-blocking-maintenance",
+    "severity": "warn",
+    "category": "locking",
+    "file": "no-blocking-maintenance/bad/vacuum-full.ts",
+    "line": 5,
+    "column": 30,
+    "message": "VACUUM FULL rewrites the whole table while blocking reads and writes. Inside a transaction, PostgreSQL rejects it: \"VACUUM cannot run inside a transaction block\".",
+    "why": "VACUUM FULL and CLUSTER take an ACCESS EXCLUSIVE lock and write a new copy of the table. REINDEX takes a SHARE lock on the table and an exclusive lock on each index it rebuilds. The lock is held until the command finishes, which on a large table can take minutes or hours.",
+    "safeAlternative": "Do not run VACUUM FULL from a migration. Run it in a maintenance window, or use a tool that rebuilds tables online, such as pg_repack.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-blocking-maintenance.md",
+    "suppressed": null
+  }
+]

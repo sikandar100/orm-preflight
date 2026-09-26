@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "enum-value-used-in-same-transaction",
+    "severity": "warn",
+    "category": "locking",
+    "file": "enum-value-used-in-same-transaction/bad/update.ts",
+    "line": 6,
+    "column": 30,
+    "message": "The new value 'archived' of enum \"public.order_status_enum\" is used before the transaction that adds it commits. PostgreSQL rejects this: \"unsafe use of new value\".",
+    "why": "A value added with ALTER TYPE ... ADD VALUE cannot be used until the transaction that added it commits, so the migration fails at this statement.",
+    "safeAlternative": "Add the value in one migration and use it in a later one. With migrationsTransactionMode \"all\", every pending migration shares one transaction, so use \"each\", or deploy the migration that uses the value separately.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/enum-value-used-in-same-transaction.md",
+    "suppressed": null
+  }
+]

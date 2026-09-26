@@ -106,6 +106,24 @@
         "no-set-not-null": {
           "$ref": "#/definitions/severity"
         },
+        "require-not-valid-check": {
+          "$ref": "#/definitions/severity"
+        },
+        "require-concurrent-unique": {
+          "$ref": "#/definitions/severity"
+        },
+        "require-concurrent-index-drop": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-blocking-maintenance": {
+          "$ref": "#/definitions/severity"
+        },
+        "enum-value-used-in-same-transaction": {
+          "$ref": "#/definitions/severity"
+        },
+        "require-lock-timeout": {
+          "$ref": "#/definitions/severity"
+        },
         "unanalyzable-statement": {
           "$ref": "#/definitions/severity"
         },

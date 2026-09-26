@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "require-concurrent-index-drop",
+    "severity": "warn",
+    "category": "locking",
+    "file": "require-concurrent-index-drop/bad/builder.ts",
+    "line": 5,
+    "column": 11,
+    "message": "Dropping index \"IDX_users_email\" without CONCURRENTLY blocks reads and writes on its table until the drop finishes.",
+    "why": "DROP INDEX takes an ACCESS EXCLUSIVE lock on the table. The drop itself is quick, but it first waits for every running query on the table, and every query that arrives meanwhile waits behind it.",
+    "safeAlternative": "Use DROP INDEX CONCURRENTLY, alone in its query() call, in a migration that runs outside a transaction: with TypeORM, set transaction = false on the migration and migrationsTransactionMode: \"each\" in the DataSource.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index-drop.md",
+    "suppressed": null
+  }
+]

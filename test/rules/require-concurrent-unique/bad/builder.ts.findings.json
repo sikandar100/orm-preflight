@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "require-concurrent-unique",
+    "severity": "warn",
+    "category": "locking",
+    "file": "require-concurrent-unique/bad/builder.ts",
+    "line": 5,
+    "column": 11,
+    "message": "Adding unique constraint \"UQ_users_email\" on \"users\" builds an index while blocking reads and writes to \"users\".",
+    "why": "ADD UNIQUE and ADD PRIMARY KEY build their index while holding an ACCESS EXCLUSIVE lock, which blocks every read and write until the build finishes.",
+    "safeAlternative": "Build the index first with CREATE UNIQUE INDEX CONCURRENTLY, in a migration that runs outside a transaction. Then attach it with ALTER TABLE ... ADD CONSTRAINT ... UNIQUE USING INDEX (or PRIMARY KEY USING INDEX), which only needs a brief lock. A primary key also needs its columns to be NOT NULL (see no-set-not-null).",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-unique.md",
+    "suppressed": null
+  }
+]
