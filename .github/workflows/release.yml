@@ -42,15 +42,9 @@ jobs:
           node-version: 24
           package-manager-cache: false
       - run: pnpm install --frozen-lockfile
-      # No publish-script, so this step can only open or update the version PR. It never publishes.
-      - id: changesets
-        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'chore: version packages'
-          pr-title: 'chore: version packages'
       # The publish job asks the owner for approval, so it should only start when there is
-      # something to publish: a package.json version that is not on npm yet.
+      # something to publish: a package.json version that is not on npm yet. This runs before
+      # the changesets action, which leaves the checkout on the version PR branch.
       - id: unpublished
         name: Is this version on npm yet?
         run: |
@@ -63,6 +57,13 @@ jobs:
             echo "$name@$version is not on npm yet."
             echo "unpublished=true" >> "$GITHUB_OUTPUT"
           fi
+      # No publish-script, so this step can only open or update the version PR. It never publishes.
+      - id: changesets
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: version packages'
+          pr-title: 'chore: version packages'
 
   publish:
     name: Publish to npm
