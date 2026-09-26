@@ -86,13 +86,16 @@ try {
   mkdirSync(path.join(project, 'migrations'))
   writeFileSync(
     path.join(project, 'migrations', '1727000000000-Drop.ts'),
-    'export class Drop1727000000000 {\n  async up(queryRunner) {\n    await queryRunner.query(`DROP TABLE "users"`)\n  }\n}\n',
+    'export class Drop1727000000000 {\n  async up(queryRunner) {\n    await queryRunner.query(`DROP TABLE "users"`)\n  }\n\n  async down() {\n    throw new Error(\'irreversible\')\n  }\n}\n',
   )
   const linted = npm(['exec', '--no', '--', 'orm-preflight', '--format', 'json'])
-  const findings = linted.stdout === '' ? [] : JSON.parse(linted.stdout).findings
+  const output = linted.stdout === '' ? { findings: [], summary: {} } : JSON.parse(linted.stdout)
+  // Check for the finding, not the total, so adding a rule does not break this test.
   check(
     'bin lints a migration and exits 1 on an error',
-    linted.status === 1 && findings.length === 1 && findings[0].ruleId === 'no-drop-table',
+    linted.status === 1 &&
+      output.summary.errors === 1 &&
+      output.findings.some((/** @type {{ ruleId: string }} */ f) => f.ruleId === 'no-drop-table'),
     JSON.stringify(linted),
   )
   const explained = npm(['exec', '--no', '--', 'orm-preflight', 'explain', 'no-drop-table'])
