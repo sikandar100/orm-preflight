@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { OrmAdapter, SourceFile } from './adapter-api.js'
 import { type ConfigOverrides, loadConfig, type ResolvedConfig } from './config/load.js'
+import { type ChangeSet, changesSince } from './discovery/git.js'
 import { discoverFiles } from './discovery/index.js'
 import { runRules } from './engine/run.js'
 import { UsageError } from './errors.js'
@@ -18,6 +19,11 @@ export interface LintOptions {
   /** Path of a config file, instead of discovering one. */
   configPath?: string
   overrides?: ConfigOverrides
+  /**
+   * A git ref. Only migrations added or modified since the merge base with it are linted,
+   * and tables created by any of them count as new.
+   */
+  changedSince?: string
 }
 
 export interface LintSummary {
@@ -50,14 +56,18 @@ export async function runLint(options: LintOptions, adapters: AdapterLookup): Pr
   const patterns = explicit
     ? options.patterns
     : (config.migrations ?? adapter.defaultMigrationGlobs)
-  const files = await discoverFiles(cwd, patterns ?? [])
-  if (files.length === 0) {
+  const matched = await discoverFiles(cwd, patterns ?? [])
+  if (matched.length === 0) {
     throw new UsageError(`No migration files matched: ${(patterns ?? []).join(', ')}`)
   }
+  const changes =
+    options.changedSince === undefined ? undefined : await changesSince(cwd, options.changedSince)
+  // With --changed-since, unchanged migrations are history: nothing to lint, not an error.
+  const files = changes === undefined ? matched : matched.filter((f) => changes.files.has(f))
   const sources = await Promise.all(
     files.map(async (file) => ({ path: file, text: await readFile(path.join(cwd, file), 'utf8') })),
   )
-  return lintSources(sources, config, adapter)
+  return lintSources(sources, config, adapter, changes)
 }
 
 /** Lints files already in memory. Used by runLint and by tests. */
@@ -65,6 +75,7 @@ export async function lintSources(
   sources: readonly SourceFile[],
   config: ResolvedConfig,
   adapter: OrmAdapter,
+  changes?: ChangeSet,
 ): Promise<LintResult> {
   const ctx = { dialect: config.dialect, options: config.adapterOptions }
   const extracted = sources
@@ -84,7 +95,7 @@ export async function lintSources(
     severities: config.rules,
     adapterOptions: config.adapterOptions,
     defaultSchema: config.defaultSchema,
-    crossMigrationNewTables: false,
+    changes,
   })
   const active = findings.filter((f) => f.suppressed === null)
   return {

@@ -73,6 +73,9 @@
         "no-drop-table": {
           "$ref": "#/definitions/severity"
         },
+        "no-edit-applied-migration": {
+          "$ref": "#/definitions/severity"
+        },
         "no-truncate": {
           "$ref": "#/definitions/severity"
         },

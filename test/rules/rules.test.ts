@@ -4,13 +4,14 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { typeormAdapter } from '../../src/adapters/typeorm/index.js'
 import { resolveConfig } from '../../src/config/load.js'
+import type { FileChange } from '../../src/discovery/git.js'
 import { lintSources } from '../../src/lint.js'
 
 /**
  * Rule fixtures (SPEC 8.2): test/rules/<rule-id>/bad/*.ts must produce that rule's finding,
  * test/rules/<rule-id>/good/*.ts must not. Every fixture's complete findings are kept in a
  * reviewed snapshot next to it. An optional first line sets the config:
- * `// fixture: {"dialect":"mysql","rules":{...}}`
+ * `// fixture: {"dialect":"mysql","rules":{...}}`. The key `$change` simulates --changed-since.
  */
 const roots = [
   fileURLToPath(new URL('./', import.meta.url)),
@@ -40,11 +41,14 @@ async function findingsFor(file: string) {
   const root = rootOf.get(file) ?? ''
   const text = readFileSync(path.join(root, file), 'utf8')
   const header = /^\/\/ fixture: (\{.*\})/.exec(text)?.[1]
-  const config = resolveConfig(
-    header === undefined ? {} : (JSON.parse(header) as unknown),
-    'fixture',
-  )
-  const result = await lintSources([{ path: file, text }], config, typeormAdapter)
+  // "$change" simulates --changed-since: the fixture was "added" or "modified" since main.
+  const { $change, ...raw } = (header === undefined ? {} : JSON.parse(header)) as {
+    $change?: FileChange
+  }
+  const config = resolveConfig(raw, 'fixture')
+  const changes =
+    $change === undefined ? undefined : { ref: 'main', files: new Map([[file, $change]]) }
+  const result = await lintSources([{ path: file, text }], config, typeormAdapter, changes)
   return result.findings
 }
 

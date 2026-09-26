@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-edit-applied-migration",
+    "severity": "warn",
+    "category": "correctness",
+    "file": "no-edit-applied-migration/bad/edited-safe-sql.ts",
+    "line": 4,
+    "column": 8,
+    "message": "This migration already exists on main and was changed. It has probably run in some environments already, and the change will never reach them.",
+    "why": "An ORM records each migration it runs and never runs it again, so an edit to an applied migration only reaches new databases. Environments that already ran it drift apart silently.",
+    "safeAlternative": "Undo the edit and put the change in a new migration. If this migration has never run anywhere, for example because it was only on your branch, suppress this finding with a reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-edit-applied-migration.md",
+    "suppressed": null
+  }
+]

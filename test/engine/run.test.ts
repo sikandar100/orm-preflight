@@ -60,7 +60,6 @@ const options: EngineOptions = {
   severities: {},
   adapterOptions: {},
   defaultSchema: 'public',
-  crossMigrationNewTables: false,
 }
 
 describe('runRules', () => {
@@ -108,7 +107,9 @@ describe('runRules', () => {
     expect(runRules([migration([create, drop(3)])], [rule('r')], options)).toEqual([])
     const two = [migration([create]), migration([drop(3)], { file: 'n.ts' })]
     expect(runRules(two, [rule('r')], options)).toHaveLength(1)
-    expect(runRules(two, [rule('r')], { ...options, crossMigrationNewTables: true })).toEqual([])
+    expect(
+      runRules(two, [rule('r')], { ...options, changes: { ref: 'main', files: new Map() } }),
+    ).toEqual([])
   })
 
   it('keeps new-table findings for categories that are about the statement itself', () => {

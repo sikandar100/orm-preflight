@@ -38,31 +38,32 @@ To start on an existing project without fixing its history, run `npx orm-preflig
 
 ## What it catches
 
-| Rule                                                                                                                                                    | Reports                                                                      |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| **Data loss**                                                                                                                                           |                                                                              |
-| [`no-drop-and-recreate-column`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-and-recreate-column.md)                       | A column dropped and added again in one migration                            |
-| [`possible-rename-data-loss`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/possible-rename-data-loss.md)                           | One column dropped and another added, with no data copied (warning)          |
-| [`no-drop-column`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md)                                                 | A dropped column                                                             |
-| [`no-drop-table`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-table.md)                                                   | A dropped table                                                              |
-| [`no-truncate`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-truncate.md)                                                       | `TRUNCATE` or `clearTable()`                                                 |
-| [`typeorm/no-changecolumn-recreate`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/no-changecolumn-recreate.md)             | `changeColumn()` that drops and re-adds the column                           |
-| **Deploy safety**                                                                                                                                       |                                                                              |
-| [`no-rename-column`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-column.md)                                             | A renamed column                                                             |
-| [`no-rename-table`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-table.md)                                               | A renamed table                                                              |
-| **Locking (PostgreSQL)**                                                                                                                                |                                                                              |
-| [`require-concurrent-index`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index.md)                             | `CREATE INDEX` without `CONCURRENTLY`                                        |
-| [`concurrent-index-transaction`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/concurrent-index-transaction.md)                     | `CONCURRENTLY` where it runs inside a transaction                            |
-| [`no-add-not-null-without-default`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-add-not-null-without-default.md)               | A `NOT NULL` column added without a default                                  |
-| [`no-volatile-default`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md)                                       | A column added with a volatile default, or as serial, identity, or generated |
-| [`no-unsafe-column-type-change`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-unsafe-column-type-change.md)                     | A column type change that rewrites the table                                 |
-| [`require-not-valid-foreign-key`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-foreign-key.md)                   | A foreign key added without `NOT VALID`                                      |
-| [`no-set-not-null`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-set-not-null.md)                                               | `SET NOT NULL` on an existing column                                         |
-| **Correctness**                                                                                                                                         |                                                                              |
-| [`typeorm/transaction-override-forbidden`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/transaction-override-forbidden.md) | `transaction` set on a migration in transaction mode `"all"`                 |
-| [`typeorm/invalid-migration-name`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/invalid-migration-name.md)                 | A migration name without a 13-digit timestamp                                |
-| [`unanalyzable-statement`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/unanalyzable-statement.md)                                 | A statement orm-preflight could not read (warning)                           |
-| [`invalid-suppression`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/invalid-suppression.md)                                       | A suppression comment with no reason or an unknown rule                      |
+| Rule                                                                                                                                                    | Reports                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Data loss**                                                                                                                                           |                                                                                                 |
+| [`no-drop-and-recreate-column`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-and-recreate-column.md)                       | A column dropped and added again in one migration                                               |
+| [`possible-rename-data-loss`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/possible-rename-data-loss.md)                           | One column dropped and another added, with no data copied (warning)                             |
+| [`no-drop-column`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md)                                                 | A dropped column                                                                                |
+| [`no-drop-table`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-table.md)                                                   | A dropped table                                                                                 |
+| [`no-truncate`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-truncate.md)                                                       | `TRUNCATE` or `clearTable()`                                                                    |
+| [`typeorm/no-changecolumn-recreate`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/no-changecolumn-recreate.md)             | `changeColumn()` that drops and re-adds the column                                              |
+| **Deploy safety**                                                                                                                                       |                                                                                                 |
+| [`no-rename-column`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-column.md)                                             | A renamed column                                                                                |
+| [`no-rename-table`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-table.md)                                               | A renamed table                                                                                 |
+| **Locking (PostgreSQL)**                                                                                                                                |                                                                                                 |
+| [`require-concurrent-index`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index.md)                             | `CREATE INDEX` without `CONCURRENTLY`                                                           |
+| [`concurrent-index-transaction`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/concurrent-index-transaction.md)                     | `CONCURRENTLY` where it runs inside a transaction                                               |
+| [`no-add-not-null-without-default`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-add-not-null-without-default.md)               | A `NOT NULL` column added without a default                                                     |
+| [`no-volatile-default`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md)                                       | A column added with a volatile default, or as serial, identity, or generated                    |
+| [`no-unsafe-column-type-change`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-unsafe-column-type-change.md)                     | A column type change that rewrites the table                                                    |
+| [`require-not-valid-foreign-key`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-foreign-key.md)                   | A foreign key added without `NOT VALID`                                                         |
+| [`no-set-not-null`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-set-not-null.md)                                               | `SET NOT NULL` on an existing column                                                            |
+| **Correctness**                                                                                                                                         |                                                                                                 |
+| [`typeorm/transaction-override-forbidden`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/transaction-override-forbidden.md) | `transaction` set on a migration in transaction mode `"all"`                                    |
+| [`typeorm/invalid-migration-name`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/invalid-migration-name.md)                 | A migration name without a 13-digit timestamp                                                   |
+| [`unanalyzable-statement`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/unanalyzable-statement.md)                                 | A statement orm-preflight could not read (warning)                                              |
+| [`invalid-suppression`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/invalid-suppression.md)                                       | A suppression comment with no reason or an unknown rule                                         |
+| [`no-edit-applied-migration`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-edit-applied-migration.md)                           | With `--changed-since`: an edit to a migration that already exists on the base branch (warning) |
 
 Every finding says what happens, why, and how to make the change safely. Each rule's page cites
 the PostgreSQL, MySQL, or TypeORM source behind its claim. Run `npx orm-preflight explain <rule>`
@@ -80,6 +81,8 @@ orm-preflight [files or globs...] [options]
   --dialect <postgres|mysql>  Database dialect (default: postgres)
   --postgres-version <n>      PostgreSQL major version the migrations run on (default: 16)
   --orm <typeorm>             ORM adapter (default: typeorm)
+  --changed-since <git-ref>   Check only migrations added or changed since the merge base
+                              with <git-ref>, such as origin/main
   --format <pretty|json>      Output format (default: pretty)
   --max-warnings <n>          Fail when there are more than n warnings (default: no limit)
   --no-color                  Print without colors
@@ -136,6 +139,17 @@ npx orm-preflight init
 `init` writes `orm-preflight.config.json` with `startAfter` set to your newest migration, so only
 migrations you add from now on are checked. It reads your migration files but never runs them.
 
+On pull requests, you can also check only the migrations the branch adds or changes:
+
+```sh
+npx orm-preflight --changed-since origin/main
+```
+
+It compares against the merge base with `origin/main` and includes uncommitted and untracked
+files. Tables created by any of the changed migrations count as new for all of them. Editing a
+migration that already exists on `origin/main` is reported by `no-edit-applied-migration`. In
+GitHub Actions, check out with `fetch-depth: 0` so the merge base is available.
+
 ## Continuous integration
 
 Run it as a step in any CI. It needs no database and no secrets, so it is safe on pull requests
@@ -187,7 +201,7 @@ Limitations in 0.1.0:
   apply, locking rules do not. It needs `npm install --save-dev node-sql-parser`.
 - Only `up()` is checked, not `down()`.
 - SQL built at run time is reported, not analyzed.
-- Checking only changed migrations, GitHub annotations, and SARIF output are planned for 0.2.0.
+- GitHub annotations and SARIF output are planned for 0.2.0.
 
 ## Programmatic use
 

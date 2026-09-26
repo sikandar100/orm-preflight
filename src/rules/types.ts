@@ -1,3 +1,4 @@
+import type { ChangeSet } from '../discovery/git.js'
 import type { AnalyzedMigration, Loc, Operation, TableRef } from '../ir/types.js'
 
 export type Severity = 'error' | 'warn' | 'off'
@@ -44,6 +45,8 @@ export interface RuleContext {
   knownRuleIds: ReadonlySet<string>
   /** Tables in this schema are shown without it in messages. */
   defaultSchema: string | undefined
+  /** Set with --changed-since: the files changed since the merge base with a ref. */
+  changes: ChangeSet | undefined
 }
 
 export interface Rule {
