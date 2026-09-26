@@ -31,6 +31,7 @@ jobs:
       pull-requests: write
     outputs:
       has-changesets: ${{ steps.changesets.outputs.has-changesets }}
+      unpublished: ${{ steps.unpublished.outputs.unpublished }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -48,13 +49,31 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: version packages'
           pr-title: 'chore: version packages'
+      # The publish job asks the owner for approval, so it should only start when there is
+      # something to publish: a package.json version that is not on npm yet.
+      - id: unpublished
+        name: Is this version on npm yet?
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version --json > /dev/null 2>&1; then
+            echo "$name@$version is already on npm."
+            echo "unpublished=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "$name@$version is not on npm yet."
+            echo "unpublished=true" >> "$GITHUB_OUTPUT"
+          fi
 
   publish:
     name: Publish to npm
     needs: version
-    # Guard 1: only after the version PR is merged (no pending changesets).
-    # Guard 2: the owner sets the RELEASE_ENABLED repository variable to "true" (not set in M0).
-    if: needs.version.outputs.has-changesets == 'false' && vars.RELEASE_ENABLED == 'true'
+    # Guard 1: only after the version PR is merged (no pending changesets), and only when
+    #   package.json holds a version that is not on npm yet.
+    # Guard 2: the owner sets the RELEASE_ENABLED repository variable to "true".
+    if: >-
+      needs.version.outputs.has-changesets == 'false' &&
+      needs.version.outputs.unpublished == 'true' &&
+      vars.RELEASE_ENABLED == 'true'
     runs-on: ubuntu-latest
     # Guard 3: the npm-publish environment requires the owner's approval.
     # Guard 4: npm accepts the OIDC token only from the trusted publisher configured on npmjs.com.
