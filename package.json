@@ -44,7 +44,8 @@
   "files": [
     "dist",
     "schema.json",
-    "action.yml"
+    "action.yml",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "prepare": "lefthook install",

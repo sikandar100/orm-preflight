@@ -24,6 +24,7 @@ const REQUIRED = [
   'package.json',
   'LICENSE',
   'README.md',
+  'CHANGELOG.md',
   'dist/cli.mjs',
   'dist/index.mjs',
   'dist/index.cjs',
