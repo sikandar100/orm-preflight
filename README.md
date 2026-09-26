@@ -83,7 +83,8 @@ orm-preflight [files or globs...] [options]
   --orm <typeorm>             ORM adapter (default: typeorm)
   --changed-since <git-ref>   Check only migrations added or changed since the merge base
                               with <git-ref>, such as origin/main
-  --format <pretty|json>      Output format (default: pretty)
+  --format <format>           pretty, json, github (annotations), or sarif. Default:
+                              github in GitHub Actions, pretty elsewhere
   --max-warnings <n>          Fail when there are more than n warnings (default: no limit)
   --no-color                  Print without colors
 
@@ -98,8 +99,12 @@ orm-preflight init [files or globs...]   Write a starter config
 | `1`       | Errors, or more warnings than `--max-warnings`        |
 | `2`       | Usage, config, or internal error                      |
 
-`--format json` prints every finding, including suppressed ones. Its shape is public API and is
-described in [docs/json-output.md](https://github.com/sikandar100/orm-preflight/blob/main/docs/json-output.md).
+| Format   | Output                                                                                                                                                                             |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pretty` | Findings grouped by file, for people. Suppressed findings are only counted.                                                                                                        |
+| `json`   | Every finding, including suppressed ones. The shape is public API, described in [docs/json-output.md](https://github.com/sikandar100/orm-preflight/blob/main/docs/json-output.md). |
+| `github` | GitHub Actions annotations on the exact lines of the pull request, then a summary line.                                                                                            |
+| `sarif`  | SARIF 2.1.0, for GitHub code scanning and other SARIF viewers. Suppressed findings are kept with their reason.                                                                     |
 
 ## Configuration
 
@@ -153,15 +158,34 @@ GitHub Actions, check out with `fetch-depth: 0` so the merge base is available.
 ## Continuous integration
 
 Run it as a step in any CI. It needs no database and no secrets, so it is safe on pull requests
-from forks. On GitHub Actions:
+from forks. On GitHub Actions, findings appear as annotations on the pull request:
 
 ```yaml
 - uses: actions/checkout@v7
+  with:
+    fetch-depth: 0 # for --changed-since
 - uses: actions/setup-node@v7
   with:
     node-version: 22
 - run: npm ci
-- run: npx orm-preflight
+- run: npx orm-preflight --changed-since "origin/$BASE_REF"
+  env:
+    BASE_REF: ${{ github.base_ref }} # passed through env, never pasted into the script
+```
+
+GitHub shows at most 10 annotations of each level per step. The last line of the log always
+counts every finding.
+
+To see findings in the repository's code scanning alerts as well, write SARIF and upload it. The
+upload needs `security-events: write`, which GitHub does not grant to pull requests from forks,
+so keep the annotation step for those:
+
+```yaml
+- run: npx orm-preflight --format sarif > orm-preflight.sarif
+  continue-on-error: true
+- uses: github/codeql-action/upload-sarif@v4
+  with:
+    sarif_file: orm-preflight.sarif
 ```
 
 ## Suppressing a finding
@@ -201,7 +225,7 @@ Limitations in 0.1.0:
   apply, locking rules do not. It needs `npm install --save-dev node-sql-parser`.
 - Only `up()` is checked, not `down()`.
 - SQL built at run time is reported, not analyzed.
-- GitHub annotations and SARIF output are planned for 0.2.0.
+- A ready-made GitHub Action is planned for 0.2.0.
 
 ## Programmatic use
 

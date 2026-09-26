@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { validateSarif } from '../reporters/sarif-schema.js'
 
 const root = fileURLToPath(new URL('../../', import.meta.url))
 const cli = fileURLToPath(new URL('../../dist/cli.mjs', import.meta.url))
@@ -15,7 +16,10 @@ const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.ur
 const project = fileURLToPath(new URL('fixtures/project/', import.meta.url))
 // Color settings come from each test, never from the environment running the tests.
 const inherited = Object.fromEntries(
-  Object.entries(process.env).filter(([key]) => key !== 'FORCE_COLOR' && key !== 'NO_COLOR'),
+  // GITHUB_ACTIONS would switch the default format to annotations when these tests run in CI.
+  Object.entries(process.env).filter(
+    ([key]) => !['FORCE_COLOR', 'NO_COLOR', 'GITHUB_ACTIONS', 'GITHUB_WORKSPACE'].includes(key),
+  ),
 )
 
 function spawnCli(...args: string[]) {
@@ -66,6 +70,21 @@ describe('built CLI on a sample project', () => {
     expect(result.status).toBe(1)
     const output = result.stdout.replace(`"version": "${pkg.version}"`, '"version": "<version>"')
     await expect(output).toMatchFileSnapshot('output/findings.json')
+  })
+
+  it('prints GitHub annotations', async () => {
+    const result = spawnIn(project, ['--format', 'github'])
+    expect(result.status).toBe(1)
+    await expect(result.stdout).toMatchFileSnapshot('output/annotations.txt')
+  })
+
+  it('prints valid SARIF', async () => {
+    const result = spawnIn(project, ['--format', 'sarif'])
+    expect(result.status).toBe(1)
+    const valid = validateSarif(JSON.parse(result.stdout))
+    expect(valid, JSON.stringify(validateSarif.errors)).toBe(true)
+    const output = result.stdout.replace(`"version": "${pkg.version}"`, '"version": "<version>"')
+    await expect(output).toMatchFileSnapshot('output/findings.sarif')
   })
 
   it('exits 0 when the given files are safe', () => {

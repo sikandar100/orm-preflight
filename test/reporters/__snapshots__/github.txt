@@ -1,0 +1,3 @@
+::error file=src/migrations/1727600000000-DropBio.ts,line=5,col=30,title=orm-preflight%3A no-drop-column::"users"."bio" is dropped, which deletes every value in it.%0AWhy: Dropping a column deletes its data immediately.%0ASafe: Drop the column in a later release.%0ADocs: https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md
+::warning file=src/migrations/1727600000000-DropBio.ts,line=12,col=5,title=orm-preflight%3A unanalyzable-statement::This statement could not be analyzed.%0AWhy: Dropping a column deletes its data immediately.%0ADocs: https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/unanalyzable-statement.md
+orm-preflight: 1 error, 1 warning in 2 migrations (1 suppressed)

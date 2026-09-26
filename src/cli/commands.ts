@@ -7,6 +7,7 @@ import { closest } from '../config/validate.js'
 import { discoverFiles } from '../discovery/index.js'
 import { UsageError } from '../errors.js'
 import { coreRules } from '../rules/index.js'
+import type { SarifRule } from '../reporters/sarif.js'
 import type { Rule } from '../rules/types.js'
 import { ruleDocs } from './rule-docs.js'
 
@@ -34,6 +35,18 @@ export function formatRules(): string {
       .trimEnd(),
   )
   return `${lines.join('\n')}\n\nRun "orm-preflight explain <rule>" for a rule's documentation.\n`
+}
+
+/** Rule metadata for SARIF, with each rule's one-sentence summary from its docs. */
+export function sarifRules(): SarifRule[] {
+  return allRules().map((r) => ({
+    id: r.meta.id,
+    category: r.meta.category,
+    defaultSeverity: r.meta.defaultSeverity,
+    docsUrl: r.meta.docsUrl,
+    // The paragraph after the title. test/cli/rule-docs.test.ts keeps every doc in this shape.
+    summary: (ruleDocs[r.meta.id] ?? '').split('\n\n')[1]?.replaceAll('\n', ' ').trim() ?? '',
+  }))
 }
 
 /** `orm-preflight explain <rule>`: the rule's Markdown documentation. */

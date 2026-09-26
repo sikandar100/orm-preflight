@@ -7,3 +7,6 @@ CHANGELOG.md
 test/**/fixtures/
 test/**/bad/
 test/**/good/
+# Snapshots stay byte-for-byte as the code writes them
+test/**/__snapshots__/
+test/e2e/output/
