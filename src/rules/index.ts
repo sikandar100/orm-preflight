@@ -4,6 +4,7 @@ import { noAddNotNullWithoutDefault } from './no-add-not-null-without-default.js
 import { noDropAndRecreateColumn } from './no-drop-and-recreate-column.js'
 import { noDropColumn } from './no-drop-column.js'
 import { noDropTable } from './no-drop-table.js'
+import { noEditAppliedMigration } from './no-edit-applied-migration.js'
 import { noRenameColumn } from './no-rename-column.js'
 import { noRenameTable } from './no-rename-table.js'
 import { noSetNotNull } from './no-set-not-null.js'
@@ -33,5 +34,6 @@ export const coreRules: readonly Rule[] = [
   requireNotValidForeignKey,
   noSetNotNull,
   unanalyzableStatement,
+  noEditAppliedMigration,
   invalidSuppression,
 ]
