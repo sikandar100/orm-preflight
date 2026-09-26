@@ -1,6 +1,4 @@
 import { execFile } from 'node:child_process'
-import { realpathSync } from 'node:fs'
-import path from 'node:path'
 import { UsageError } from '../errors.js'
 
 /** How a file differs from the merge base. Renamed files with edits count as modified. */
@@ -24,9 +22,8 @@ export async function changesSince(cwd: string, ref: string): Promise<ChangeSet>
   if (ref === '' || ref.startsWith('-')) {
     throw new UsageError(`--changed-since needs a git ref, such as origin/main. Got "${ref}".`)
   }
-  let root: string
   try {
-    root = (await git(cwd, ['rev-parse', '--show-toplevel'])).trim()
+    await git(cwd, ['rev-parse', '--show-toplevel'])
   } catch (error) {
     throw new UsageError(`--changed-since needs a git repository: ${firstLine(error)}.`)
   }
@@ -45,7 +42,18 @@ export async function changesSince(cwd: string, ref: string): Promise<ChangeSet>
   }
 
   const files = new Map<string, FileChange>()
-  const diff = await git(cwd, ['diff', '--name-status', '-z', '-M', '--end-of-options', base])
+  // --relative: paths relative to cwd, leaving out files outside it. Converting paths from the
+  // repository root instead breaks where the two spell the same directory differently, such
+  // as Windows short (8.3) names.
+  const diff = await git(cwd, [
+    'diff',
+    '--relative',
+    '--name-status',
+    '-z',
+    '-M',
+    '--end-of-options',
+    base,
+  ])
   const fields = diff.split('\0').filter((f) => f !== '')
   for (let i = 0; i < fields.length; i++) {
     const status = fields[i] ?? ''
@@ -56,23 +64,10 @@ export async function changesSince(cwd: string, ref: string): Promise<ChangeSet>
     if (letter === 'R' && status === 'R100') continue
     files.set(file, letter === 'A' || letter === 'C' ? 'added' : 'modified')
   }
-  const untracked = await git(cwd, [
-    'ls-files',
-    '--others',
-    '--exclude-standard',
-    '-z',
-    '--full-name',
-  ])
+  // Untracked files under cwd, relative to it.
+  const untracked = await git(cwd, ['ls-files', '--others', '--exclude-standard', '-z'])
   for (const file of untracked.split('\0')) if (file !== '') files.set(file, 'added')
-
-  // git reports paths from the repository root; the linter works relative to cwd.
-  const here = realpathSync(cwd)
-  const relative = new Map<string, FileChange>()
-  for (const [file, change] of files) {
-    const rel = path.relative(here, path.join(root, file)).split(path.sep).join('/')
-    if (!rel.startsWith('../') && rel !== '..') relative.set(rel, change)
-  }
-  return { ref, files: relative }
+  return { ref, files }
 }
 
 function git(cwd: string, args: string[]): Promise<string> {
