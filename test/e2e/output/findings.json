@@ -2,7 +2,7 @@
   "version": "<version>",
   "summary": {
     "errors": 2,
-    "warnings": 1,
+    "warnings": 2,
     "suppressed": 1,
     "files": 4,
     "migrations": 3
@@ -32,6 +32,19 @@
       "why": "PostgreSQL fills a new column with its default for every existing row. With no default that value is NULL, which the NOT NULL constraint rejects.",
       "safeAlternative": "Add the column as nullable, backfill it in batches, then enforce NOT NULL without a long lock (see no-set-not-null). Or add it with a constant default, which PostgreSQL 11 and later add without rewriting the table.",
       "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-add-not-null-without-default.md",
+      "suppressed": null
+    },
+    {
+      "ruleId": "require-down",
+      "severity": "warn",
+      "category": "correctness",
+      "file": "src/migrations/1727300000000-DropBio.ts",
+      "line": 3,
+      "column": 8,
+      "message": "This migration has an empty or missing down(), so reverting it changes nothing in the database but still marks it as not applied.",
+      "why": "Reverting runs down() and then deletes the migration from the migrations table. With an empty down(), the schema keeps every change, and the next run applies up() again to a schema that already has them, which usually fails.",
+      "safeAlternative": "Write the reverse of up() in down(). If the change cannot be undone, for example because it deletes data, throw an error in down() that says so, so a revert stops instead of silently doing nothing.",
+      "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-down.md",
       "suppressed": null
     },
     {

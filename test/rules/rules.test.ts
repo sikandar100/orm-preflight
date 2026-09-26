@@ -37,7 +37,7 @@ const cases = roots.flatMap((root) =>
     }),
 )
 
-async function findingsFor(file: string) {
+async function findingsFor(file: string, ruleId: string) {
   const root = rootOf.get(file) ?? ''
   const text = readFileSync(path.join(root, file), 'utf8')
   const header = /^\/\/ fixture: (\{.*\})/.exec(text)?.[1]
@@ -45,7 +45,12 @@ async function findingsFor(file: string) {
   const { $change, ...raw } = (header === undefined ? {} : JSON.parse(header)) as {
     $change?: FileChange
   }
-  const config = resolveConfig(raw, 'fixture')
+  // Fixtures of other rules keep down() empty on purpose; require-down would add to every one.
+  const rules = ruleId === 'require-down' ? {} : { 'require-down': 'off' }
+  const config = resolveConfig(
+    { ...raw, rules: { ...rules, ...(raw as { rules?: object }).rules } },
+    'fixture',
+  )
   const changes =
     $change === undefined ? undefined : { ref: 'main', files: new Map([[file, $change]]) }
   const result = await lintSources([{ path: file, text }], config, typeormAdapter, changes)
@@ -61,7 +66,7 @@ describe('rule fixtures', () => {
   })
 
   it.each(cases)('$file', async ({ ruleId, kind, file }) => {
-    const findings = await findingsFor(file)
+    const findings = await findingsFor(file, ruleId)
     const own = findings.filter((f) => f.ruleId === ruleId)
     if (kind === 'bad') expect(own.length).toBeGreaterThan(0)
     else expect(own).toEqual([])

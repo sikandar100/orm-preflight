@@ -37,5 +37,5 @@ Decided:
 - Package manager: pnpm
 - Node support: `engines` `>=20` through 1.x. Dev tooling (Vitest, tsdown, Changesets) needs Node 22 or newer, so tests run on Node 22 and 24, and CI installs the packed tarball on Node 20, 22, and 24 to prove runtime support.
 - TypeScript 6.0.x (typescript-eslint does not support 7.x yet)
-- MySQL: a preview in 0.1.0 (data-loss and deploy-safety rules, no locking rules); full support in 0.2.0
+- MySQL: a preview in 0.1.0; supported from 0.2.0 with the data-loss, deploy-safety, and correctness rules (SPEC 6.6). MySQL locking analysis comes after 1.0
 - Default `postgresVersion`: 16

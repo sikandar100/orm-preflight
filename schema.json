@@ -76,6 +76,9 @@
         "no-edit-applied-migration": {
           "$ref": "#/definitions/severity"
         },
+        "require-down": {
+          "$ref": "#/definitions/severity"
+        },
         "no-truncate": {
           "$ref": "#/definitions/severity"
         },
@@ -137,6 +140,9 @@
           "$ref": "#/definitions/severity"
         },
         "typeorm/invalid-migration-name": {
+          "$ref": "#/definitions/severity"
+        },
+        "typeorm/no-enum-recreate": {
           "$ref": "#/definitions/severity"
         }
       }
