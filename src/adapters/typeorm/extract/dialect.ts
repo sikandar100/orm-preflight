@@ -1,7 +1,7 @@
 import type * as t from '@babel/types'
 import type { Dialect } from '../../../rules/types.js'
 import { keyName, unwrap } from './parse.js'
-import type { Scope } from './scope.js'
+import { Scope } from './scope.js'
 
 /** TypeORM driver types (DataSourceOptions.type) that behave like each lint dialect. */
 const DRIVERS: Readonly<Record<Dialect, readonly string[]>> = {
@@ -42,6 +42,7 @@ const DRIVER_BY_NORMALIZED = new Map(KNOWN_DRIVERS.map((d) => [normalize(d), d])
  */
 export function isDatabaseType(node: t.Node, scope: Scope, depth = 0): boolean {
   const n = unwrap(node)
+  if (n.type === 'CallExpression' && depth < 8) return returnsDatabaseType(n, scope, depth)
   if (n.type === 'Identifier') {
     const binding = scope.lookup(n.name)
     return (
@@ -68,6 +69,61 @@ export function isDatabaseType(node: t.Node, scope: Scope, depth = 0): boolean {
     (owner === 'connection' || owner === 'dataSource') &&
     (tail === 'options.type' || tail === 'driver.options.type')
   )
+}
+
+/**
+ * Whether a call to a same-file helper returns the database type: the helper receives
+ * queryRunner, and every return statement in it returns the type (possibly through a
+ * constant). Checks such as `if (!supported.includes(type)) throw ...` may come first.
+ */
+function returnsDatabaseType(call: t.CallExpression, scope: Scope, depth: number): boolean {
+  const helper = scope.findHelper(call.callee)
+  if (helper === undefined) return false
+  const inner = new Scope(helper.scope)
+  const params = helper.fn.params.filter((p) => !(p.type === 'Identifier' && p.name === 'this'))
+  for (const [i, param] of params.entries()) {
+    const arg = call.arguments[i]
+    if (param.type !== 'Identifier' || arg === undefined) continue
+    const a = unwrap(arg)
+    if (a.type === 'Identifier' && scope.lookup(a.name)?.kind === 'queryRunner') {
+      inner.declare(param.name, { kind: 'queryRunner' })
+    }
+  }
+  const body = helper.fn.body
+  if (body.type !== 'BlockStatement') return isDatabaseType(body, inner, depth + 1)
+  inner.declareStatements(body.body)
+  const returns = returnStatements(body)
+  return (
+    returns.length > 0 &&
+    returns.every((r) => r.argument != null && isDatabaseType(r.argument, inner, depth + 1))
+  )
+}
+
+/** Return statements of a function body, leaving out nested functions. */
+function returnStatements(node: t.Node): t.ReturnStatement[] {
+  if (node.type === 'ReturnStatement') return [node]
+  if (
+    node.type === 'FunctionDeclaration' ||
+    node.type === 'FunctionExpression' ||
+    node.type === 'ArrowFunctionExpression' ||
+    node.type === 'ClassMethod' ||
+    node.type === 'ObjectMethod'
+  ) {
+    return []
+  }
+  const out: t.ReturnStatement[] = []
+  for (const value of Object.values(node) as unknown[]) {
+    for (const child of Array.isArray(value) ? (value as unknown[]) : [value]) {
+      if (
+        typeof child === 'object' &&
+        child !== null &&
+        typeof (child as t.Node).type === 'string'
+      ) {
+        out.push(...returnStatements(child as t.Node))
+      }
+    }
+  }
+  return out
 }
 
 /**

@@ -1,0 +1,81 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/helper-params.ts",
+    "id": "HelperParams1727000000000",
+    "loc": {
+      "file": "handwritten/flow/helper-params.ts",
+      "line": 6,
+      "column": 8
+    },
+    "timestamp": 1727000000000,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "HelperParams1727000000000"
+    },
+    "up": [
+      {
+        "kind": "create_index",
+        "table": {
+          "name": "role_permission"
+        },
+        "unique": true,
+        "concurrently": false,
+        "name": "IDX_a",
+        "loc": {
+          "file": "handwritten/flow/helper-params.ts",
+          "line": 24,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "CREATE UNIQUE INDEX `IDX_a` ON `role_permission` (`tenantId`)"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "name": "users"
+        },
+        "column": "bio",
+        "type": "text",
+        "notNull": false,
+        "loc": {
+          "file": "handwritten/flow/helper-params.ts",
+          "line": 32,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE `users` ADD `bio` text"
+      },
+      {
+        "kind": "drop_table",
+        "table": {
+          "name": "legacy"
+        },
+        "loc": {
+          "file": "handwritten/flow/helper-params.ts",
+          "line": 53,
+          "column": 32
+        },
+        "origin": "sql",
+        "sql": "DROP TABLE `legacy`",
+        "conditional": true
+      },
+      {
+        "kind": "drop_table",
+        "table": {
+          "name": "maybe"
+        },
+        "loc": {
+          "file": "handwritten/flow/helper-params.ts",
+          "line": 14,
+          "column": 32
+        },
+        "origin": "sql",
+        "sql": "DROP TABLE `maybe`",
+        "conditional": true
+      }
+    ]
+  }
+]

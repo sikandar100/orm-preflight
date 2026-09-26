@@ -94,6 +94,12 @@ export function walkUp(
   ctx: Omit<Context, 'steps' | 'stack' | 'active'>,
 ): ExtractedStep[] {
   const context: Context = { ...ctx, stack: [fn], active: [], steps: [] }
+  // Lets guards follow a helper that returns the database type, such as
+  // `const type = this.databaseType(queryRunner)`.
+  ctx.moduleScope.helpers = (callee, from) => {
+    const helper = resolveHelper(callee, from, context)
+    return helper === undefined ? undefined : { fn: helper.fn, scope: helper.scope }
+  }
   const scope = new Scope(ctx.moduleScope)
   scope.declare('this', { kind: 'instance' })
   const params = fn.params.filter((p) => !(p.type === 'Identifier' && p.name === 'this'))
@@ -645,6 +651,15 @@ function followHelper(
     const arg = call.arguments[i]
     if (id.type === 'Identifier' && arg !== undefined && isQueryRunner(arg, scope)) {
       inner.declare(id.name, { kind: 'queryRunner' })
+    } else if (
+      id.type === 'Identifier' &&
+      arg !== undefined &&
+      arg.type !== 'SpreadElement' &&
+      !isReassigned(helper.fn.body, id.name)
+    ) {
+      // The parameter holds the caller's argument, so a database type, table name, or SQL
+      // string passed in resolves as if written in the helper.
+      inner.declare(id.name, { kind: 'const', init: arg, scope })
     } else {
       for (const name of patternNames(param)) inner.declare(name, { kind: 'mutable' })
     }
@@ -652,6 +667,32 @@ function followHelper(
   ctx.stack.push(helper.fn)
   walkFunctionBody(helper.fn.body, inner, ctx, cond)
   ctx.stack.pop()
+}
+
+/** Whether `name` is assigned or updated anywhere in `node`, including nested functions. */
+function isReassigned(node: t.Node, name: string): boolean {
+  if (
+    (node.type === 'AssignmentExpression' && assignsName(node.left, name)) ||
+    (node.type === 'UpdateExpression' &&
+      node.argument.type === 'Identifier' &&
+      node.argument.name === name)
+  ) {
+    return true
+  }
+  for (const key of Object.keys(node) as (keyof t.Node)[]) {
+    const value: unknown = node[key]
+    const children = Array.isArray(value) ? value : [value]
+    for (const child of children) {
+      if (isNode(child) && isReassigned(child, name)) return true
+    }
+  }
+  return false
+}
+
+function assignsName(target: t.Node, name: string): boolean {
+  return (
+    patternNames(target).includes(name) || (target.type === 'Identifier' && target.name === name)
+  )
 }
 
 function containsExit(node: t.Node): boolean {

@@ -1,0 +1,109 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/flow/helper-params.ts",
+    "id": "HelperParams1727000000000",
+    "loc": {
+      "file": "handwritten/flow/helper-params.ts",
+      "line": 6,
+      "column": 8
+    },
+    "timestamp": 1727000000000,
+    "runsInTransaction": true,
+    "up": [
+      {
+        "kind": "sql",
+        "sql": "CREATE UNIQUE INDEX `IDX_a` ON `role_permission` (`tenantId`)",
+        "loc": {
+          "file": "handwritten/flow/helper-params.ts",
+          "line": 24,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/helper-params.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 24,
+              "column": 30
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "ALTER TABLE `users` ADD `bio` text",
+        "loc": {
+          "file": "handwritten/flow/helper-params.ts",
+          "line": 32,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/flow/helper-params.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 32,
+              "column": 30
+            },
+            {
+              "offset": 13,
+              "line": 11,
+              "column": 40
+            },
+            {
+              "offset": 18,
+              "line": 32,
+              "column": 56
+            }
+          ]
+        }
+      },
+      {
+        "kind": "sql",
+        "sql": "DROP TABLE `legacy`",
+        "loc": {
+          "file": "handwritten/flow/helper-params.ts",
+          "line": 53,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/helper-params.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 53,
+              "column": 32
+            }
+          ]
+        },
+        "conditional": true
+      },
+      {
+        "kind": "sql",
+        "sql": "DROP TABLE `maybe`",
+        "loc": {
+          "file": "handwritten/flow/helper-params.ts",
+          "line": 14,
+          "column": 13
+        },
+        "map": {
+          "file": "handwritten/flow/helper-params.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 14,
+              "column": 32
+            }
+          ]
+        },
+        "conditional": true
+      }
+    ],
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "HelperParams1727000000000"
+    }
+  }
+]

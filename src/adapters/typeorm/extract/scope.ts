@@ -12,11 +12,27 @@ export type Binding =
   /** A function declared in the file, so `helper(queryRunner)` can be followed. */
   | { kind: 'function'; node: t.FunctionDeclaration; scope: Scope }
 
+/** A same-file helper function, with the scope it was declared in. */
+export interface HelperFunction {
+  fn: t.Function
+  scope: Scope
+}
+
+/** Finds the same-file helper a callee refers to, seen from `scope`. */
+export type HelperLookup = (callee: t.Node, scope: Scope) => HelperFunction | undefined
+
 /** Lexical scope, just detailed enough to resolve const strings and QueryRunner aliases. */
 export class Scope {
   private readonly bindings = new Map<string, Binding>()
+  /** Set on the module scope while a migration is walked, since helpers depend on its class. */
+  helpers: HelperLookup | undefined
 
   constructor(readonly parent?: Scope) {}
+
+  /** The same-file helper `callee` refers to, if any. */
+  findHelper(callee: t.Node, from: Scope = this): HelperFunction | undefined {
+    return this.helpers?.(callee, from) ?? this.parent?.findHelper(callee, from)
+  }
 
   declare(name: string, binding: Binding): void {
     this.bindings.set(name, binding)
