@@ -23,6 +23,8 @@ add unique using index          | child=AccessExclusiveLock | no rewrite
 drop index                      | child=AccessExclusiveLock | no rewrite 
 reindex index                   | child=ShareLock | no rewrite 
 cluster                         | child=AccessExclusiveLock, child=ShareLock | REWRITE 
+enum recreate (TypeORM 0.3)   | child=AccessExclusiveLock, child=ShareLock | REWRITE 
+enum add value                  |  | no rewrite 
 vacuum full (outside a tx)      | waits for AccessExclusiveLock 
 drop index concurrently         | waits for no lock on child (reads and writes continue) 
 --- errors
@@ -34,6 +36,7 @@ REINDEX CONCURRENTLY inside BEGIN    | ERROR:  REINDEX CONCURRENTLY cannot run i
 VACUUM FULL inside BEGIN             | ERROR:  VACUUM cannot run inside a transaction block 
 enum value used before commit        | ERROR:  unsafe use of new value "happy" of enum type mood LINE 1: SELECT 'happy'::mood;                ^ HINT:  New enum values must be committed before they can be used. 
 enum value used after commit         | happy 
+enum recreate, row has removed value | ERROR:  invalid input value for enum st: "b" 
 lock_timeout cancels a blocked ALTER | ERROR:  canceling statement due to lock timeout 
 SELECT queued behind a waiting ALTER | waiting: AccessExclusiveLock (the ALTER), AccessShareLock (the SELECT) 
 CONCURRENTLY alone (autocommit)      | ok

@@ -62,6 +62,8 @@ check "add unique using index         " "CREATE UNIQUE INDEX u_idx ON child (ema
 check "drop index                     " "CREATE INDEX d_idx ON child (email); COMMIT; BEGIN; DROP INDEX d_idx"
 check "reindex index                  " "REINDEX INDEX child_pkey"
 check "cluster                        " "CLUSTER child USING child_pkey"
+check "enum recreate (TypeORM 0.3)  " "DROP TYPE IF EXISTS st_old; DROP TYPE IF EXISTS st CASCADE; CREATE TYPE st AS ENUM ('a', 'b'); ALTER TABLE child ADD s st; COMMIT; BEGIN; ALTER TYPE st RENAME TO st_old; CREATE TYPE st AS ENUM ('a', 'b', 'c'); ALTER TABLE child ALTER COLUMN s TYPE st USING s::text::st; DROP TYPE st_old"
+check "enum add value                 " "DROP TYPE IF EXISTS st CASCADE; CREATE TYPE st AS ENUM ('a', 'b'); ALTER TABLE child ADD s st; COMMIT; BEGIN; ALTER TYPE st ADD VALUE 'c'"
 if [ "$ver" -ge 18 ]; then
   check "add not null NOT VALID (18+)   " "ALTER TABLE child ADD CONSTRAINT nn NOT NULL email NOT VALID"
   check "validate not null (18+)        " "ALTER TABLE child ADD CONSTRAINT nn NOT NULL email NOT VALID; COMMIT; BEGIN; ALTER TABLE child VALIDATE CONSTRAINT nn"
@@ -106,6 +108,18 @@ BEGIN;
 ALTER TYPE mood ADD VALUE IF NOT EXISTS 'happy';
 COMMIT;
 SELECT 'happy'::mood;
+SQL
+echo -n "enum recreate, row has removed value | "; setup; psql <<'SQL' 2>&1 | grep -E "ERROR" | tr '\n' ' '; echo
+SET client_min_messages = warning;
+DROP TYPE IF EXISTS st_old; DROP TYPE IF EXISTS st CASCADE;
+CREATE TYPE st AS ENUM ('a', 'b');
+ALTER TABLE child ADD s st;
+UPDATE child SET s = 'b' WHERE id = 1;
+BEGIN;
+ALTER TYPE st RENAME TO st_old;
+CREATE TYPE st AS ENUM ('a');
+ALTER TABLE child ALTER COLUMN s TYPE st USING s::text::st;
+ROLLBACK;
 SQL
 echo -n "lock_timeout cancels a blocked ALTER | "; setup; docker exec $name psql -U postgres -X -q -c "BEGIN; SELECT 1 FROM child LIMIT 1; SELECT pg_sleep(3); COMMIT;" > /dev/null 2>&1 & sleep 1; psql -c "SET lock_timeout = '500ms'" -c "ALTER TABLE child ADD t int" 2>&1 | tr '\n' ' '; wait; echo
 # A waiting ALTER blocks the queries that come after it, even plain reads.
