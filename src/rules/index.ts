@@ -1,5 +1,6 @@
 import { enumValueUsedInSameTransaction } from './enum-value-used-in-same-transaction.js'
 import { noBlockingMaintenance } from './no-blocking-maintenance.js'
+import { requireDown } from './require-down.js'
 import { requireConcurrentIndexDrop } from './require-concurrent-index-drop.js'
 import { requireConcurrentUnique } from './require-concurrent-unique.js'
 import { requireLockTimeout } from './require-lock-timeout.js'
@@ -47,5 +48,6 @@ export const coreRules: readonly Rule[] = [
   requireLockTimeout,
   unanalyzableStatement,
   noEditAppliedMigration,
+  requireDown,
   invalidSuppression,
 ]

@@ -19,6 +19,7 @@ To accept one finding, put a suppression comment with a reason above the stateme
 | [`no-drop-table`](no-drop-table.md)                                       | A dropped table                                                  |
 | [`no-truncate`](no-truncate.md)                                           | `TRUNCATE` or `clearTable()`                                     |
 | [`typeorm/no-changecolumn-recreate`](typeorm/no-changecolumn-recreate.md) | `changeColumn()` that drops and re-adds the column               |
+| [`typeorm/no-enum-recreate`](typeorm/no-enum-recreate.md)                 | TypeORM 0.3's enum change by recreating the type (warn)          |
 
 ## Deploy safety
 
@@ -52,5 +53,6 @@ To accept one finding, put a suppression comment with a reason above the stateme
 | [`unanalyzable-statement`](unanalyzable-statement.md)                                 | A statement orm-preflight could not read (warn)                |
 | [`invalid-suppression`](invalid-suppression.md)                                       | A suppression comment with no reason or an unknown rule        |
 | [`no-edit-applied-migration`](no-edit-applied-migration.md)                           | With `--changed-since`: an edit to an applied migration (warn) |
+| [`require-down`](require-down.md)                                                     | An empty or missing `down()` (warn)                            |
 | [`typeorm/transaction-override-forbidden`](typeorm/transaction-override-forbidden.md) | `transaction` set on a migration in transaction mode `"all"`   |
 | [`typeorm/invalid-migration-name`](typeorm/invalid-migration-name.md)                 | A migration name without a 13-digit timestamp                  |

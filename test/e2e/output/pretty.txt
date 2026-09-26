@@ -12,10 +12,16 @@ src/migrations/1727100000000-WidenUserName.ts
         Docs: https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-add-not-null-without-default.md
 
 src/migrations/1727300000000-DropBio.ts
+  3:8   warn   require-down
+        This migration has an empty or missing down(), so reverting it changes nothing in the database but still marks it as not applied.
+        Why:  Reverting runs down() and then deletes the migration from the migrations table. With an empty down(), the schema keeps every change, and the next run applies up() again to a schema that already has them, which usually fails.
+        Safe: Write the reverse of up() in down(). If the change cannot be undone, for example because it deletes data, throw an error in down() that says so, so a revert stops instead of silently doing nothing.
+        Docs: https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-down.md
+
   6:30  warn   possible-rename-data-loss
         "users"."bio" is dropped and "users"."nickname" is added in the same migration. If this is a rename, every value in "bio" is lost.
         Why:  A renamed property can turn into a migration that drops the old column and adds a new one. The data is not copied, and no statement in the migration copies it. The dropped column type is not known here, so check whether the columns match.
         Safe: Rename through expand and contract: add the new column, backfill it from the old one, switch the code, and drop the old column in a later release.
         Docs: https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/possible-rename-data-loss.md
 
-2 errors, 1 warning in 3 migrations (1 suppressed)
+2 errors, 2 warnings in 3 migrations (1 suppressed)

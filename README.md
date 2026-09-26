@@ -64,12 +64,14 @@ To start on an existing project without fixing its history, run `npx orm-preflig
 | [`no-blocking-maintenance`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-blocking-maintenance.md)                               | `VACUUM FULL`, `CLUSTER`, or `REINDEX` without `CONCURRENTLY` (warn)                            |
 | [`enum-value-used-in-same-transaction`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/enum-value-used-in-same-transaction.md)       | A new enum value used before the transaction that adds it commits (warn)                        |
 | [`require-lock-timeout`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-lock-timeout.md)                                     | A change to an existing table without `lock_timeout` (off, opt-in)                              |
+| [`typeorm/no-enum-recreate`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/no-enum-recreate.md)                             | TypeORM 0.3's enum change by recreating the type (warning)                                      |
 | **Correctness**                                                                                                                                         |                                                                                                 |
 | [`typeorm/transaction-override-forbidden`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/transaction-override-forbidden.md) | `transaction` set on a migration in transaction mode `"all"`                                    |
 | [`typeorm/invalid-migration-name`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/invalid-migration-name.md)                 | A migration name without a 13-digit timestamp                                                   |
 | [`unanalyzable-statement`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/unanalyzable-statement.md)                                 | A statement orm-preflight could not read (warning)                                              |
 | [`invalid-suppression`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/invalid-suppression.md)                                       | A suppression comment with no reason or an unknown rule                                         |
 | [`no-edit-applied-migration`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-edit-applied-migration.md)                           | With `--changed-since`: an edit to a migration that already exists on the base branch (warning) |
+| [`require-down`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-down.md)                                                     | An empty or missing `down()` (warning)                                                          |
 
 Every finding says what happens, why, and how to make the change safely. Each rule's page cites
 the PostgreSQL, MySQL, or TypeORM source behind its claim. Run `npx orm-preflight explain <rule>`
@@ -224,12 +226,13 @@ A clean run means none of the documented hazards were found. It does not guarant
 migration is safe. orm-preflight does not know your table sizes or traffic, so it assumes every
 existing table is large and busy.
 
-Limitations in 0.1.0:
+Limitations:
 
 - TypeORM only. The core is ORM-agnostic, so adapters for other ORMs can follow.
-- PostgreSQL is fully supported. MySQL support is a preview: data-loss and deploy-safety rules
-  apply, locking rules do not. It needs `npm install --save-dev node-sql-parser`.
-- Only `up()` is checked, not `down()`.
+- PostgreSQL and MySQL. On MySQL, the data-loss, deploy-safety, and correctness rules apply.
+  Locking analysis for MySQL (`ALGORITHM=INSTANT`, `INPLACE`, `COPY`) is planned after 1.0.
+  MySQL needs `npm install --save-dev node-sql-parser`.
+- Only `up()` is analyzed. `down()` is only checked for being empty (`require-down`).
 - SQL built at run time is reported, not analyzed.
 - A ready-made GitHub Action is planned for 0.2.0.
 

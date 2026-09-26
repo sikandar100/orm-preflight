@@ -19,11 +19,13 @@ import possibleRenameDataLoss from '../../docs/rules/possible-rename-data-loss.m
 import requireConcurrentIndex from '../../docs/rules/require-concurrent-index.md'
 import requireConcurrentIndexDrop from '../../docs/rules/require-concurrent-index-drop.md'
 import requireConcurrentUnique from '../../docs/rules/require-concurrent-unique.md'
+import requireDown from '../../docs/rules/require-down.md'
 import requireLockTimeout from '../../docs/rules/require-lock-timeout.md'
 import requireNotValidCheck from '../../docs/rules/require-not-valid-check.md'
 import requireNotValidForeignKey from '../../docs/rules/require-not-valid-foreign-key.md'
 import typeormInvalidMigrationName from '../../docs/rules/typeorm/invalid-migration-name.md'
 import typeormNoChangecolumnRecreate from '../../docs/rules/typeorm/no-changecolumn-recreate.md'
+import typeormNoEnumRecreate from '../../docs/rules/typeorm/no-enum-recreate.md'
 import typeormTransactionOverrideForbidden from '../../docs/rules/typeorm/transaction-override-forbidden.md'
 import unanalyzableStatement from '../../docs/rules/unanalyzable-statement.md'
 
@@ -48,11 +50,13 @@ export const ruleDocs: Readonly<Record<string, string>> = {
   'require-concurrent-index': requireConcurrentIndex,
   'require-concurrent-index-drop': requireConcurrentIndexDrop,
   'require-concurrent-unique': requireConcurrentUnique,
+  'require-down': requireDown,
   'require-lock-timeout': requireLockTimeout,
   'require-not-valid-check': requireNotValidCheck,
   'require-not-valid-foreign-key': requireNotValidForeignKey,
   'typeorm/invalid-migration-name': typeormInvalidMigrationName,
   'typeorm/no-changecolumn-recreate': typeormNoChangecolumnRecreate,
+  'typeorm/no-enum-recreate': typeormNoEnumRecreate,
   'typeorm/transaction-override-forbidden': typeormTransactionOverrideForbidden,
   'unanalyzable-statement': unanalyzableStatement,
 }

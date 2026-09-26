@@ -22,7 +22,9 @@ export class ${name}${String(ts)} implements MigrationInterface {
     await queryRunner.query(\`${sql}\`)
   }
 
-  public async down(): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query('SELECT 1')
+  }
 }
 `
 

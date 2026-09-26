@@ -1,0 +1,28 @@
+[
+  {
+    "ruleId": "typeorm/no-enum-recreate",
+    "severity": "warn",
+    "category": "locking",
+    "file": "no-enum-recreate/bad/generated-0.3.ts",
+    "line": 5,
+    "column": 30,
+    "message": "TypeORM recreates enum \"public.users_status_enum\" instead of adding values to it. Converting \"users\".\"status\" to the new type rewrites the table while blocking reads and writes, and fails if a row holds a value that was removed.",
+    "why": "TypeORM 0.3 changes an enum in four steps: rename the old type to _old, create the new type, convert each column with ALTER COLUMN ... TYPE ... USING, and drop the old type. Each conversion rewrites its table under an ACCESS EXCLUSIVE lock. TypeORM 1.x uses ALTER TYPE ... ADD VALUE when values are only added.",
+    "safeAlternative": "When you only add values, replace the generated statements with ALTER TYPE ... ADD VALUE, which changes no rows. To rename a value, use ALTER TYPE ... RENAME VALUE. To remove values, use expand and contract: add a column with the new type, backfill it, switch the code, and drop the old column later.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/no-enum-recreate.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "no-unsafe-column-type-change",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-enum-recreate/bad/generated-0.3.ts",
+    "line": 7,
+    "column": 30,
+    "message": "Changing the type of \"users\".\"status\" to public.users_status_enum with a USING expression rewrites the whole \"users\" table while blocking reads and writes.",
+    "why": "ALTER COLUMN ... TYPE holds an ACCESS EXCLUSIVE lock and rewrites the table and its indexes, unless the old and new types store values the same way (such as a longer varchar, or varchar to text).",
+    "safeAlternative": "Expand and contract: add a column with the new type, backfill it in batches, switch the code to it, and drop the old column in a later release.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-unsafe-column-type-change.md",
+    "suppressed": null
+  }
+]
