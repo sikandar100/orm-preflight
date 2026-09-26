@@ -54,6 +54,8 @@ export type OperationBody =
       using: boolean
     }
   | { kind: 'set_not_null'; table: TableRef; column: string }
+  /** ALTER COLUMN ... SET DEFAULT. The default applies to new rows only. */
+  | { kind: 'set_default'; table: TableRef; column: string }
   | {
       kind: 'add_constraint'
       table: TableRef

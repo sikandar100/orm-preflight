@@ -165,6 +165,10 @@ describe('PostgreSQL statements to operations', () => {
       [{ kind: 'set_not_null', table: users, column: 'name' }],
     ],
     [
+      "ALTER TABLE users ALTER COLUMN status SET DEFAULT 'active'",
+      [{ kind: 'set_default', table: users, column: 'status' }],
+    ],
+    [
       'ALTER TABLE "posts" ADD CONSTRAINT "FK_1" FOREIGN KEY ("author") REFERENCES "users"("id")',
       [
         {
@@ -336,7 +340,6 @@ describe('PostgreSQL statements to operations', () => {
     'DROP FUNCTION f()',
     'DROP EXTENSION x',
     'CREATE SCHEMA s',
-    'ALTER TABLE users ALTER COLUMN a SET DEFAULT 1',
     'ALTER TABLE users ALTER COLUMN a DROP DEFAULT',
     'ALTER TABLE users ALTER COLUMN a DROP NOT NULL',
     'ALTER TABLE users ALTER COLUMN a SET STORAGE EXTERNAL',

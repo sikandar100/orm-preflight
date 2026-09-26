@@ -57,7 +57,6 @@ const NO_OP_DROPS = new Set([
 
 /** ALTER TABLE actions that take a brief lock without scanning or rewriting the table. */
 const NO_OP_ALTER_TABLE = new Set([
-  'AT_ColumnDefault',
   'AT_DropNotNull',
   'AT_SetStatistics',
   'AT_SetStorage',
@@ -254,6 +253,9 @@ function mapAlterTableCmd(cmd: AlterTableCmd, t: TableRef, ctx: MapContext): Ope
       const mods = col?.typeName ? typmods(col.typeName) : []
       return [mods.length > 0 && isBuiltin(col?.typeName) ? { ...op, toTypmods: mods } : op]
     }
+    case 'AT_ColumnDefault':
+      // DROP DEFAULT has no expression and needs no analysis.
+      return def === undefined ? [] : [{ kind: 'set_default', table: t, column: cmd.name ?? '' }]
     case 'AT_SetNotNull':
       return [{ kind: 'set_not_null', table: t, column: cmd.name ?? '' }]
     case 'AT_AddConstraint':
