@@ -1,0 +1,492 @@
+{
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "orm-preflight",
+          "version": "0.0.0",
+          "informationUri": "https://github.com/sikandar100/orm-preflight",
+          "rules": [
+            {
+              "id": "no-drop-and-recreate-column",
+              "shortDescription": {
+                "text": "Reports a column that is dropped and added again in the same migration, which deletes every value in it."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-and-recreate-column.md",
+              "help": {
+                "text": "Reports a column that is dropped and added again in the same migration, which deletes every value in it. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-and-recreate-column.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
+              "id": "possible-rename-data-loss",
+              "shortDescription": {
+                "text": "Warns when a migration drops one column and adds a different one on the same table without copying data, which is what a renamed entity property produces."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/possible-rename-data-loss.md",
+              "help": {
+                "text": "Warns when a migration drops one column and adds a different one on the same table without copying data, which is what a renamed entity property produces. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/possible-rename-data-loss.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
+              "id": "no-drop-column",
+              "shortDescription": {
+                "text": "Reports a dropped column, which deletes its data and breaks application code that still uses it."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md",
+              "help": {
+                "text": "Reports a dropped column, which deletes its data and breaks application code that still uses it. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-column.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
+              "id": "no-drop-table",
+              "shortDescription": {
+                "text": "Reports a dropped table, which deletes all of its rows and breaks application code that still uses it."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-table.md",
+              "help": {
+                "text": "Reports a dropped table, which deletes all of its rows and breaks application code that still uses it. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-drop-table.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
+              "id": "no-truncate",
+              "shortDescription": {
+                "text": "Reports `TRUNCATE` and `queryRunner.clearTable()`, which delete every row of a table."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-truncate.md",
+              "help": {
+                "text": "Reports `TRUNCATE` and `queryRunner.clearTable()`, which delete every row of a table. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-truncate.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
+              "id": "no-rename-column",
+              "shortDescription": {
+                "text": "Reports a renamed column, which breaks the previous version of the application while a deploy is in progress."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-column.md",
+              "help": {
+                "text": "Reports a renamed column, which breaks the previous version of the application while a deploy is in progress. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-column.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "deploy-safety",
+                "tags": [
+                  "deploy-safety"
+                ]
+              }
+            },
+            {
+              "id": "no-rename-table",
+              "shortDescription": {
+                "text": "Reports a renamed table, which breaks the previous version of the application while a deploy is in progress."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-table.md",
+              "help": {
+                "text": "Reports a renamed table, which breaks the previous version of the application while a deploy is in progress. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-rename-table.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "deploy-safety",
+                "tags": [
+                  "deploy-safety"
+                ]
+              }
+            },
+            {
+              "id": "require-concurrent-index",
+              "shortDescription": {
+                "text": "Reports `CREATE INDEX` without `CONCURRENTLY`, which blocks writes to the table while the index is built."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index.md",
+              "help": {
+                "text": "Reports `CREATE INDEX` without `CONCURRENTLY`, which blocks writes to the table while the index is built. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "concurrent-index-transaction",
+              "shortDescription": {
+                "text": "Reports `CREATE INDEX`, `DROP INDEX`, or `REINDEX` with `CONCURRENTLY` in a place where PostgreSQL runs it inside a transaction, which makes the migration fail."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/concurrent-index-transaction.md",
+              "help": {
+                "text": "Reports `CREATE INDEX`, `DROP INDEX`, or `REINDEX` with `CONCURRENTLY` in a place where PostgreSQL runs it inside a transaction, which makes the migration fail. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/concurrent-index-transaction.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "no-add-not-null-without-default",
+              "shortDescription": {
+                "text": "Reports a `NOT NULL` column added to an existing table without a default, which fails as soon as the table has rows."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-add-not-null-without-default.md",
+              "help": {
+                "text": "Reports a `NOT NULL` column added to an existing table without a default, which fails as soon as the table has rows. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-add-not-null-without-default.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "no-volatile-default",
+              "shortDescription": {
+                "text": "Reports a column added with a volatile default, or as a serial, identity, or stored generated column, which rewrites the whole table under an exclusive lock."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md",
+              "help": {
+                "text": "Reports a column added with a volatile default, or as a serial, identity, or stored generated column, which rewrites the whole table under an exclusive lock. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-volatile-default.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "no-unsafe-column-type-change",
+              "shortDescription": {
+                "text": "Reports a column type change that rewrites the whole table while blocking reads and writes."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-unsafe-column-type-change.md",
+              "help": {
+                "text": "Reports a column type change that rewrites the whole table while blocking reads and writes. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-unsafe-column-type-change.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "require-not-valid-foreign-key",
+              "shortDescription": {
+                "text": "Reports a foreign key added to an existing table without `NOT VALID`, which blocks writes to both tables while every row is checked."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-foreign-key.md",
+              "help": {
+                "text": "Reports a foreign key added to an existing table without `NOT VALID`, which blocks writes to both tables while every row is checked. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-foreign-key.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "no-set-not-null",
+              "shortDescription": {
+                "text": "Reports `SET NOT NULL` on an existing column, which scans the whole table while blocking reads and writes."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-set-not-null.md",
+              "help": {
+                "text": "Reports `SET NOT NULL` on an existing column, which scans the whole table while blocking reads and writes. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-set-not-null.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "unanalyzable-statement",
+              "shortDescription": {
+                "text": "Warns about a statement orm-preflight could not read, so that nothing it cannot check passes silently."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/unanalyzable-statement.md",
+              "help": {
+                "text": "Warns about a statement orm-preflight could not read, so that nothing it cannot check passes silently. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/unanalyzable-statement.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "correctness",
+                "tags": [
+                  "correctness"
+                ]
+              }
+            },
+            {
+              "id": "no-edit-applied-migration",
+              "shortDescription": {
+                "text": "Reports a migration that already exists on the base branch and was changed, since the change will never reach databases where it already ran."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-edit-applied-migration.md",
+              "help": {
+                "text": "Reports a migration that already exists on the base branch and was changed, since the change will never reach databases where it already ran. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-edit-applied-migration.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "correctness",
+                "tags": [
+                  "correctness"
+                ]
+              }
+            },
+            {
+              "id": "invalid-suppression",
+              "shortDescription": {
+                "text": "Reports a suppression comment that names no rule, an unknown rule, or gives no reason."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/invalid-suppression.md",
+              "help": {
+                "text": "Reports a suppression comment that names no rule, an unknown rule, or gives no reason. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/invalid-suppression.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "correctness",
+                "tags": [
+                  "correctness"
+                ]
+              }
+            },
+            {
+              "id": "typeorm/no-changecolumn-recreate",
+              "shortDescription": {
+                "text": "Reports `queryRunner.changeColumn()` calls that make TypeORM drop and re-add the column, which deletes every value in it."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/no-changecolumn-recreate.md",
+              "help": {
+                "text": "Reports `queryRunner.changeColumn()` calls that make TypeORM drop and re-add the column, which deletes every value in it. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/no-changecolumn-recreate.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
+              "id": "typeorm/transaction-override-forbidden",
+              "shortDescription": {
+                "text": "Reports a migration that sets its `transaction` property while TypeORM runs migrations in transaction mode `\"all\"`, where TypeORM refuses to run any pending migration."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/transaction-override-forbidden.md",
+              "help": {
+                "text": "Reports a migration that sets its `transaction` property while TypeORM runs migrations in transaction mode `\"all\"`, where TypeORM refuses to run any pending migration. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/transaction-override-forbidden.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "correctness",
+                "tags": [
+                  "correctness"
+                ]
+              }
+            },
+            {
+              "id": "typeorm/invalid-migration-name",
+              "shortDescription": {
+                "text": "Reports a migration whose name does not end with a 13-digit timestamp, which makes TypeORM refuse to load any migration."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/invalid-migration-name.md",
+              "help": {
+                "text": "Reports a migration whose name does not end with a 13-digit timestamp, which makes TypeORM refuse to load any migration. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/invalid-migration-name.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
+              "properties": {
+                "category": "correctness",
+                "tags": [
+                  "correctness"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "no-drop-column",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "\"users\".\"bio\" is dropped, which deletes every value in it. Why: Dropping a column deletes its data immediately. Safe: Drop the column in a later release."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/migrations/1727600000000-DropBio.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 5,
+                  "startColumn": 30
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "unanalyzable-statement",
+          "ruleIndex": 14,
+          "level": "warning",
+          "message": {
+            "text": "This statement could not be analyzed. Why: Dropping a column deletes its data immediately."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/migrations/1727600000000-DropBio.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "no-drop-column",
+          "ruleIndex": 2,
+          "level": "error",
+          "message": {
+            "text": "\"users\".\"bio\" is dropped, which deletes every value in it. Why: Dropping a column deletes its data immediately. Safe: Drop the column in a later release."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/migrations/1727700000000-Drop.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 5,
+                  "startColumn": 30
+                }
+              }
+            }
+          ],
+          "suppressions": [
+            {
+              "kind": "inSource",
+              "justification": "unused since 2.3"
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits"
+    }
+  ]
+}
