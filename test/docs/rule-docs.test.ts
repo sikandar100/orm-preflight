@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { typeormAdapter } from '../../src/adapters/typeorm/index.js'
 import { typeormRules } from '../../src/adapters/typeorm/rules/index.js'
 import { resolveConfig } from '../../src/config/load.js'
+import type { FileChange } from '../../src/discovery/git.js'
 import { lintSources } from '../../src/lint.js'
 import { coreRules } from '../../src/rules/index.js'
 
@@ -41,9 +42,29 @@ function migrations(body: string): string[] {
   return codeBlocks(body, 'ts').filter((code) => code.includes('implements MigrationInterface'))
 }
 
-async function unsuppressed(ruleId: string, code: string, raw: Record<string, unknown>) {
+/**
+ * Rules that only run with --changed-since. Their Bad examples are linted as edits to an
+ * existing migration, their Safe examples as new migrations.
+ */
+const CHANGE_CONTEXT: Record<string, { bad: FileChange; safe: FileChange }> = {
+  'no-edit-applied-migration': { bad: 'modified', safe: 'added' },
+}
+
+async function unsuppressed(
+  ruleId: string,
+  code: string,
+  raw: Record<string, unknown>,
+  change?: FileChange,
+) {
   const config = resolveConfig(raw, 'doc example')
-  const result = await lintSources([{ path: 'example.ts', text: code }], config, typeormAdapter)
+  const changes =
+    change === undefined ? undefined : { ref: 'main', files: new Map([['example.ts', change]]) }
+  const result = await lintSources(
+    [{ path: 'example.ts', text: code }],
+    config,
+    typeormAdapter,
+    changes,
+  )
   return result.findings.filter((f) => f.ruleId === ruleId && f.suppressed === null)
 }
 
@@ -80,7 +101,9 @@ describe.each(rules.map((r) => ({ id: r.meta.id, rule: r })))(
     it('has a Bad example that the rule reports', async () => {
       const bad = parts.filter((s) => s.heading === 'Bad').flatMap((s) => migrations(s.body))
       expect(bad.length).toBeGreaterThan(0)
-      for (const code of bad) expect(await unsuppressed(id, code, {})).not.toEqual([])
+      for (const code of bad) {
+        expect(await unsuppressed(id, code, {}, CHANGE_CONTEXT[id]?.bad)).not.toEqual([])
+      }
     })
 
     it('has Safe examples that the rule does not report', async () => {
@@ -90,7 +113,7 @@ describe.each(rules.map((r) => ({ id: r.meta.id, rule: r })))(
         const version = /PostgreSQL (\d+)$/.exec(section.heading)?.[1]
         if (version !== undefined) config.postgresVersion = Number(version)
         for (const code of migrations(section.body))
-          expect(await unsuppressed(id, code, config)).toEqual([])
+          expect(await unsuppressed(id, code, config, CHANGE_CONTEXT[id]?.safe)).toEqual([])
       }
     })
   },

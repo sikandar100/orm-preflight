@@ -1,6 +1,6 @@
 # Rules
 
-Every rule is an error by default, except the two marked warn. Change a rule's severity in the
+Every rule is an error by default, except those marked warn. Change a rule's severity in the
 config, for example `{ "rules": { "no-rename-column": "warn" } }`, or set it to `"off"`.
 
 To accept one finding, put a suppression comment with a reason above the statement:
@@ -41,9 +41,10 @@ To accept one finding, put a suppression comment with a reason above the stateme
 
 ## Correctness
 
-| Rule                                                                                  | Reports                                                      |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| [`unanalyzable-statement`](unanalyzable-statement.md)                                 | A statement orm-preflight could not read (warn)              |
-| [`invalid-suppression`](invalid-suppression.md)                                       | A suppression comment with no reason or an unknown rule      |
-| [`typeorm/transaction-override-forbidden`](typeorm/transaction-override-forbidden.md) | `transaction` set on a migration in transaction mode `"all"` |
-| [`typeorm/invalid-migration-name`](typeorm/invalid-migration-name.md)                 | A migration name without a 13-digit timestamp                |
+| Rule                                                                                  | Reports                                                        |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| [`unanalyzable-statement`](unanalyzable-statement.md)                                 | A statement orm-preflight could not read (warn)                |
+| [`invalid-suppression`](invalid-suppression.md)                                       | A suppression comment with no reason or an unknown rule        |
+| [`no-edit-applied-migration`](no-edit-applied-migration.md)                           | With `--changed-since`: an edit to an applied migration (warn) |
+| [`typeorm/transaction-override-forbidden`](typeorm/transaction-override-forbidden.md) | `transaction` set on a migration in transaction mode `"all"`   |
+| [`typeorm/invalid-migration-name`](typeorm/invalid-migration-name.md)                 | A migration name without a 13-digit timestamp                  |

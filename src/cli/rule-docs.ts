@@ -6,6 +6,7 @@ import noAddNotNullWithoutDefault from '../../docs/rules/no-add-not-null-without
 import noDropAndRecreateColumn from '../../docs/rules/no-drop-and-recreate-column.md'
 import noDropColumn from '../../docs/rules/no-drop-column.md'
 import noDropTable from '../../docs/rules/no-drop-table.md'
+import noEditAppliedMigration from '../../docs/rules/no-edit-applied-migration.md'
 import noRenameColumn from '../../docs/rules/no-rename-column.md'
 import noRenameTable from '../../docs/rules/no-rename-table.md'
 import noSetNotNull from '../../docs/rules/no-set-not-null.md'
@@ -28,6 +29,7 @@ export const ruleDocs: Readonly<Record<string, string>> = {
   'no-drop-and-recreate-column': noDropAndRecreateColumn,
   'no-drop-column': noDropColumn,
   'no-drop-table': noDropTable,
+  'no-edit-applied-migration': noEditAppliedMigration,
   'no-rename-column': noRenameColumn,
   'no-rename-table': noRenameTable,
   'no-set-not-null': noSetNotNull,
