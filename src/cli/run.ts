@@ -32,6 +32,8 @@ Options
   --dialect <postgres|mysql>  Database dialect (default: postgres)
   --postgres-version <n>      PostgreSQL major version the migrations run on (default: 16)
   --orm <typeorm>             ORM adapter (default: typeorm)
+  --changed-since <git-ref>   Check only migrations added or changed since the merge base
+                              with <git-ref>, such as origin/main
   --format <pretty|json>      Output format (default: pretty)
   --max-warnings <n>          Fail when there are more than n warnings (default: no limit)
   --no-color                  Print without colors
@@ -55,6 +57,7 @@ const OPTIONS = {
   dialect: { type: 'string' },
   'postgres-version': { type: 'string' },
   orm: { type: 'string' },
+  'changed-since': { type: 'string' },
   format: { type: 'string' },
   'max-warnings': { type: 'string' },
   'no-color': { type: 'boolean' },
@@ -134,6 +137,7 @@ async function dispatch(argv: readonly string[], io: CliIo): Promise<ExitCode> {
       cwd,
       patterns: positionals,
       ...(values.config === undefined ? {} : { configPath: values.config }),
+      ...(values['changed-since'] === undefined ? {} : { changedSince: values['changed-since'] }),
       overrides,
     },
     { get: getAdapter },

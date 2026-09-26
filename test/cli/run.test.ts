@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
@@ -301,5 +302,92 @@ describe('init', () => {
     const result = await runCli(['init', '--orm', 'prisma'])
     expect(result.code).toBe(ExitCode.UsageOrInternalError)
     expect(result.stderr).toContain('prisma')
+  })
+})
+
+describe('--changed-since', () => {
+  const git = (...args: string[]) =>
+    execFileSync(
+      'git',
+      [
+        '-c',
+        'user.name=test',
+        '-c',
+        'user.email=test@example.com',
+        '-c',
+        'commit.gpgsign=false',
+        ...args,
+      ],
+      { cwd: dir, stdio: 'ignore' },
+    )
+
+  beforeEach(() => {
+    git('init', '-q', '-b', 'main')
+    write(
+      'src/migrations/1727000000000-Old.ts',
+      migration('Old1727000000000', 'DROP TABLE "legacy"'),
+    )
+    git('add', '-A')
+    git('commit', '-q', '-m', 'base')
+    git('checkout', '-q', '-b', 'feature')
+  })
+
+  it('exits 0 when no migration changed', async () => {
+    const result = await runCli(['--changed-since', 'main'])
+    expect(result).toEqual({
+      code: ExitCode.Ok,
+      stdout: '0 errors, 0 warnings in 0 migrations\n',
+      stderr: '',
+    })
+  })
+
+  it('checks only migrations added or changed on the branch', async () => {
+    write(
+      'src/migrations/1727600000000-DropBio.ts',
+      migration('DropBio1727600000000', 'ALTER TABLE "users" DROP COLUMN "bio"'),
+    )
+    const result = await runCli(['--changed-since', 'main', '--format', 'json'])
+    expect(result.code).toBe(ExitCode.LintFailed)
+    const output = JSON.parse(result.stdout) as { findings: { file: string; ruleId: string }[] }
+    expect(output.findings.map((f) => `${f.file} ${f.ruleId}`)).toEqual([
+      'src/migrations/1727600000000-DropBio.ts no-drop-column',
+    ])
+  })
+
+  it('reports an edit to a migration that exists on the base branch', async () => {
+    write('src/migrations/1727000000000-Old.ts', migration('Old1727000000000', 'SELECT 1'))
+    const result = await runCli(['--changed-since', 'main'])
+    expect(result.code).toBe(ExitCode.Ok)
+    expect(result.stdout).toContain('warn   no-edit-applied-migration')
+    expect(result.stdout).toContain('already exists on main and was changed')
+  })
+
+  it('treats a table created by any changed migration as new', async () => {
+    write(
+      'src/migrations/1727600000000-Create.ts',
+      migration('Create1727600000000', 'CREATE TABLE "notes" ("id" int)'),
+    )
+    write(
+      'src/migrations/1727700000000-Index.ts',
+      migration('Index1727700000000', 'CREATE INDEX "IDX_notes_id" ON "notes" ("id")'),
+    )
+    expect((await runCli(['--changed-since', 'main'])).code).toBe(ExitCode.Ok)
+    // Without the flag, the index migration is checked on its own and the table is not new.
+    expect((await runCli([])).stdout).toContain('require-concurrent-index')
+  })
+
+  it('exits 2 on an unknown ref', async () => {
+    const result = await runCli(['--changed-since', 'nope'])
+    expect(result.code).toBe(ExitCode.UsageOrInternalError)
+    expect(result.stderr).toContain('Could not find the merge base of "nope" and HEAD')
+  })
+})
+
+describe('--changed-since outside a git repository', () => {
+  it('exits 2 and says why', async () => {
+    write('src/migrations/1727000000000-A.ts', migration('A1727000000000', 'SELECT 1'))
+    const result = await runCli(['--changed-since', 'main'])
+    expect(result.code).toBe(ExitCode.UsageOrInternalError)
+    expect(result.stderr).toContain('--changed-since needs a git repository')
   })
 })
