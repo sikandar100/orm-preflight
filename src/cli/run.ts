@@ -1,12 +1,16 @@
+import { realpathSync } from 'node:fs'
+import path from 'node:path'
 import { parseArgs } from 'node:util'
 import { getAdapter } from '../adapters/index.js'
 import type { ConfigOverrides } from '../config/load.js'
 import { UsageError } from '../errors.js'
 import { runLint } from '../lint.js'
+import { formatGithub } from '../reporters/github.js'
 import { formatJson } from '../reporters/json.js'
 import { formatPretty } from '../reporters/pretty.js'
+import { formatSarif } from '../reporters/sarif.js'
 import { version } from '../version.js'
-import { explain, formatRules, init } from './commands.js'
+import { explain, formatRules, init, sarifRules } from './commands.js'
 import { ExitCode } from './exit-codes.js'
 
 export interface CliIo {
@@ -16,6 +20,8 @@ export interface CliIo {
   cwd?: string
   /** Whether stdout supports colors. `--no-color` turns them off. Defaults to false. */
   color?: boolean
+  /** Environment variables. Defaults to process.env. */
+  env?: Readonly<Record<string, string | undefined>>
 }
 
 const ISSUES_URL = 'https://github.com/sikandar100/orm-preflight/issues'
@@ -34,7 +40,8 @@ Options
   --orm <typeorm>             ORM adapter (default: typeorm)
   --changed-since <git-ref>   Check only migrations added or changed since the merge base
                               with <git-ref>, such as origin/main
-  --format <pretty|json>      Output format (default: pretty)
+  --format <format>           pretty, json, github (annotations), or sarif. Default:
+                              github in GitHub Actions, pretty elsewhere
   --max-warnings <n>          Fail when there are more than n warnings (default: no limit)
   --no-color                  Print without colors
   -h, --help                  Print this help
@@ -65,7 +72,8 @@ const OPTIONS = {
   version: { type: 'boolean', short: 'v' },
 } as const
 
-const FORMATS = ['pretty', 'json'] as const
+const FORMATS = ['pretty', 'json', 'github', 'sarif'] as const
+type Format = (typeof FORMATS)[number]
 
 /** Runs the CLI with the given arguments and resolves with the exit code. Never exits the process. */
 export async function run(argv: readonly string[], io: CliIo): Promise<ExitCode> {
@@ -127,9 +135,10 @@ async function dispatch(argv: readonly string[], io: CliIo): Promise<ExitCode> {
     return ExitCode.Ok
   }
 
-  const format = values.format ?? 'pretty'
-  if (!(FORMATS as readonly string[]).includes(format)) {
-    throw new UsageError(`Unknown format "${format}". Use ${FORMATS.join(' or ')}.`)
+  const env = io.env ?? process.env
+  const format = values.format ?? (env.GITHUB_ACTIONS === 'true' ? 'github' : 'pretty')
+  if (!isFormat(format)) {
+    throw new UsageError(`Unknown format "${format}". Use pretty, json, github, or sarif.`)
   }
   const maxWarnings = integer(values['max-warnings'], '--max-warnings')
   const result = await runLint(
@@ -143,16 +152,39 @@ async function dispatch(argv: readonly string[], io: CliIo): Promise<ExitCode> {
     { get: getAdapter },
   )
 
-  io.stdout(
-    format === 'json'
-      ? formatJson(result)
-      : formatPretty(result, {
-          color: io.color === true && values['no-color'] !== true,
-          maxWarnings,
-        }),
-  )
+  const pathPrefix = repositoryPrefix(cwd, env.GITHUB_WORKSPACE)
+  const output: Record<Format, () => string> = {
+    pretty: () =>
+      formatPretty(result, {
+        color: io.color === true && values['no-color'] !== true,
+        maxWarnings,
+      }),
+    json: () => formatJson(result),
+    github: () => formatGithub(result, { pathPrefix }),
+    sarif: () => formatSarif(result, { rules: sarifRules(), pathPrefix }),
+  }
+  io.stdout(output[format]())
   const tooManyWarnings = maxWarnings !== undefined && result.summary.warnings > maxWarnings
   return result.summary.errors > 0 || tooManyWarnings ? ExitCode.LintFailed : ExitCode.Ok
+}
+
+function isFormat(value: string): value is Format {
+  return (FORMATS as readonly string[]).includes(value)
+}
+
+/**
+ * The linted directory relative to the repository root, which annotations and SARIF need.
+ * Known only in GitHub Actions (GITHUB_WORKSPACE); elsewhere paths stay relative to cwd.
+ */
+function repositoryPrefix(cwd: string, workspace: string | undefined): string {
+  if (workspace === undefined || workspace === '') return ''
+  try {
+    const rel = path.relative(realpathSync.native(workspace), realpathSync.native(cwd))
+    if (rel === '' || rel.startsWith('..') || path.isAbsolute(rel)) return ''
+    return rel.split(path.sep).join('/')
+  } catch {
+    return ''
+  }
 }
 
 function parse(argv: readonly string[]) {

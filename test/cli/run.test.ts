@@ -29,13 +29,18 @@ export class ${name} implements MigrationInterface {
 }
 `
 
-async function runCli(argv: string[], options: { color?: boolean } = {}) {
+async function runCli(
+  argv: string[],
+  options: { color?: boolean; env?: Record<string, string> } = {},
+) {
   let stdout = ''
   let stderr = ''
   const code = await run(argv, {
     stdout: (text) => (stdout += text),
     stderr: (text) => (stderr += text),
     cwd: dir,
+    // Never the real environment: in CI, GITHUB_ACTIONS=true would change the default format.
+    env: {},
     ...options,
   })
   return { code, stdout, stderr }
@@ -66,7 +71,7 @@ describe('options', () => {
   })
 
   it.each([
-    [['--format', 'xml'], 'Unknown format "xml". Use pretty or json.'],
+    [['--format', 'xml'], 'Unknown format "xml". Use pretty, json, github, or sarif.'],
     [['--max-warnings=-1'], '--max-warnings must be a whole number, got "-1".'],
     [['--max-warnings', '1.5'], '--max-warnings must be a whole number, got "1.5".'],
     [['--postgres-version', 'sixteen'], '--postgres-version must be a whole number'],
@@ -389,5 +394,48 @@ describe('--changed-since outside a git repository', () => {
     const result = await runCli(['--changed-since', 'main'])
     expect(result.code).toBe(ExitCode.UsageOrInternalError)
     expect(result.stderr).toContain('--changed-since needs a git repository')
+  })
+})
+
+describe('output formats', () => {
+  beforeEach(() => {
+    write(
+      'src/migrations/1727600000000-DropBio.ts',
+      migration('DropBio1727600000000', 'ALTER TABLE "users" DROP COLUMN "bio"'),
+    )
+  })
+
+  it('annotates by default in GitHub Actions', async () => {
+    const result = await runCli([], { env: { GITHUB_ACTIONS: 'true' } })
+    expect(result.code).toBe(ExitCode.LintFailed)
+    expect(result.stdout).toMatch(
+      /^::error file=src\/migrations\/1727600000000-DropBio\.ts,line=5,col=30,/,
+    )
+  })
+
+  it('lets --format override the GitHub Actions default', async () => {
+    const result = await runCli(['--format', 'pretty'], { env: { GITHUB_ACTIONS: 'true' } })
+    expect(result.stdout).toContain('  5:30  error  no-drop-column')
+  })
+
+  it('prefixes paths when run from a directory inside the workspace', async () => {
+    const workspace = path.dirname(dir)
+    const result = await runCli(['--format', 'github'], { env: { GITHUB_WORKSPACE: workspace } })
+    expect(result.stdout).toContain(`::error file=${path.basename(dir)}/src/migrations/`)
+  })
+
+  it('ignores a GITHUB_WORKSPACE that does not contain the directory', async () => {
+    const result = await runCli(['--format', 'github'], {
+      env: { GITHUB_WORKSPACE: path.join(dir, 'src') },
+    })
+    expect(result.stdout).toContain('::error file=src/migrations/')
+  })
+
+  it('prints SARIF with --format sarif', async () => {
+    const result = await runCli(['--format', 'sarif'])
+    expect(result.code).toBe(ExitCode.LintFailed)
+    const sarif = JSON.parse(result.stdout) as { version: string; runs: { results: unknown[] }[] }
+    expect(sarif.version).toBe('2.1.0')
+    expect(sarif.runs[0]?.results).toHaveLength(1)
   })
 })
