@@ -1,3 +1,9 @@
+import { enumValueUsedInSameTransaction } from './enum-value-used-in-same-transaction.js'
+import { noBlockingMaintenance } from './no-blocking-maintenance.js'
+import { requireConcurrentIndexDrop } from './require-concurrent-index-drop.js'
+import { requireConcurrentUnique } from './require-concurrent-unique.js'
+import { requireLockTimeout } from './require-lock-timeout.js'
+import { requireNotValidCheck } from './require-not-valid-check.js'
 import { concurrentIndexTransaction } from './concurrent-index-transaction.js'
 import { invalidSuppression } from './invalid-suppression.js'
 import { noAddNotNullWithoutDefault } from './no-add-not-null-without-default.js'
@@ -33,6 +39,12 @@ export const coreRules: readonly Rule[] = [
   noUnsafeColumnTypeChange,
   requireNotValidForeignKey,
   noSetNotNull,
+  requireNotValidCheck,
+  requireConcurrentUnique,
+  requireConcurrentIndexDrop,
+  noBlockingMaintenance,
+  enumValueUsedInSameTransaction,
+  requireLockTimeout,
   unanalyzableStatement,
   noEditAppliedMigration,
   invalidSuppression,

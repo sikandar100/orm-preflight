@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "require-not-valid-check",
+    "severity": "warn",
+    "category": "locking",
+    "file": "require-not-valid-check/bad/sql.ts",
+    "line": 5,
+    "column": 30,
+    "message": "Adding check constraint \"CHK_users_age\" on \"users\" checks every row while blocking reads and writes to \"users\".",
+    "why": "Adding a CHECK constraint scans the whole table to validate the existing rows, and holds an ACCESS EXCLUSIVE lock until the scan finishes.",
+    "safeAlternative": "Add the constraint with NOT VALID, which applies it to new and changed rows without a scan. Then run ALTER TABLE ... VALIDATE CONSTRAINT in a separate migration; it holds only a SHARE UPDATE EXCLUSIVE lock, which does not block reads or writes. TypeORM builder calls cannot add NOT VALID, so use queryRunner.query().",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-check.md",
+    "suppressed": null
+  }
+]

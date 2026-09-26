@@ -290,6 +290,126 @@
               }
             },
             {
+              "id": "require-not-valid-check",
+              "shortDescription": {
+                "text": "Reports a CHECK constraint added to an existing table without `NOT VALID`, which checks every row while blocking reads and writes."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-check.md",
+              "help": {
+                "text": "Reports a CHECK constraint added to an existing table without `NOT VALID`, which checks every row while blocking reads and writes. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-check.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "require-concurrent-unique",
+              "shortDescription": {
+                "text": "Reports a unique constraint or primary key added to an existing table, which builds its index while blocking reads and writes."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-unique.md",
+              "help": {
+                "text": "Reports a unique constraint or primary key added to an existing table, which builds its index while blocking reads and writes. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-unique.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "require-concurrent-index-drop",
+              "shortDescription": {
+                "text": "Reports `DROP INDEX` without `CONCURRENTLY`, which blocks reads and writes on the table while it waits and runs."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index-drop.md",
+              "help": {
+                "text": "Reports `DROP INDEX` without `CONCURRENTLY`, which blocks reads and writes on the table while it waits and runs. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index-drop.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "no-blocking-maintenance",
+              "shortDescription": {
+                "text": "Reports `VACUUM FULL`, `CLUSTER`, and `REINDEX` without `CONCURRENTLY`, which block the table for as long as they run."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-blocking-maintenance.md",
+              "help": {
+                "text": "Reports `VACUUM FULL`, `CLUSTER`, and `REINDEX` without `CONCURRENTLY`, which block the table for as long as they run. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-blocking-maintenance.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "enum-value-used-in-same-transaction",
+              "shortDescription": {
+                "text": "Reports a new enum value that is used in the same transaction that adds it, which PostgreSQL rejects."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/enum-value-used-in-same-transaction.md",
+              "help": {
+                "text": "Reports a new enum value that is used in the same transaction that adds it, which PostgreSQL rejects. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/enum-value-used-in-same-transaction.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
+              "id": "require-lock-timeout",
+              "shortDescription": {
+                "text": "Reports a migration that changes an existing table without setting `lock_timeout` first, so a busy table can stall all its traffic."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-lock-timeout.md",
+              "help": {
+                "text": "Reports a migration that changes an existing table without setting `lock_timeout` first, so a busy table can stall all its traffic. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-lock-timeout.md"
+              },
+              "defaultConfiguration": {
+                "enabled": false,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
               "id": "unanalyzable-statement",
               "shortDescription": {
                 "text": "Warns about a statement orm-preflight could not read, so that nothing it cannot check passes silently."

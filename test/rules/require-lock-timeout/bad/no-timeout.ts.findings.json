@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "require-lock-timeout",
+    "severity": "warn",
+    "category": "locking",
+    "file": "require-lock-timeout/bad/no-timeout.ts",
+    "line": 6,
+    "column": 30,
+    "message": "This migration changes \"users\" without a lock_timeout. If \"users\" is busy, the change waits for its lock, and every query on \"users\" queues behind it.",
+    "why": "A schema change first waits for every running query on the table to finish, and while it waits, it blocks all new queries on that table. One slow query can turn a quick change into an outage.",
+    "safeAlternative": "Start up() with SET LOCAL lock_timeout = '5s' when the migration runs in a transaction, or SET lock_timeout = '5s' when it does not. The change then fails fast instead of queuing traffic, and you can retry it.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-lock-timeout.md",
+    "suppressed": null
+  }
+]

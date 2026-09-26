@@ -16,12 +16,26 @@ add foreign key NOT VALID       | child=AccessShareLock, child=ShareRowExclusive
 validate constraint             | child=AccessShareLock, child=ShareUpdateExclusiveLock, parent=AccessShareLock, parent=RowShareLock | no rewrite 
 set not null                    | child=AccessExclusiveLock | no rewrite 
 add check NOT VALID             | child=AccessExclusiveLock | no rewrite 
+add check (validates rows)     | child=AccessExclusiveLock | no rewrite 
+validate check                  | child=ShareUpdateExclusiveLock | no rewrite 
+add unique constraint           | child=AccessExclusiveLock, child=ShareLock | no rewrite 
+add unique using index          | child=AccessExclusiveLock | no rewrite 
+drop index                      | child=AccessExclusiveLock | no rewrite 
+reindex index                   | child=ShareLock | no rewrite 
+cluster                         | child=AccessExclusiveLock, child=ShareLock | REWRITE 
+vacuum full (outside a tx)      | waits for AccessExclusiveLock 
+drop index concurrently         | waits for no lock on child (reads and writes continue) 
 --- errors
 NOT NULL without default, rows exist | ERROR:  column "c" of relation "child" contains null values 
 CONCURRENTLY inside BEGIN            | ERROR:  CREATE INDEX CONCURRENTLY cannot run inside a transaction block 
 CONCURRENTLY in multi-statement query| ERROR:  CREATE INDEX CONCURRENTLY cannot run inside a transaction block 
 DROP INDEX CONCURRENTLY inside BEGIN | ERROR:  DROP INDEX CONCURRENTLY cannot run inside a transaction block 
 REINDEX CONCURRENTLY inside BEGIN    | ERROR:  REINDEX CONCURRENTLY cannot run inside a transaction block 
+VACUUM FULL inside BEGIN             | ERROR:  VACUUM cannot run inside a transaction block 
+enum value used before commit        | ERROR:  unsafe use of new value "happy" of enum type mood LINE 1: SELECT 'happy'::mood;                ^ HINT:  New enum values must be committed before they can be used. 
+enum value used after commit         | happy 
+lock_timeout cancels a blocked ALTER | ERROR:  canceling statement due to lock timeout 
+SELECT queued behind a waiting ALTER | waiting: AccessExclusiveLock (the ALTER), AccessShareLock (the SELECT) 
 CONCURRENTLY alone (autocommit)      | ok
 SET NOT NULL uses valid CHECK        | DEBUG:  existing constraints on column "child.email" are sufficient to prove that it does not contain nulls
 
