@@ -1,5 +1,11 @@
 # orm-preflight
 
+## 0.1.1
+
+### Patch Changes
+
+- [#9](https://github.com/sikandar100/orm-preflight/pull/9) [`ef90a7f`](https://github.com/sikandar100/orm-preflight/commit/ef90a7f4bbfa13c64d8b837589c1ab8227a2121e) Thanks [@sikandar100](https://github.com/sikandar100)! - The package now includes CHANGELOG.md.
+
 ## 0.1.0
 
 ### Minor Changes
