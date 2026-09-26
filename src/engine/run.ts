@@ -1,3 +1,4 @@
+import type { ChangeSet } from '../discovery/git.js'
 import type { AnalyzedMigration, Suppression } from '../ir/types.js'
 import { tableKey } from '../rules/helpers.js'
 import type { Dialect, Finding, Rule, RuleContext, RuleFinding, Severity } from '../rules/types.js'
@@ -10,10 +11,10 @@ export interface EngineOptions {
   adapterOptions: Readonly<Record<string, unknown>>
   defaultSchema: string | undefined
   /**
-   * When true, a table created by any migration in this run counts as new for every other
-   * migration. Used when linting only changed migrations.
+   * Set with --changed-since. A table created by any migration in the run then counts as new
+   * for every other migration, since they ship together.
    */
-  crossMigrationNewTables: boolean
+  changes?: ChangeSet | undefined
 }
 
 /** Categories whose findings do not apply to a table created in the same change. */
@@ -34,6 +35,7 @@ export function runRules(
     adapterOptions: options.adapterOptions,
     knownRuleIds,
     defaultSchema: options.defaultSchema,
+    changes: options.changes,
   }
 
   const enabled = rules.flatMap((rule) => {
@@ -53,11 +55,12 @@ export function runRules(
 
   const findings: (Finding & { key?: string })[] = []
   for (const migration of migrations) {
-    const created = options.crossMigrationNewTables
-      ? createdInRun
-      : new Set(
-          migration.up.flatMap((op) => (op.kind === 'create_table' ? [tableKey(op.table)] : [])),
-        )
+    const created =
+      options.changes !== undefined
+        ? createdInRun
+        : new Set(
+            migration.up.flatMap((op) => (op.kind === 'create_table' ? [tableKey(op.table)] : [])),
+          )
     const valid = validSuppressions(migration.suppressions, knownRuleIds)
 
     for (const { rule, severity } of enabled) {
