@@ -1,0 +1,112 @@
+name: orm-preflight
+description: Preflight safety checks for TypeORM migrations. Static analysis, no database, safe on pull requests from forks.
+author: Sikandar Waheed
+branding:
+  icon: shield
+  color: blue
+
+inputs:
+  changed-since:
+    description: >-
+      Check only migrations added or changed since the merge base with this git ref, such as
+      origin/main. Needs actions/checkout with fetch-depth: 0.
+    required: false
+    default: ''
+  files:
+    description: Files or globs to check, separated by spaces. Default the config's migrations, or every migrations folder.
+    required: false
+    default: ''
+  config:
+    description: Path of the config file. Default orm-preflight.config.json, then package.json.
+    required: false
+    default: ''
+  working-directory:
+    description: Directory to run in, relative to the repository root.
+    required: false
+    default: '.'
+  max-warnings:
+    description: Fail when there are more than this many warnings. Default no limit.
+    required: false
+    default: ''
+  mysql:
+    description: Set to true when the migrations target MySQL, to install the MySQL parser.
+    required: false
+    default: 'false'
+  sarif:
+    description: >-
+      Set to true to also upload SARIF to GitHub code scanning. Needs security-events: write,
+      which GitHub never grants to pull requests from forks, so the upload is skipped there.
+    required: false
+    default: 'false'
+  version:
+    description: The orm-preflight version to run. Defaults to the version of this action.
+    required: false
+    # Kept equal to package.json by scripts/sync-action-version.mjs when a release is versioned.
+    default: '0.1.1'
+
+runs:
+  using: composite
+  steps:
+    - name: Check inputs
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        MAX_WARNINGS: ${{ inputs.max-warnings }}
+      run: |
+        # "local" runs this checkout's own build, which only this repository's tests use.
+        if [[ "$VERSION" != local && ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+          # The value is not echoed back: a newline in it could start another workflow command.
+          echo "::error::orm-preflight: the version input must be an exact version, such as 1.2.3."
+          exit 2
+        fi
+        if [[ -n "$MAX_WARNINGS" && ! "$MAX_WARNINGS" =~ ^[0-9]+$ ]]; then
+          echo "::error::orm-preflight: the max-warnings input must be a whole number."
+          exit 2
+        fi
+
+    - name: Write SARIF
+      if: inputs.sarif == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        VERSION: ${{ inputs.version }}
+        CHANGED_SINCE: ${{ inputs.changed-since }}
+        FILES: ${{ inputs.files }}
+        CONFIG: ${{ inputs.config }}
+        MYSQL: ${{ inputs.mysql }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: |
+        source "$ACTION_PATH/scripts/action-run.sh"
+        # Exit code 1 only means findings; the annotation step below decides the job result.
+        set +e
+        orm_preflight --format sarif > "$RUNNER_TEMP/orm-preflight.sarif"
+        code=$?
+        set -e
+        if [ "$code" -gt 1 ]; then exit "$code"; fi
+
+    - name: Upload SARIF
+      if: >-
+        inputs.sarif == 'true' &&
+        (github.event_name != 'pull_request' ||
+        github.event.pull_request.head.repo.full_name == github.repository)
+      uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+      with:
+        sarif_file: ${{ runner.temp }}/orm-preflight.sarif
+        category: orm-preflight
+
+    - name: Check migrations
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        VERSION: ${{ inputs.version }}
+        CHANGED_SINCE: ${{ inputs.changed-since }}
+        FILES: ${{ inputs.files }}
+        CONFIG: ${{ inputs.config }}
+        MYSQL: ${{ inputs.mysql }}
+        MAX_WARNINGS: ${{ inputs.max-warnings }}
+        ACTION_PATH: ${{ github.action_path }}
+      run: |
+        source "$ACTION_PATH/scripts/action-run.sh"
+        args=(--format github)
+        if [ -n "$MAX_WARNINGS" ]; then args+=(--max-warnings "$MAX_WARNINGS"); fi
+        orm_preflight "${args[@]}"
