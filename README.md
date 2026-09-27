@@ -165,36 +165,72 @@ GitHub Actions, check out with `fetch-depth: 0` so the merge base is available.
 
 ## Continuous integration
 
-Run it as a step in any CI. It needs no database and no secrets, so it is safe on pull requests
-from forks. On GitHub Actions, findings appear as annotations on the pull request:
+orm-preflight needs no database and no secrets, so it is safe on pull requests from forks.
+
+### GitHub Action
+
+Findings appear as annotations on the exact lines of the pull request:
 
 ```yaml
-- uses: actions/checkout@v7
-  with:
-    fetch-depth: 0 # for --changed-since
-- uses: actions/setup-node@v7
-  with:
-    node-version: 22
-- run: npm ci
-- run: npx orm-preflight --changed-since "origin/$BASE_REF"
-  env:
-    BASE_REF: ${{ github.base_ref }} # passed through env, never pasted into the script
+name: Migrations
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  orm-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # for changed-since
+          persist-credentials: false
+      - uses: sikandar100/orm-preflight@v0.2.0
+        with:
+          changed-since: origin/${{ github.base_ref }}
 ```
+
+Pin the action to a release tag, or to a commit SHA if your policy requires it. The action runs
+the orm-preflight version of its tag with `npx`, so GitHub-hosted runners need nothing else. On a
+self-hosted runner, set up Node.js 20 or newer first.
+
+| Input               | Meaning                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------ |
+| `changed-since`     | Check only migrations added or changed since the merge base with this git ref.                   |
+| `files`             | Files or globs to check, separated by spaces. Default: the config, or every `migrations` folder. |
+| `config`            | Path of the config file.                                                                         |
+| `working-directory` | Directory to run in, relative to the repository root. Default `.`.                               |
+| `max-warnings`      | Fail when there are more than this many warnings.                                                |
+| `mysql`             | `true` when the migrations target MySQL, to install the MySQL parser.                            |
+| `sarif`             | `true` to also upload the findings to GitHub code scanning. See below.                           |
+| `version`           | The orm-preflight version to run. Default: the version of the action's tag.                      |
+
+Use the `pull_request` trigger. Never use `pull_request_target` for this: it gives pull requests
+from forks a token with write access and your secrets, and orm-preflight needs neither.
 
 GitHub shows at most 10 annotations of each level per step. The last line of the log always
 counts every finding.
 
-To see findings in the repository's code scanning alerts as well, write SARIF and upload it. The
-upload needs `security-events: write`, which GitHub does not grant to pull requests from forks,
-so keep the annotation step for those:
+To see findings in the repository's code scanning alerts as well, set `sarif: true` and grant
+`security-events: write`. GitHub never grants that to pull requests from forks, so the action
+skips the upload there and still annotates:
 
 ```yaml
-- run: npx orm-preflight --format sarif > orm-preflight.sarif
-  continue-on-error: true
-- uses: github/codeql-action/upload-sarif@v4
-  with:
-    sarif_file: orm-preflight.sarif
+permissions:
+  contents: read
+  security-events: write
 ```
+
+### Other CI systems
+
+Run the CLI. The exit code is 1 when there are errors:
+
+```sh
+npx orm-preflight --changed-since origin/main
+```
+
+Check out enough history for the merge base (in GitHub Actions, `fetch-depth: 0`).
 
 ## Suppressing a finding
 
@@ -234,7 +270,6 @@ Limitations:
   MySQL needs `npm install --save-dev node-sql-parser`.
 - Only `up()` is analyzed. `down()` is only checked for being empty (`require-down`).
 - SQL built at run time is reported, not analyzed.
-- A ready-made GitHub Action is planned for 0.2.0.
 
 ## Programmatic use
 
