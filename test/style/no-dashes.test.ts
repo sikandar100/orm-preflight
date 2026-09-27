@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest'
  * sentences instead (see CONTRIBUTING.md). Only files that are not text are skipped.
  */
 const root = fileURLToPath(new URL('../../', import.meta.url))
-const DASHES = /[–—]/
+const DASHES = /[\u2013\u2014]/
 const BINARY = /\.(png|jpe?g|gif|ico|tgz|gz|zip|wasm|woff2?)$/i
 
 const files = execFileSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' })
