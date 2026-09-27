@@ -63,7 +63,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           # Also pins action.yml to the new version, so tag vX.Y.Z runs orm-preflight X.Y.Z.
-          version: pnpm run version-packages
+          version-script: pnpm run version-packages
           commit-message: 'chore: version packages'
           pr-title: 'chore: version packages'
 
