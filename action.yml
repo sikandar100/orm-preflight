@@ -42,7 +42,7 @@ inputs:
     description: The orm-preflight version to run. Defaults to the version of this action.
     required: false
     # Kept equal to package.json by scripts/sync-action-version.mjs when a release is versioned.
-    default: '0.1.1'
+    default: '0.2.0'
 
 runs:
   using: composite
