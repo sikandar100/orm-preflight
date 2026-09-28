@@ -5,8 +5,7 @@ export const requireConcurrentUnique: Rule = {
   meta: {
     id: 'require-concurrent-unique',
     category: 'locking',
-    // Spec default: error. New rules ship at warn in a minor release (CONTRIBUTING).
-    defaultSeverity: 'warn',
+    defaultSeverity: 'error',
     dialects: ['postgres'],
     docsUrl: docsUrl('require-concurrent-unique'),
   },

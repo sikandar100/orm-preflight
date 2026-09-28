@@ -1,7 +1,7 @@
 [
   {
     "ruleId": "no-blocking-maintenance",
-    "severity": "warn",
+    "severity": "error",
     "category": "locking",
     "file": "no-blocking-maintenance/bad/cluster.ts",
     "line": 5,

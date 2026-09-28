@@ -4,9 +4,7 @@ Reports a new enum value that is used in the same transaction that adds it, whic
 
 | Category | Default severity | Databases  |
 | -------- | ---------------- | ---------- |
-| locking  | warn             | PostgreSQL |
-
-It becomes an error by default in 1.0.
+| locking  | error            | PostgreSQL |
 
 ## What happens
 

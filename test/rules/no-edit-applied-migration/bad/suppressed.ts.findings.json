@@ -1,7 +1,7 @@
 [
   {
     "ruleId": "no-edit-applied-migration",
-    "severity": "warn",
+    "severity": "error",
     "category": "correctness",
     "file": "no-edit-applied-migration/bad/suppressed.ts",
     "line": 5,

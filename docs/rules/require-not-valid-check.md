@@ -4,9 +4,7 @@ Reports a CHECK constraint added to an existing table without `NOT VALID`, which
 
 | Category | Default severity | Databases  |
 | -------- | ---------------- | ---------- |
-| locking  | warn             | PostgreSQL |
-
-It becomes an error by default in 1.0.
+| locking  | error            | PostgreSQL |
 
 ## What happens
 

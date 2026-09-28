@@ -4,10 +4,10 @@ Reports a migration that already exists on the base branch and was changed, sinc
 
 | Category    | Default severity | Databases         |
 | ----------- | ---------------- | ----------------- |
-| correctness | warn             | PostgreSQL, MySQL |
+| correctness | error            | PostgreSQL, MySQL |
 
 This rule runs only with `--changed-since <ref>`, which tells orm-preflight which migrations
-already exist on the base branch. It becomes an error by default in 1.0.
+already exist on the base branch.
 
 ## What happens
 

@@ -300,7 +300,7 @@
               },
               "defaultConfiguration": {
                 "enabled": true,
-                "level": "warning"
+                "level": "error"
               },
               "properties": {
                 "category": "locking",
@@ -320,7 +320,7 @@
               },
               "defaultConfiguration": {
                 "enabled": true,
-                "level": "warning"
+                "level": "error"
               },
               "properties": {
                 "category": "locking",
@@ -360,7 +360,7 @@
               },
               "defaultConfiguration": {
                 "enabled": true,
-                "level": "warning"
+                "level": "error"
               },
               "properties": {
                 "category": "locking",
@@ -380,7 +380,7 @@
               },
               "defaultConfiguration": {
                 "enabled": true,
-                "level": "warning"
+                "level": "error"
               },
               "properties": {
                 "category": "locking",
@@ -440,7 +440,7 @@
               },
               "defaultConfiguration": {
                 "enabled": true,
-                "level": "warning"
+                "level": "error"
               },
               "properties": {
                 "category": "correctness",

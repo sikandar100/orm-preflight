@@ -39,20 +39,20 @@ To accept one finding, put a suppression comment with a reason above the stateme
 | [`no-unsafe-column-type-change`](no-unsafe-column-type-change.md)               | A column type change that rewrites the table                                        |
 | [`require-not-valid-foreign-key`](require-not-valid-foreign-key.md)             | A foreign key added without `NOT VALID`                                             |
 | [`no-set-not-null`](no-set-not-null.md)                                         | `SET NOT NULL` on an existing column                                                |
-| [`require-not-valid-check`](require-not-valid-check.md)                         | A CHECK constraint added without `NOT VALID` (warn)                                 |
-| [`require-concurrent-unique`](require-concurrent-unique.md)                     | A unique constraint or primary key added in place (warn)                            |
+| [`require-not-valid-check`](require-not-valid-check.md)                         | A CHECK constraint added without `NOT VALID`                                        |
+| [`require-concurrent-unique`](require-concurrent-unique.md)                     | A unique constraint or primary key added in place                                   |
 | [`require-concurrent-index-drop`](require-concurrent-index-drop.md)             | `DROP INDEX` without `CONCURRENTLY` (warn)                                          |
-| [`no-blocking-maintenance`](no-blocking-maintenance.md)                         | `VACUUM FULL`, `CLUSTER`, or `REINDEX` without `CONCURRENTLY` (warn)                |
-| [`enum-value-used-in-same-transaction`](enum-value-used-in-same-transaction.md) | A new enum value used before the transaction that adds it commits (warn)            |
+| [`no-blocking-maintenance`](no-blocking-maintenance.md)                         | `VACUUM FULL`, `CLUSTER`, or `REINDEX` without `CONCURRENTLY`                       |
+| [`enum-value-used-in-same-transaction`](enum-value-used-in-same-transaction.md) | A new enum value used before the transaction that adds it commits                   |
 | [`require-lock-timeout`](require-lock-timeout.md)                               | A change to an existing table without `lock_timeout` (off, opt-in)                  |
 
 ## Correctness
 
-| Rule                                                                                  | Reports                                                        |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| [`unanalyzable-statement`](unanalyzable-statement.md)                                 | A statement orm-preflight could not read (warn)                |
-| [`invalid-suppression`](invalid-suppression.md)                                       | A suppression comment with no reason or an unknown rule        |
-| [`no-edit-applied-migration`](no-edit-applied-migration.md)                           | With `--changed-since`: an edit to an applied migration (warn) |
-| [`require-down`](require-down.md)                                                     | An empty or missing `down()` (warn)                            |
-| [`typeorm/transaction-override-forbidden`](typeorm/transaction-override-forbidden.md) | `transaction` set on a migration in transaction mode `"all"`   |
-| [`typeorm/invalid-migration-name`](typeorm/invalid-migration-name.md)                 | A migration name without a 13-digit timestamp                  |
+| Rule                                                                                  | Reports                                                      |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [`unanalyzable-statement`](unanalyzable-statement.md)                                 | A statement orm-preflight could not read (warn)              |
+| [`invalid-suppression`](invalid-suppression.md)                                       | A suppression comment with no reason or an unknown rule      |
+| [`no-edit-applied-migration`](no-edit-applied-migration.md)                           | With `--changed-since`: an edit to an applied migration      |
+| [`require-down`](require-down.md)                                                     | An empty or missing `down()` (warn)                          |
+| [`typeorm/transaction-override-forbidden`](typeorm/transaction-override-forbidden.md) | `transaction` set on a migration in transaction mode `"all"` |
+| [`typeorm/invalid-migration-name`](typeorm/invalid-migration-name.md)                 | A migration name without a 13-digit timestamp                |
