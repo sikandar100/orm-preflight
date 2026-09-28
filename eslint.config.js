@@ -87,7 +87,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['**/*.js', '**/*.mjs'],
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     extends: [tseslint.configs.disableTypeChecked],
     // tsc checks these files (checkJs), which catches undefined names more precisely.
     rules: { 'no-undef': 'off' },

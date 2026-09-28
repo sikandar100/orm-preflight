@@ -26,8 +26,15 @@ export interface OrmAdapter {
   configSchema: object
   /** Static extraction. Must never import or execute user code. */
   extract(file: SourceFile, ctx: AdapterContext): ExtractedMigration[]
-  /** Optional dynamic extraction for --execute. */
-  extractDynamic?(path: string, ctx: AdapterContext): Promise<ExtractedMigration[]>
+  /**
+   * Optional dynamic extraction for --execute: runs the file's migrations and records what
+   * they do. `absolutePath` is where the file is on disk. This runs the project's code.
+   */
+  extractDynamic?(
+    file: SourceFile,
+    absolutePath: string,
+    ctx: AdapterContext,
+  ): Promise<ExtractedMigration[]>
   /** Adapter rules. Every ID must be `<adapter-id>/<name>`. */
   rules: Rule[]
   /** Written under the adapter's config key by `orm-preflight init`. */

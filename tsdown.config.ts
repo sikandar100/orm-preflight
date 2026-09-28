@@ -18,6 +18,10 @@ export default defineConfig([
     format: ['esm', 'cjs'],
     dts: true,
     clean: true,
+    // The --execute code finds the typeorm stand-in with import.meta.url, in CJS too.
+    shims: true,
+    // --execute loads this file in place of the typeorm package. It sits next to the chunks.
+    copy: [{ from: 'src/adapters/typeorm/execute/typeorm-shim.cjs', to: 'dist' }],
   },
   {
     ...shared,
