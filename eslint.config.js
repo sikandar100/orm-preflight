@@ -70,6 +70,9 @@ export default defineConfig(
       'test/**/fixtures/**',
       'test/**/bad/**',
       'test/**/good/**',
+      'test/golden/typeorm-*/**',
+      // CommonJS helpers that run against a throwaway TypeORM install (scripts/golden/generate.sh).
+      'scripts/golden/*.cjs',
     ],
   },
   js.configs.recommended,
