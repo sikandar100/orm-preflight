@@ -1,5 +1,27 @@
 # orm-preflight
 
+## 1.0.0
+
+### Major Changes
+
+- [#25](https://github.com/sikandar100/orm-preflight/pull/25) [`bb03cd7`](https://github.com/sikandar100/orm-preflight/commit/bb03cd7a2e4bba67a9ac293e0f70794707a36731) Thanks [@sikandar100](https://github.com/sikandar100)! - orm-preflight 1.0.
+  
+  Breaking change: five rules that shipped as warnings in 0.2 are now errors, as the rule catalogue always intended. If your CI passed with warnings before, it may now fail on these:
+  
+  - `require-not-valid-check`
+  - `require-concurrent-unique`
+  - `no-blocking-maintenance`
+  - `enum-value-used-in-same-transaction`
+  - `no-edit-applied-migration`
+  
+  To keep one as a warning, set it in your config, for example `{ "rules": { "require-not-valid-check": "warn" } }`.
+  
+  The GitHub Action now has a `v1` tag that follows every 1.x release: `uses: sikandar100/orm-preflight@v1`.
+
+### Minor Changes
+
+- [#22](https://github.com/sikandar100/orm-preflight/pull/22) [`4fe6818`](https://github.com/sikandar100/orm-preflight/commit/4fe6818a850c9c24aef6051978461b80278780c3) Thanks [@sikandar100](https://github.com/sikandar100)! - Add `--execute`, which runs each migration's `up()` with a recording query runner to see SQL that is only built at run time. It never touches a database or loads TypeORM, and it refuses to run under `pull_request_target` unless `--allow-untrusted-execute` is given. The GitHub Action stays static.
+
 ## 0.2.0
 
 ### Minor Changes
