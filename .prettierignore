@@ -7,6 +7,8 @@ CHANGELOG.md
 test/**/fixtures/
 test/**/bad/
 test/**/good/
+# Written by real TypeORM (scripts/golden/generate.sh)
+test/golden/typeorm-*/
 # Snapshots stay byte-for-byte as the code writes them
 test/**/__snapshots__/
 test/e2e/output/
