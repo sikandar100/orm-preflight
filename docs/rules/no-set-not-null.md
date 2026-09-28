@@ -128,4 +128,4 @@ When the table is small, or the migration runs in a maintenance window.
   exist, then the table scan is skipped.")
 - PostgreSQL: [ALTER TABLE, ADD table_constraint](https://www.postgresql.org/docs/current/sql-altertable.html#SQL-ALTERTABLE-DESC-ADD-TABLE-CONSTRAINT)
   (NOT VALID "is currently only allowed for foreign-key, CHECK, and not-null constraints", on 18)
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

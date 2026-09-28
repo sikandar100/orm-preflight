@@ -101,4 +101,4 @@ When the table is small, or the migration runs in a maintenance window.
   and its example "To recreate a primary key constraint, without blocking updates while the index
   is rebuilt", which uses `CREATE UNIQUE INDEX CONCURRENTLY` and `PRIMARY KEY USING INDEX`
 - PostgreSQL: [CREATE INDEX, building indexes concurrently](https://www.postgresql.org/docs/current/sql-createindex.html#SQL-CREATEINDEX-CONCURRENTLY)
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

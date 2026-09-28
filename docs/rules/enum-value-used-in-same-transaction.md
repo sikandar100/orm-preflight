@@ -97,4 +97,4 @@ When the literal only looks like the value, for example the same text in an unre
   form that adds a new value to an enum type) is executed inside a transaction block, the new
   value cannot be used until after the transaction has been committed.")
 - PostgreSQL: [multiple statements in a simple query](https://www.postgresql.org/docs/current/protocol-flow.html#PROTOCOL-FLOW-MULTI-STATEMENT)
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

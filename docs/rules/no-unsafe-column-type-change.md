@@ -80,4 +80,4 @@ the migration runs in a maintenance window.
   existing column, if the USING clause does not change the column contents and the old type is
   either binary coercible to the new type or an unconstrained domain over the new type, a table
   rewrite is not needed")
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

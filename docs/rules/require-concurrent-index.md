@@ -82,4 +82,4 @@ a maintenance window.
 - PostgreSQL: [explicit locking, table-level locks](https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-TABLES)
 - MySQL: [online DDL, index operations](https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl-operations.html)
 - TypeORM: [`TableIndexOptions.isConcurrent`](https://github.com/typeorm/typeorm/blob/f279fd1367f24ad108a1b11cf833f1620274088d/packages/typeorm/src/schema-builder/options/TableIndexOptions.ts)
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

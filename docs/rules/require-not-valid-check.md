@@ -90,4 +90,4 @@ When the table is small, or the migration runs in a maintenance window.
   potentially-lengthy scan is skipped.")
 - PostgreSQL: [ALTER TABLE, notes](https://www.postgresql.org/docs/current/sql-altertable.html#SQL-ALTERTABLE-NOTES) ("validation
   acquires only a SHARE UPDATE EXCLUSIVE lock on the table being altered")
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

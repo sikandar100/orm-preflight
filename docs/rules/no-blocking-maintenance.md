@@ -83,4 +83,4 @@ When the table is small, or the migration runs in a maintenance window.
   index's parent table. It also takes an ACCESS EXCLUSIVE lock on the specific index being
   processed, which will block reads that attempt to use that index.") and
   [rebuilding indexes concurrently](https://www.postgresql.org/docs/current/sql-reindex.html#SQL-REINDEX-CONCURRENTLY)
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

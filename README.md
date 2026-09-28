@@ -2,6 +2,8 @@
 
 Preflight safety checks for TypeORM migrations: catch data loss and locking before you merge.
 
+Documentation: https://sikandar100.github.io/orm-preflight/
+
 Changing a column's length in TypeORM can delete all of its data. When a column's type or length
 changes, TypeORM's migration generator drops the column and adds it again
 ([typeorm/typeorm#3357](https://github.com/typeorm/typeorm/issues/3357)). The migration looks
