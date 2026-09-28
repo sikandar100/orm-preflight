@@ -24,6 +24,11 @@ export const typeormAdapter: OrmAdapter = {
   ],
   configSchema: typeormConfigSchema,
   extract: extractTypeorm,
+  // Loaded only for --execute, so static mode never loads the code that runs migrations.
+  extractDynamic: async (file, absolutePath, ctx) => {
+    const { runMigrations } = await import('./execute/index.js')
+    return runMigrations(file, absolutePath, ctx, extractTypeorm(file, ctx))
+  },
   rules: [...typeormRules],
   starterOptions: { transactionMode: 'all' },
   starterNote:
