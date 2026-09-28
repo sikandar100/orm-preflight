@@ -90,7 +90,16 @@ changeset. A new rule ships at `warn` (see Public API above).
 
 ## Writing style
 
-README, docs, and CLI messages use plain, direct English. Do not use em dashes.
+Everything in this repository is written for people, so keep it plain and easy to scan:
+
+- Use short sentences and everyday words. One idea per sentence.
+- Prefer headings, lists, and tables over long paragraphs.
+- Say why in a line, not a wall of text.
+- Never use em dashes or en dashes, in any file. A test (`test/style/no-dashes.test.ts`)
+  fails if one slips in.
+
+This applies to the README, docs, rule pages, CLI messages, code comments, changesets, and
+pull request descriptions.
 
 ## Code of Conduct
 

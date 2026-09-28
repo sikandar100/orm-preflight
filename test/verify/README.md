@@ -1,28 +1,48 @@
 # Lock verification
 
-The locking rules make claims about PostgreSQL: which lock a statement takes, whether it
-rewrites the table, and which statements fail inside a transaction. `verify-locks.sh` checks
-each claim against a real server in Docker.
+The locking rules make claims about PostgreSQL:
+
+- which lock a statement takes
+- whether it rewrites the table
+- which statements fail inside a transaction
+
+This folder checks every one of those claims against a real PostgreSQL server in Docker.
+
+## How to run it
+
+Check one version:
 
 ```sh
-test/verify/verify-locks.sh 14
-test/verify/verify-locks.sh 18
+test/verify/check.sh 16
 ```
 
-For each statement, the script runs it inside a transaction on a table with 1,000 rows and
-prints:
+`check.sh` runs `verify-locks.sh` and compares its output with `expected.txt`. It fails with
+a diff when any claim does not hold. Checks marked `(18+)` only run on PostgreSQL 18 and newer.
+
+The same check runs in GitHub Actions on PostgreSQL 14, 15, 16, 17, and 18, on every push to
+`main` and every night (`.github/workflows/verify.yml`).
+
+## What the script does
+
+For each statement, `verify-locks.sh` runs it inside a transaction on a table with 1,000 rows
+and prints:
 
 - the locks the transaction holds on each table (from `pg_locks`)
 - `REWRITE` when the table's file node changed, which means PostgreSQL rewrote it
 
-It then runs the statements that must fail and prints the error.
+Some statements cannot run inside a transaction, such as `VACUUM FULL`. For those, a second
+session holds a light lock on the table, and the script prints the lock the statement waits for.
+
+Last, it runs the statements that must fail and prints their errors.
 
 ## Results
 
-`results/pg14.txt` and `results/pg18.txt` hold the output for PostgreSQL 14.24 and 18.6,
-recorded on 26 and 27 September 2026. Both versions agree on every claim. PostgreSQL 18 also shows
-that `ADD CONSTRAINT ... NOT NULL ... NOT VALID` needs no scan, and that validating it takes
-only a SHARE UPDATE EXCLUSIVE lock, which is the safe path `no-set-not-null` suggests on 18.
+`results/` keeps the full output for PostgreSQL 14.24, 15.19, 16.15, 17.11, and 18.6, recorded
+in September 2026. All five versions give the same result for every claim.
+
+PostgreSQL 18 also shows two things older versions cannot do: `ADD CONSTRAINT ... NOT NULL ...
+NOT VALID` needs no scan, and validating it takes only a SHARE UPDATE EXCLUSIVE lock. That is
+the safe path `no-set-not-null` suggests on 18.
 
 | Claim                                                                         | Rule                                  |
 | ----------------------------------------------------------------------------- | ------------------------------------- |
@@ -44,5 +64,8 @@ only a SHARE UPDATE EXCLUSIVE lock, which is the safe path `no-set-not-null` sug
 | A waiting ALTER queues a plain SELECT behind it; `lock_timeout` cancels it    | `require-lock-timeout`                |
 | TypeORM's enum recreate rewrites the table and fails on removed values        | `typeorm/no-enum-recreate`            |
 
-Re-run the script and update the results when a rule's claim changes or a new PostgreSQL
-major version is released.
+## When to update
+
+- A rule's claim changes: update `verify-locks.sh`, run `check.sh`, and update `expected.txt`.
+- A new PostgreSQL major version comes out: add it to the workflow's matrix and record its
+  results in `results/`.

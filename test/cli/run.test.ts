@@ -87,7 +87,7 @@ describe('options', () => {
   })
 
   it('keeps help free of em dashes', () => {
-    expect(helpText).not.toMatch(/[–—]/)
+    expect(helpText).not.toMatch(/[\u2013\u2014]/)
   })
 })
 

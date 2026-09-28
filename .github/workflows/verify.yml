@@ -1,0 +1,37 @@
+name: PostgreSQL verification
+
+# Checks every locking claim the rules make against real PostgreSQL 14 to 18 (SPEC 8.4).
+# It starts a database per version in Docker, so it runs on main and nightly, not on every
+# pull request.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: PostgreSQL ${{ matrix.postgres }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        postgres: [14, 15, 16, 17, 18]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check the locking claims
+        env:
+          POSTGRES: ${{ matrix.postgres }}
+        run: test/verify/check.sh "$POSTGRES"
