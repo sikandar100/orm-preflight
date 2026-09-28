@@ -364,8 +364,8 @@ describe('--changed-since', () => {
   it('reports an edit to a migration that exists on the base branch', async () => {
     write('src/migrations/1727000000000-Old.ts', migration('Old1727000000000', 'SELECT 1'))
     const result = await runCli(['--changed-since', 'main'])
-    expect(result.code).toBe(ExitCode.Ok)
-    expect(result.stdout).toContain('warn   no-edit-applied-migration')
+    expect(result.code).toBe(ExitCode.LintFailed)
+    expect(result.stdout).toContain('error  no-edit-applied-migration')
     expect(result.stdout).toContain('already exists on main and was changed')
   })
 

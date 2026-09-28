@@ -103,10 +103,32 @@ jobs:
           fi
       - run: pnpm build
       - run: pnpm check:pack
-      - uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+      - id: changesets
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           publish-script: pnpm changeset publish
+      # Moves the major tag (v1 for 1.x.y) to the release just published, so users can write
+      # `uses: sikandar100/orm-preflight@v1` and get every 1.x fix.
+      - name: Move the major version tag
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          major=$(node -p "require('./package.json').version.split('.')[0]")
+          if [ "$major" -lt 1 ]; then
+            echo "Version 0.x has no major tag."
+            exit 0
+          fi
+          tag="v$major"
+          if gh api "repos/$REPOSITORY/git/refs/tags/$tag" --silent 2>/dev/null; then
+            gh api -X PATCH "repos/$REPOSITORY/git/refs/tags/$tag" -f sha="$SHA" -F force=true --silent
+          else
+            gh api -X POST "repos/$REPOSITORY/git/refs" -f ref="refs/tags/$tag" -f sha="$SHA" --silent
+          fi
+          echo "$tag now points to $SHA."
 
   rehearsal:
     name: Release rehearsal (never publishes)

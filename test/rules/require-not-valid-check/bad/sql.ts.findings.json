@@ -1,7 +1,7 @@
 [
   {
     "ruleId": "require-not-valid-check",
-    "severity": "warn",
+    "severity": "error",
     "category": "locking",
     "file": "require-not-valid-check/bad/sql.ts",
     "line": 5,

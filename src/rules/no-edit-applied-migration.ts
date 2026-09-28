@@ -5,8 +5,7 @@ export const noEditAppliedMigration: Rule = {
   meta: {
     id: 'no-edit-applied-migration',
     category: 'correctness',
-    // Spec default: error. New rules ship at warn in a minor release (CONTRIBUTING).
-    defaultSeverity: 'warn',
+    defaultSeverity: 'error',
     dialects: ['postgres', 'mysql'],
     docsUrl: docsUrl('no-edit-applied-migration'),
   },

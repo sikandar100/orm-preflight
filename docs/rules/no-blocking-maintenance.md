@@ -4,9 +4,7 @@ Reports `VACUUM FULL`, `CLUSTER`, and `REINDEX` without `CONCURRENTLY`, which bl
 
 | Category | Default severity | Databases  |
 | -------- | ---------------- | ---------- |
-| locking  | warn             | PostgreSQL |
-
-It becomes an error by default in 1.0.
+| locking  | error            | PostgreSQL |
 
 ## What happens
 

@@ -17,8 +17,7 @@ export const enumValueUsedInSameTransaction: Rule = {
   meta: {
     id: 'enum-value-used-in-same-transaction',
     category: 'locking',
-    // Spec default: error. New rules ship at warn in a minor release (CONTRIBUTING).
-    defaultSeverity: 'warn',
+    defaultSeverity: 'error',
     dialects: ['postgres'],
     docsUrl: docsUrl('enum-value-used-in-same-transaction'),
   },

@@ -1,7 +1,7 @@
 [
   {
     "ruleId": "enum-value-used-in-same-transaction",
-    "severity": "warn",
+    "severity": "error",
     "category": "locking",
     "file": "enum-value-used-in-same-transaction/bad/update.ts",
     "line": 6,

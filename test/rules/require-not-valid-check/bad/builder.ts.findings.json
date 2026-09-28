@@ -1,7 +1,7 @@
 [
   {
     "ruleId": "require-not-valid-check",
-    "severity": "warn",
+    "severity": "error",
     "category": "locking",
     "file": "require-not-valid-check/bad/builder.ts",
     "line": 5,

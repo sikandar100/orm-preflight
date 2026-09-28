@@ -1,7 +1,7 @@
 [
   {
     "ruleId": "require-concurrent-unique",
-    "severity": "warn",
+    "severity": "error",
     "category": "locking",
     "file": "require-concurrent-unique/bad/generated.ts",
     "line": 5,
