@@ -1,0 +1,62 @@
+{
+  "$comment": "The rules each golden migration must trigger, no more and no less. Decided from the SQL TypeORM wrote, not from what orm-preflight reports.",
+  "knownGaps": {
+    "mysql/RemoveEnumValue": "TypeORM writes CHANGE with the new enum values only. The old values are not in the statement, so a removed value cannot be seen. Rows holding it then fail or are blanked."
+  },
+  "typeorm-0.3.31": {
+    "postgres": {
+      "WidenVarchar": ["no-add-not-null-without-default", "no-drop-and-recreate-column"],
+      "IntToBigint": ["no-add-not-null-without-default", "no-drop-and-recreate-column"],
+      "AddIndex": ["require-concurrent-index"],
+      "AddRelation": ["require-not-valid-foreign-key"],
+      "RenameProperty": ["no-rename-column"],
+      "AddNotNullColumn": ["no-add-not-null-without-default"],
+      "MakeRequired": ["no-set-not-null"],
+      "RemoveEnumValue": ["no-unsafe-column-type-change", "typeorm/no-enum-recreate"],
+      "RemoveColumn": ["no-drop-column"],
+      "AddUnique": ["require-concurrent-unique"],
+      "AddEnumValue": ["no-unsafe-column-type-change", "typeorm/no-enum-recreate"]
+    },
+    "mysql": {
+      "WidenVarchar": ["no-drop-and-recreate-column"],
+      "IntToBigint": ["no-drop-and-recreate-column"],
+      "AddEnumValue": [],
+      "AddIndex": [],
+      "AddRelation": [],
+      "RenameProperty": ["no-rename-column"],
+      "AddNotNullColumn": [],
+      "MakeRequired": [],
+      "RemoveEnumValue": [],
+      "RemoveColumn": ["no-drop-column"],
+      "AddUnique": []
+    }
+  },
+  "typeorm-1.1.1": {
+    "postgres": {
+      "WidenVarchar": ["no-add-not-null-without-default", "no-drop-and-recreate-column"],
+      "IntToBigint": ["no-add-not-null-without-default", "no-drop-and-recreate-column"],
+      "AddIndex": ["require-concurrent-index"],
+      "AddRelation": ["require-not-valid-foreign-key"],
+      "RenameProperty": ["no-rename-column"],
+      "AddNotNullColumn": ["no-add-not-null-without-default"],
+      "MakeRequired": ["no-set-not-null"],
+      "RemoveEnumValue": ["no-unsafe-column-type-change", "typeorm/no-enum-recreate"],
+      "RemoveColumn": ["no-drop-column"],
+      "AddUnique": ["require-concurrent-unique"],
+      "AddEnumValue": []
+    },
+    "mysql": {
+      "WidenVarchar": ["no-drop-and-recreate-column"],
+      "IntToBigint": ["no-drop-and-recreate-column"],
+      "AddEnumValue": [],
+      "AddIndex": [],
+      "AddRelation": [],
+      "RenameProperty": ["no-rename-column"],
+      "AddNotNullColumn": [],
+      "MakeRequired": [],
+      "RemoveEnumValue": [],
+      "RemoveColumn": ["no-drop-column"],
+      "AddUnique": []
+    }
+  }
+}
