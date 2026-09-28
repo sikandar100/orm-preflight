@@ -1,3 +1,4 @@
+import { realpathSync } from 'node:fs'
 import type { ExtractedStep, Loc } from '../../../ir/types.js'
 import type { Dialect } from '../../../rules/types.js'
 import { mapBuilderCall, READ_METHODS, TRANSACTION_METHODS } from '../builder.js'
@@ -36,7 +37,9 @@ export function createRecorder(options: {
   const steps: ExtractedStep[] = []
   let inTransaction = options.inTransaction
 
-  const here = (): Loc => callSite(new Error().stack ?? '', absolutePath, file) ?? fallback
+  // The path as given and as the file system resolves it: on Windows they can differ.
+  const paths = [absolutePath, realPath(absolutePath)]
+  const here = (): Loc => callSite(new Error().stack ?? '', paths, file) ?? fallback
   const unanalyzable = (reason: string, loc = here()) => {
     steps.push({
       kind: 'operation',
@@ -150,17 +153,44 @@ export function toValue(value: unknown, depth: number): Value {
 }
 
 /**
- * The first stack frame inside the migration file, as a location in it. Stack frames look
- * like `at X (/path/file.ts:12:5)` or `at /path/file.ts:12:5`, sometimes with a file:// URL.
+ * The first stack frame inside the migration file, as a location in it. Frames look like
+ * `at X (/path/file.ts:12:5)`, `at X (C:\path\file.ts:12:5)`, or use a file:// URL. On
+ * Windows the same file can also appear with another drive-letter case or its long name.
  */
-export function callSite(stack: string, absolutePath: string, file: string): Loc | undefined {
-  for (const line of stack.split('\n')) {
-    const at = line.lastIndexOf(absolutePath)
-    if (at === -1) continue
-    const match = /^:(\d+):(\d+)/.exec(line.slice(at + absolutePath.length))
-    if (match?.[1] !== undefined && match[2] !== undefined) {
-      return { file, line: Number(match[1]), column: Number(match[2]) }
+export function callSite(
+  stack: string,
+  absolutePaths: readonly string[],
+  file: string,
+  windows = process.platform === 'win32',
+): Loc | undefined {
+  const normalize = (text: string) => {
+    let out = text.replaceAll('\\', '/')
+    try {
+      out = decodeURI(out)
+    } catch {
+      // Not URL-encoded; compare as it is.
+    }
+    return windows ? out.toLowerCase() : out
+  }
+  const targets = absolutePaths.map(normalize)
+  for (const raw of stack.split('\n')) {
+    const line = normalize(raw)
+    for (const target of targets) {
+      const at = line.lastIndexOf(target)
+      if (at === -1) continue
+      const match = /^:(\d+):(\d+)/.exec(line.slice(at + target.length))
+      if (match?.[1] !== undefined && match[2] !== undefined) {
+        return { file, line: Number(match[1]), column: Number(match[2]) }
+      }
     }
   }
   return undefined
+}
+
+function realPath(file: string): string {
+  try {
+    return realpathSync.native(file)
+  } catch {
+    return file
+  }
 }
