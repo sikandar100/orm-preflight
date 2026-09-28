@@ -94,6 +94,9 @@ orm-preflight [files or globs...] [options]
   --format <format>           pretty, json, github (annotations), or sarif. Default:
                               github in GitHub Actions, pretty elsewhere
   --max-warnings <n>          Fail when there are more than n warnings (default: no limit)
+  --execute                   Run each migration's up() to see SQL built at run time. This
+                              runs your code: only use it on code you trust
+  --allow-untrusted-execute   Allow --execute under GitHub's pull_request_target event
   --no-color                  Print without colors
 
 orm-preflight rules                      List every rule
@@ -256,6 +259,30 @@ It never imports or runs your migrations, never connects to a database, and neve
 TypeORM. Anything it cannot read, such as SQL built at run time, is reported as
 `unanalyzable-statement` instead of being skipped silently.
 
+### Running migrations with `--execute`
+
+Some migrations build their SQL at run time, for example in a loop over table names, or in a
+helper imported from another file. Static analysis cannot read that SQL. `--execute` can:
+
+```sh
+npx orm-preflight --execute
+```
+
+It loads each migration file and runs `up()` with a stand-in for TypeORM's query runner, which
+records every statement instead of sending it to a database. So:
+
+- No database is needed, and none is touched.
+- Imports of `typeorm` get a small stand-in; the real TypeORM is never loaded.
+- If `up()` reads the database, for example with `getTable()`, it gets an empty answer, and
+  orm-preflight reports that a real database may lead to different statements.
+- If `up()` fails or runs longer than 10 seconds, that is reported, and linting goes on.
+
+**`--execute` runs your code.** Only use it on code you trust:
+
+- Never use it on pull requests from forks with the `pull_request_target` trigger, which gives
+  them your secrets. orm-preflight refuses to, unless you add `--allow-untrusted-execute`.
+- The GitHub Action never uses `--execute`. It stays static and safe for forks.
+
 ## What a clean run means
 
 A clean run means none of the documented hazards were found. It does not guarantee that a
@@ -269,7 +296,7 @@ Limitations:
   Locking analysis for MySQL (`ALGORITHM=INSTANT`, `INPLACE`, `COPY`) is planned after 1.0.
   MySQL needs `npm install --save-dev node-sql-parser`.
 - Only `up()` is analyzed. `down()` is only checked for being empty (`require-down`).
-- SQL built at run time is reported, not analyzed.
+- SQL built at run time is reported, not analyzed, unless you use `--execute`.
 
 ## Programmatic use
 

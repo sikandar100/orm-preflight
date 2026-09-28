@@ -441,3 +441,69 @@ describe('output formats', () => {
     expect(sarif.runs[0]?.results).toHaveLength(1)
   })
 })
+
+describe('--execute', () => {
+  const dynamicMigration = (marker: string) => `import { writeFileSync } from 'node:fs'
+import { MigrationInterface, QueryRunner } from 'typeorm'
+
+writeFileSync(${JSON.stringify(marker)}, 'ran')
+
+export class Dynamic1727000000000 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    const table = ['us', 'ers'].join('')
+    await queryRunner.query(\`DROP TABLE "\${table}"\`)
+  }
+
+  public async down(): Promise<void> {
+    throw new Error('irreversible')
+  }
+}
+`
+  let marker: string
+  beforeEach(() => {
+    marker = path.join(dir, 'ran.txt')
+    write('src/migrations/1727000000000-Dynamic.ts', dynamicMigration(marker))
+  })
+
+  it('runs up(), warns on stderr, and sees SQL built at run time', async () => {
+    const result = await runCli(['--execute'])
+    expect(result.code).toBe(ExitCode.LintFailed)
+    expect(result.stderr).toBe(
+      'orm-preflight: --execute is running your migration code. Only use it on code you trust.\n',
+    )
+    expect(result.stdout).toContain('error  no-drop-table')
+    expect(existsSync(marker)).toBe(true)
+  })
+
+  it('never runs migration code without --execute', async () => {
+    const result = await runCli([])
+    expect(result.stdout).toContain('unanalyzable-statement')
+    expect(existsSync(marker)).toBe(false)
+  })
+
+  it('refuses to run under pull_request_target, before any code runs', async () => {
+    const result = await runCli(['--execute'], {
+      env: { GITHUB_EVENT_NAME: 'pull_request_target' },
+    })
+    expect(result.code).toBe(ExitCode.UsageOrInternalError)
+    expect(result.stderr).toContain('--execute refuses to run under pull_request_target')
+    expect(result.stderr).not.toContain('is running your migration code')
+    expect(existsSync(marker)).toBe(false)
+  })
+
+  it('runs under pull_request_target with --allow-untrusted-execute', async () => {
+    const result = await runCli(['--execute', '--allow-untrusted-execute'], {
+      env: { GITHUB_EVENT_NAME: 'pull_request_target' },
+    })
+    expect(result.code).toBe(ExitCode.LintFailed)
+    expect(existsSync(marker)).toBe(true)
+  })
+
+  it('rejects --allow-untrusted-execute on its own', async () => {
+    const result = await runCli(['--allow-untrusted-execute'])
+    expect(result.code).toBe(ExitCode.UsageOrInternalError)
+    expect(result.stderr).toContain(
+      '--allow-untrusted-execute only makes sense together with --execute',
+    )
+  })
+})

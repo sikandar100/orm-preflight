@@ -43,6 +43,9 @@ Options
   --format <format>           pretty, json, github (annotations), or sarif. Default:
                               github in GitHub Actions, pretty elsewhere
   --max-warnings <n>          Fail when there are more than n warnings (default: no limit)
+  --execute                   Run each migration's up() to see SQL built at run time. This
+                              runs your code: only use it on code you trust
+  --allow-untrusted-execute   Allow --execute under GitHub's pull_request_target event
   --no-color                  Print without colors
   -h, --help                  Print this help
   -v, --version               Print the version
@@ -67,6 +70,8 @@ const OPTIONS = {
   'changed-since': { type: 'string' },
   format: { type: 'string' },
   'max-warnings': { type: 'string' },
+  execute: { type: 'boolean' },
+  'allow-untrusted-execute': { type: 'boolean' },
   'no-color': { type: 'boolean' },
   help: { type: 'boolean', short: 'h' },
   version: { type: 'boolean', short: 'v' },
@@ -141,6 +146,10 @@ async function dispatch(argv: readonly string[], io: CliIo): Promise<ExitCode> {
     throw new UsageError(`Unknown format "${format}". Use pretty, json, github, or sarif.`)
   }
   const maxWarnings = integer(values['max-warnings'], '--max-warnings')
+  const execute = values.execute === true
+  if (values['allow-untrusted-execute'] === true && !execute) {
+    throw new UsageError('--allow-untrusted-execute only makes sense together with --execute.')
+  }
   const result = await runLint(
     {
       cwd,
@@ -148,6 +157,14 @@ async function dispatch(argv: readonly string[], io: CliIo): Promise<ExitCode> {
       ...(values.config === undefined ? {} : { configPath: values.config }),
       ...(values['changed-since'] === undefined ? {} : { changedSince: values['changed-since'] }),
       overrides,
+      execute,
+      allowUntrustedExecute: values['allow-untrusted-execute'] === true,
+      env,
+      onExecute: () => {
+        io.stderr(
+          'orm-preflight: --execute is running your migration code. Only use it on code you trust.\n',
+        )
+      },
     },
     { get: getAdapter },
   )

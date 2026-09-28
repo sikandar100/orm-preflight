@@ -4,6 +4,7 @@ import type { OrmAdapter, SourceFile } from './adapter-api.js'
 import { type ConfigOverrides, loadConfig, type ResolvedConfig } from './config/load.js'
 import { type ChangeSet, changesSince } from './discovery/git.js'
 import { discoverFiles } from './discovery/index.js'
+import type { ExtractedMigration } from './ir/types.js'
 import { runRules } from './engine/run.js'
 import { UsageError } from './errors.js'
 import { coreRules } from './rules/index.js'
@@ -24,6 +25,17 @@ export interface LintOptions {
    * and tables created by any of them count as new.
    */
   changedSince?: string
+  /**
+   * Runs each migration's up() with a recording QueryRunner, to see SQL that is only known at
+   * run time. This runs the project's code: only use it on code you trust.
+   */
+  execute?: boolean
+  /** Allows `execute` under GitHub's pull_request_target event, which is refused by default. */
+  allowUntrustedExecute?: boolean
+  /** Environment variables. Defaults to process.env. */
+  env?: Readonly<Record<string, string | undefined>>
+  /** Called once `execute` passed its checks, right before any migration code runs. */
+  onExecute?: () => void
 }
 
 export interface LintSummary {
@@ -51,6 +63,7 @@ export async function runLint(options: LintOptions, adapters: AdapterLookup): Pr
   const config = loadConfig(cwd, options.configPath, options.overrides)
   const adapter = adapters.get(config.orm)
   if (adapter === undefined) throw new UsageError(`Unknown ORM "${config.orm}".`)
+  if (options.execute === true) checkExecuteAllowed(adapter, options)
 
   const explicit = options.patterns !== undefined && options.patterns.length > 0
   const patterns = explicit
@@ -67,19 +80,57 @@ export async function runLint(options: LintOptions, adapters: AdapterLookup): Pr
   const sources = await Promise.all(
     files.map(async (file) => ({ path: file, text: await readFile(path.join(cwd, file), 'utf8') })),
   )
-  return lintSources(sources, config, adapter, changes)
+  if (options.execute === true && sources.length > 0) options.onExecute?.()
+  return lintSources(
+    sources,
+    config,
+    adapter,
+    changes,
+    options.execute === true ? { cwd } : undefined,
+  )
 }
 
-/** Lints files already in memory. Used by runLint and by tests. */
+/**
+ * --execute runs project code. Under pull_request_target, GitHub runs a workflow with the
+ * base repository's secrets and a write token for pull requests from forks, so running the
+ * fork's code there is refused unless the caller insists.
+ */
+function checkExecuteAllowed(adapter: OrmAdapter, options: LintOptions): void {
+  if (adapter.extractDynamic === undefined) {
+    throw new UsageError(`--execute is not available for the ${adapter.id} adapter.`)
+  }
+  const env = options.env ?? process.env
+  if (env.GITHUB_EVENT_NAME === 'pull_request_target' && options.allowUntrustedExecute !== true) {
+    throw new UsageError(
+      '--execute refuses to run under pull_request_target: a pull request from a fork would run its own code with your secrets. Use the pull_request trigger, or pass --allow-untrusted-execute if you are sure.',
+    )
+  }
+}
+
+/**
+ * Lints files already in memory. Used by runLint and by tests. With `execute`, migrations
+ * are run (see LintOptions.execute), and file paths resolve against `execute.cwd`.
+ */
 export async function lintSources(
   sources: readonly SourceFile[],
   config: ResolvedConfig,
   adapter: OrmAdapter,
   changes?: ChangeSet,
+  execute?: { cwd: string },
 ): Promise<LintResult> {
   const ctx = { dialect: config.dialect, options: config.adapterOptions }
-  const extracted = sources
-    .flatMap((source) => adapter.extract(source, ctx))
+  const all: ExtractedMigration[] = []
+  for (const source of sources) {
+    if (execute !== undefined && adapter.extractDynamic !== undefined) {
+      // One file at a time: running migrations touches process-wide state, such as console.
+      all.push(
+        ...(await adapter.extractDynamic(source, path.resolve(execute.cwd, source.path), ctx)),
+      )
+    } else {
+      all.push(...adapter.extract(source, ctx))
+    }
+  }
+  const extracted = all
     // Migrations at or before startAfter are part of the history the project adopted.
     .filter(
       (m) =>

@@ -105,6 +105,44 @@ try {
     JSON.stringify(explained),
   )
 
+  // --execute loads the typeorm stand-in shipped in dist. A migration whose SQL is only known
+  // at run time proves it works from the installed package, in ESM (the bin) and CJS (require).
+  mkdirSync(path.join(project, 'dynamic'))
+  writeFileSync(
+    path.join(project, 'dynamic', '1727000000001-Dynamic.ts'),
+    "import { MigrationInterface, QueryRunner } from 'typeorm'\n\nexport class Dynamic1727000000001 implements MigrationInterface {\n  async up(queryRunner: QueryRunner) {\n    const table = ['us', 'ers'].join('')\n    await queryRunner.query(`DROP TABLE \"${table}\"`)\n  }\n\n  async down() {\n    throw new Error('irreversible')\n  }\n}\n",
+  )
+  const executed = npm([
+    'exec',
+    '--no',
+    '--',
+    'orm-preflight',
+    '--execute',
+    '--format',
+    'json',
+    'dynamic/*.ts',
+  ])
+  const executedFindings = executed.stdout === '' ? [] : JSON.parse(executed.stdout).findings
+  check(
+    'bin --execute runs a TypeScript migration and sees its run-time SQL',
+    executed.status === 1 &&
+      executedFindings.some((/** @type {{ ruleId: string }} */ f) => f.ruleId === 'no-drop-table'),
+    JSON.stringify(executed),
+  )
+  const requiredExecute = execFileSync(
+    process.execPath,
+    [
+      '-e',
+      "require('orm-preflight').lint({ execute: true, patterns: ['dynamic/*.ts'] }).then((r) => process.stdout.write(r.findings.map((f) => f.ruleId).join(',')))",
+    ],
+    { cwd: project, encoding: 'utf8' },
+  )
+  check(
+    'require() --execute (CJS build) finds the typeorm stand-in',
+    requiredExecute.split(',').includes('no-drop-table'),
+    requiredExecute,
+  )
+
   const required = execFileSync(
     process.execPath,
     ['-e', 'process.stdout.write(require("orm-preflight").version)'],
