@@ -40,6 +40,8 @@ jobs:
       - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm typecheck
+      # Fails on broken links and pages, before the site is deployed from main.
+      - run: pnpm docs:build
       - name: Commit messages
         if: github.event_name == 'pull_request'
         env:
@@ -137,6 +139,25 @@ jobs:
       - name: Install the tarball in a clean project and run it
         run: node scripts/smoke-tarball.mjs --tarball pack/*.tgz
 
+  performance:
+    name: Performance budget
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      # SPEC 8.6: 1,000 migration files in under 10 seconds on a GitHub-hosted runner.
+      - run: node scripts/benchmark.mjs --files 1000 --budget 10
+
   action:
     name: GitHub Action
     runs-on: ubuntu-latest
@@ -192,7 +213,8 @@ jobs:
   ci-ok:
     name: CI passed
     if: always()
-    needs: [quality, workflows, test, package, runtime-compat, action, dependency-review]
+    needs:
+      [quality, workflows, test, package, runtime-compat, action, performance, dependency-review]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
