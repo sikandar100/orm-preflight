@@ -9,8 +9,13 @@ trustPolicyExclude:
   # Required by @types/node@22. Published in Nov 2024 by the undici maintainer,
   # like the rest of the 6.x line, before undici switched to OIDC publishing in 7.x.
   - undici-types@6.21.0
+  # Required by vitepress@1.6.4 (docs site only). A backport on the 5.4 line, published by
+  # the Vite team's bot with provenance, after newer lines moved to OIDC publishing.
+  - vite@5.4.21
 
 # Dependencies may not run install scripts unless approved here.
 allowBuilds:
   # Git hooks are installed by the "prepare" script instead.
   lefthook: false
+  # VitePress's bundler. Its platform binary comes as an optional package; the script is not needed.
+  esbuild: false

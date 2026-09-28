@@ -72,4 +72,4 @@ When the migration runs in a maintenance window, or the table has no concurrent 
   statement that waits longer than the specified amount of time while attempting to acquire a
   lock on a table, index, row, or other database object.")
 - PostgreSQL: [explicit locking, table-level locks](https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-TABLES)
-- orm-preflight [lock verification results](../../test/verify/README.md) (a SELECT waits behind a waiting ALTER, and lock_timeout cancels it)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md) (a SELECT waits behind a waiting ALTER, and lock_timeout cancels it)

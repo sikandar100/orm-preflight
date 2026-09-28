@@ -73,6 +73,9 @@ export default defineConfig(
       'test/golden/typeorm-*/**',
       // CommonJS helpers that run against a throwaway TypeORM install (scripts/golden/generate.sh).
       'scripts/golden/*.cjs',
+      // VitePress build output and cache.
+      'docs/.vitepress/cache/**',
+      'docs/.vitepress/dist/**',
     ],
   },
   js.configs.recommended,

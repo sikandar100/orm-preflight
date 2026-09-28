@@ -74,4 +74,4 @@ When the table is small and quiet, or the migration runs in a maintenance window
 - PostgreSQL: [DROP INDEX](https://www.postgresql.org/docs/current/sql-dropindex.html) ("A normal DROP INDEX acquires an ACCESS
   EXCLUSIVE lock on the table, blocking other accesses until the index drop can be completed.
   With this option, the command instead waits until conflicting transactions have completed.")
-- orm-preflight [lock verification results](../../test/verify/README.md) (a SELECT waits behind a waiting ALTER)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md) (a SELECT waits behind a waiting ALTER)

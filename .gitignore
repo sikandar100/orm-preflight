@@ -34,3 +34,7 @@ Thumbs.db
 
 # Local AI assistant settings
 .claude/settings.local.json
+
+# VitePress build output and cache
+docs/.vitepress/cache/
+docs/.vitepress/dist/

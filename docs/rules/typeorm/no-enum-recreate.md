@@ -89,5 +89,5 @@ When every table that uses the enum is small, or the migration runs in a mainten
   (a conversion with USING rewrites the table)
 - TypeORM 0.3.x: [`PostgresQueryRunner.changeColumn`, enum branch](https://github.com/typeorm/typeorm/blob/797320375fb83b2e9af4a6455e0b1b4483be329d/src/driver/postgres/PostgresQueryRunner.ts#L1590)
   (`ALTER TYPE ... RENAME TO ..._old`)
-- orm-preflight [lock verification results](../../../test/verify/README.md) (the recreate pattern
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md) (the recreate pattern
   rewrites the table; `ADD VALUE` does not; a removed value makes it fail)

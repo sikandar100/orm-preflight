@@ -81,4 +81,4 @@ maintenance window.
   with a volatile DEFAULT (e.g., clock_timestamp()), a stored generated column, an identity column,
   or a column with a domain data type that has constraints will cause the entire table and its
   indexes to be rewritten.")
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

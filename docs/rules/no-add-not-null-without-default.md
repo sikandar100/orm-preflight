@@ -70,4 +70,4 @@ When the table is known to be empty in every environment.
 - PostgreSQL: [ALTER TABLE, notes](https://www.postgresql.org/docs/current/sql-altertable.html#SQL-ALTERTABLE-NOTES) ("If no column
   constraints are specified, NULL is used as the DEFAULT", and a non-volatile default needs no
   rewrite)
-- orm-preflight [lock verification results](../../test/verify/README.md)
+- orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)
