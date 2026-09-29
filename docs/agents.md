@@ -34,9 +34,9 @@ It adds:
 The plugin uses the orm-preflight installed in your project when there is one, so your config
 and version apply. Otherwise it runs the version it was released with.
 
-We test this in Claude Code with real prompts: asked for a column length change, Claude writes
-`ALTER COLUMN ... TYPE` instead of TypeORM's drop and re-add, and when it does write a risky
-migration, it gets the findings and tells you not to run it.
+For example, asked to make a column longer, Claude writes `ALTER COLUMN ... TYPE` instead of
+TypeORM's drop and re-add. If it does write a risky migration, it gets the findings right away
+and fixes the migration or tells you not to run it.
 
 ## MCP server
 
@@ -58,10 +58,10 @@ database.
 
 ### Setup for each agent
 
-Claude Code is tested by us. The others follow each app's own documentation, checked on
-September 30, 2026. Apps change their settings often, so the linked docs win if they differ.
+Each setup links to the app's own documentation. If a snippet here stops working, the linked
+docs have the current setup.
 
-#### Claude Code (tested)
+#### Claude Code
 
 ```sh
 claude mcp add orm-preflight -- npx -y orm-preflight mcp
