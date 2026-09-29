@@ -12,6 +12,7 @@ import { formatSarif } from '../reporters/sarif.js'
 import { version } from '../version.js'
 import { explain, formatRules, init, sarifRules } from './commands.js'
 import { ExitCode } from './exit-codes.js'
+import { serveMcp } from './mcp.js'
 
 export interface CliIo {
   stdout: (text: string) => void
@@ -22,6 +23,8 @@ export interface CliIo {
   color?: boolean
   /** Environment variables. Defaults to process.env. */
   env?: Readonly<Record<string, string | undefined>>
+  /** Input for `orm-preflight mcp`. */
+  stdin?: NodeJS.ReadableStream
 }
 
 const ISSUES_URL = 'https://github.com/sikandar100/orm-preflight/issues'
@@ -55,6 +58,9 @@ Commands
   explain <rule>              Print a rule's documentation
   init [files or globs...]    Write orm-preflight.config.json, with startAfter set to the
                               newest existing migration
+  mcp                         Run as an MCP server over stdio, so AI coding agents can
+                              check migrations. --config, --dialect, and
+                              --postgres-version set its defaults
 
 Exit codes
   0  No errors, and no more warnings than --max-warnings
@@ -137,6 +143,17 @@ async function dispatch(argv: readonly string[], io: CliIo): Promise<ExitCode> {
   }
   if (command === 'init') {
     io.stdout(await init(cwd, rest, overrides))
+    return ExitCode.Ok
+  }
+  if (command === 'mcp') {
+    if (rest.length > 0) throw new UsageError('"mcp" takes no arguments.')
+    if (io.stdin === undefined) throw new UsageError('"mcp" needs standard input.')
+    const defaults = {
+      ...(values.config === undefined ? {} : { configPath: values.config }),
+      overrides,
+    }
+    // From here on, stdout carries only MCP messages.
+    await serveMcp(cwd, defaults, io.stdin, { write: io.stdout })
     return ExitCode.Ok
   }
 

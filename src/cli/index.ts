@@ -12,4 +12,5 @@ process.exitCode = await run(process.argv.slice(2), {
   stderr: (text) => process.stderr.write(text),
   // Honors NO_COLOR, FORCE_COLOR, and whether stdout is a terminal.
   color: pc.isColorSupported,
+  stdin: process.stdin,
 })
