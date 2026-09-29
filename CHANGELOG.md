@@ -1,5 +1,11 @@
 # orm-preflight
 
+## 1.0.1
+
+### Patch Changes
+
+- [#27](https://github.com/sikandar100/orm-preflight/pull/27) [`e5e7d96`](https://github.com/sikandar100/orm-preflight/commit/e5e7d96c7fbfe26b3d2afb6f2d21602c9437890d) Thanks [@sikandar100](https://github.com/sikandar100)! - README fixes. The rule table no longer marks `require-not-valid-check`, `require-concurrent-unique`, `no-blocking-maintenance`, and `enum-value-used-in-same-transaction` as warnings: they are errors since 1.0.0. The README also shows the npm, CI, OpenSSF Scorecard, and license badges, and the package homepage is now the documentation site.
+
 ## 1.0.0
 
 ### Major Changes
