@@ -1,7 +1,7 @@
 {
   "name": "orm-preflight",
   "mcpName": "io.github.sikandar100/orm-preflight",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Preflight safety checks for TypeORM migrations: catch data loss and locking before you merge.",
   "keywords": [
     "typeorm",
