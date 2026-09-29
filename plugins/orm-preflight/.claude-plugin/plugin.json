@@ -1,0 +1,13 @@
+{
+  "name": "orm-preflight",
+  "version": "1.0.2",
+  "description": "Checks database migrations as Claude writes them. Catches data loss, table locks, and deploy problems in TypeORM migrations, and tells Claude the safe way to make the change.",
+  "author": {
+    "name": "Sikandar Waheed",
+    "url": "https://github.com/sikandar100"
+  },
+  "homepage": "https://sikandar100.github.io/orm-preflight/",
+  "repository": "https://github.com/sikandar100/orm-preflight",
+  "license": "MIT",
+  "keywords": ["typeorm", "migrations", "postgresql", "mysql", "database", "nestjs", "mcp"]
+}

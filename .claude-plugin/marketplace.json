@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "orm-preflight",
+  "description": "The orm-preflight plugin for Claude Code: safety checks for database migrations.",
+  "owner": {
+    "name": "Sikandar Waheed",
+    "url": "https://github.com/sikandar100"
+  },
+  "plugins": [
+    {
+      "name": "orm-preflight",
+      "source": "./plugins/orm-preflight",
+      "description": "Checks database migrations as Claude writes them. Catches data loss, table locks, and deploy problems in TypeORM migrations, and tells Claude the safe way to make the change.",
+      "category": "development",
+      "homepage": "https://sikandar100.github.io/orm-preflight/"
+    }
+  ]
+}
