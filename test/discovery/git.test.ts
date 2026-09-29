@@ -30,6 +30,9 @@ function write(file: string, text: string) {
   writeFileSync(path.join(dir, file), text)
 }
 
+// Each test runs real git commands, which start slowly on Windows runners.
+const GIT_TIMEOUT = 30_000
+
 beforeEach(() => {
   dir = mkdtempSync(path.join(tmpdir(), 'orm-preflight-git-'))
   git(dir, 'init', '-q', '-b', 'main')
@@ -65,12 +68,12 @@ beforeEach(() => {
   // Not committed: a local edit and an untracked file.
   write('db/migrations/5-Uncommitted.ts', 'export class Uncommitted5 { changed = true }\n')
   write('db/migrations/7-Untracked.ts', 'export class Untracked7 {}\n')
-})
+}, GIT_TIMEOUT)
 afterEach(() => {
   rmSync(dir, { recursive: true, force: true })
 })
 
-describe('changesSince', () => {
+describe('changesSince', { timeout: GIT_TIMEOUT }, () => {
   it('lists added and modified files, committed or not', async () => {
     const changes = await changesSince(dir, 'main')
     expect(changes.ref).toBe('main')
