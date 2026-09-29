@@ -1,5 +1,10 @@
 # orm-preflight
 
+[![npm](https://img.shields.io/npm/v/orm-preflight)](https://www.npmjs.com/package/orm-preflight)
+[![CI](https://github.com/sikandar100/orm-preflight/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sikandar100/orm-preflight/actions/workflows/ci.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/sikandar100/orm-preflight/badge)](https://scorecard.dev/viewer/?uri=github.com/sikandar100/orm-preflight)
+[![License: MIT](https://img.shields.io/npm/l/orm-preflight)](https://github.com/sikandar100/orm-preflight/blob/main/LICENSE)
+
 Preflight safety checks for TypeORM migrations: catch data loss and locking before you merge.
 
 Documentation: https://sikandar100.github.io/orm-preflight/
@@ -60,11 +65,11 @@ To start on an existing project without fixing its history, run `npx orm-preflig
 | [`no-unsafe-column-type-change`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-unsafe-column-type-change.md)                     | A column type change that rewrites the table                                          |
 | [`require-not-valid-foreign-key`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-foreign-key.md)                   | A foreign key added without `NOT VALID`                                               |
 | [`no-set-not-null`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-set-not-null.md)                                               | `SET NOT NULL` on an existing column                                                  |
-| [`require-not-valid-check`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-check.md)                               | A CHECK constraint added without `NOT VALID` (warn)                                   |
-| [`require-concurrent-unique`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-unique.md)                           | A unique constraint or primary key added in place (warn)                              |
-| [`require-concurrent-index-drop`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index-drop.md)                   | `DROP INDEX` without `CONCURRENTLY` (warn)                                            |
-| [`no-blocking-maintenance`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-blocking-maintenance.md)                               | `VACUUM FULL`, `CLUSTER`, or `REINDEX` without `CONCURRENTLY` (warn)                  |
-| [`enum-value-used-in-same-transaction`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/enum-value-used-in-same-transaction.md)       | A new enum value used before the transaction that adds it commits (warn)              |
+| [`require-not-valid-check`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-check.md)                               | A CHECK constraint added without `NOT VALID`                                          |
+| [`require-concurrent-unique`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-unique.md)                           | A unique constraint or primary key added in place                                     |
+| [`require-concurrent-index-drop`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-concurrent-index-drop.md)                   | `DROP INDEX` without `CONCURRENTLY` (warning)                                         |
+| [`no-blocking-maintenance`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-blocking-maintenance.md)                               | `VACUUM FULL`, `CLUSTER`, or `REINDEX` without `CONCURRENTLY`                         |
+| [`enum-value-used-in-same-transaction`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/enum-value-used-in-same-transaction.md)       | A new enum value used before the transaction that adds it commits                     |
 | [`require-lock-timeout`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-lock-timeout.md)                                     | A change to an existing table without `lock_timeout` (off, opt-in)                    |
 | [`typeorm/no-enum-recreate`](https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/typeorm/no-enum-recreate.md)                             | TypeORM 0.3's enum change by recreating the type (warning)                            |
 | **Correctness**                                                                                                                                         |                                                                                       |

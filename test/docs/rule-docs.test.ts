@@ -124,3 +124,35 @@ describe.each(rules.map((r) => ({ id: r.meta.id, rule: r })))(
     })
   },
 )
+
+/**
+ * The rule tables in the README and in docs/rules/README.md list every rule once, and mark its
+ * default severity: "(warn)" or "(warning)" for warn, "(off, opt-in)" for off, nothing for error.
+ */
+describe.each(['README.md', 'docs/rules/README.md'])('rule table in %s', (path) => {
+  const text = readFileSync(fileURLToPath(new URL(`../../${path}`, import.meta.url)), 'utf8')
+  const rows = new Map<string, string>()
+  for (const line of text.split('\n')) {
+    const id = /^\| \[`([a-z/-]+)`\]/.exec(line)?.[1]
+    if (id !== undefined) rows.set(id, line.split('|').at(-2)?.trim() ?? '')
+  }
+
+  it.each(rules.map((r) => ({ id: r.meta.id, severity: r.meta.defaultSeverity })))(
+    '$id is listed with its default severity',
+    ({ id, severity }) => {
+      const label = rows.get(id)
+      expect(label, `${id} is missing`).toBeDefined()
+      const marked = /\((warn|warning)\)$/.test(label ?? '')
+        ? 'warn'
+        : label?.endsWith('(off, opt-in)')
+          ? 'off'
+          : 'error'
+      expect(marked).toBe(severity)
+    },
+  )
+
+  it('lists no unknown rules', () => {
+    const known = new Set(rules.map((r) => r.meta.id))
+    expect([...rows.keys()].filter((id) => !known.has(id))).toEqual([])
+  })
+})
