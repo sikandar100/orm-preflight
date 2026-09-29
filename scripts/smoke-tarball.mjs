@@ -105,6 +105,16 @@ try {
     JSON.stringify(explained),
   )
 
+  // node-sql-parser is not installed here, so MySQL must fail with a plain message, not a crash.
+  const noParser = npm(['exec', '--no', '--', 'orm-preflight', '--dialect', 'mysql'])
+  check(
+    'bin explains a missing MySQL parser and exits 2',
+    noParser.status === 2 &&
+      noParser.stderr.includes('npm install --save-dev node-sql-parser') &&
+      !noParser.stderr.includes('internal error'),
+    JSON.stringify(noParser),
+  )
+
   // --execute loads the typeorm stand-in shipped in dist. A migration whose SQL is only known
   // at run time proves it works from the installed package, in ESM (the bin) and CJS (require).
   mkdirSync(path.join(project, 'dynamic'))

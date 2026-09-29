@@ -196,6 +196,15 @@ jobs:
           version: local
           working-directory: test/e2e/fixtures/project
           changed-since: HEAD
+      # A released version, installed the way users get it, with the optional MySQL parser.
+      # Any published version tests the install path; the migration is safe, so the step
+      # only passes when the parser was installed and loaded.
+      - name: A released version checks MySQL migrations
+        uses: ./ # zizmor: ignore[self-repository] runs this checkout's action script
+        with:
+          version: 1.0.1
+          working-directory: test/e2e/fixtures/mysql-project
+          mysql: true
       - name: The step with errors failed
         env:
           OUTCOME: ${{ steps.errors.outcome }}

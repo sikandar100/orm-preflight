@@ -1,9 +1,13 @@
+import { UsageError } from '../../errors.js'
 import type { ParsedStatement, SqlParser } from '../types.js'
 import { mapStatement, type MysqlAst } from './map.js'
 import { splitStatements } from './split.js'
 
-/** node-sql-parser is an optional peer dependency, needed only for the MySQL dialect. */
-export class MissingParserError extends Error {
+/**
+ * node-sql-parser is an optional peer dependency, needed only for the MySQL dialect. Missing
+ * it is a setup problem, not a bug, so the CLI prints the message and exits with code 2.
+ */
+export class MissingParserError extends UsageError {
   constructor() {
     super(
       'MySQL support needs the node-sql-parser package. Install it with: npm install --save-dev node-sql-parser',
