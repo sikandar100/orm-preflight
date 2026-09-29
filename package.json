@@ -1,6 +1,6 @@
 {
   "name": "orm-preflight",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Preflight safety checks for TypeORM migrations: catch data loss and locking before you merge.",
   "keywords": [
     "typeorm",

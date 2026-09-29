@@ -1,5 +1,13 @@
 # orm-preflight
 
+## 1.0.2
+
+### Patch Changes
+
+- [#31](https://github.com/sikandar100/orm-preflight/pull/31) [`f15907d`](https://github.com/sikandar100/orm-preflight/commit/f15907dd3a33be49ad296eb6d6ca2305b29f1050) Thanks [@sikandar100](https://github.com/sikandar100)! - Fix the GitHub Action's `mysql: true` input. The MySQL parser was never installed, so every MySQL check in the Action stopped with an internal error. The action now installs orm-preflight and the parser with npm, and CI runs it on a MySQL project.
+  
+  A missing MySQL parser is now reported as a plain message with exit code 2, instead of an internal error with a stack trace.
+
 ## 1.0.1
 
 ### Patch Changes
