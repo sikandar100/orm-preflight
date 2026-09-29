@@ -21,11 +21,18 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide' },
+      { text: 'AI agents', link: '/agents' },
       { text: 'Rules', link: '/rules/' },
       { text: 'JSON output', link: '/json-output' },
     ],
     sidebar: [
-      { text: 'Guide', items: [{ text: 'Getting started', link: '/guide' }] },
+      {
+        text: 'Guide',
+        items: [
+          { text: 'Getting started', link: '/guide' },
+          { text: 'Use with AI agents', link: '/agents' },
+        ],
+      },
       {
         text: 'Rules',
         items: [

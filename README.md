@@ -286,13 +286,16 @@ In Claude Code, without the plugin:
 claude mcp add orm-preflight -- npx -y orm-preflight mcp
 ```
 
-In other agents, such as Cursor, VS Code, or Claude Desktop, add a server to the MCP settings
-that runs this command. Each app has its own settings file, but the command is always the
-same:
+In other agents, such as Cursor, VS Code, Codex, or Gemini CLI, add a server to the MCP
+settings that runs this command. Each app has its own settings file, but the command is always
+the same:
 
 ```sh
 npx -y orm-preflight mcp
 ```
+
+The exact setup for each agent, and an instructions snippet for `AGENTS.md`, are in
+[Use with AI agents](https://sikandar100.github.io/orm-preflight/agents).
 
 The agent gets three tools:
 
