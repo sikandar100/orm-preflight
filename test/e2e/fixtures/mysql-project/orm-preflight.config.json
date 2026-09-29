@@ -1,0 +1,5 @@
+{
+  "$schema": "../../../../schema.json",
+  "dialect": "mysql",
+  "migrations": ["src/migrations/*.ts"]
+}

@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest'
+import { UsageError } from '../../src/errors.js'
 import type { OperationBody } from '../../src/ir/types.js'
 import {
   createMysqlLoader,
@@ -360,6 +361,10 @@ describe('createMysqlLoader', () => {
 })
 
 describe('MissingParserError', () => {
+  it('is a usage problem, so the CLI prints it plainly and exits 2', () => {
+    expect(new MissingParserError()).toBeInstanceOf(UsageError)
+  })
+
   it('tells the user how to install the optional parser', () => {
     expect(new MissingParserError().message).toBe(
       'MySQL support needs the node-sql-parser package. Install it with: npm install --save-dev node-sql-parser',

@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
+import { chmodSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -81,3 +81,68 @@ describe.skipIf(process.platform === 'win32')('scripts/action-run.sh', () => {
     expect(result.stderr).toContain(`Could not find the merge base of "$(touch ${marker}) --help"`)
   })
 })
+
+/**
+ * A released version is installed with npm into a temporary folder and run from there. npx
+ * is not used: it skips node-sql-parser, an optional peer of orm-preflight, even when asked
+ * for it with --package. A fake npm records its arguments and installs a stand-in CLI.
+ */
+describe.skipIf(process.platform === 'win32')(
+  'scripts/action-run.sh with a released version',
+  () => {
+    function withFakeNpm(env: Record<string, string>, calls = 1) {
+      const temp = mkdtempSync(path.join(tmpdir(), 'orm-preflight-action-'))
+      const log = path.join(temp, 'npm.log')
+      const fakeNpm = [
+        '#!/usr/bin/env bash',
+        `echo "$*" >> "${log}"`,
+        'echo "added 42 packages"',
+        'prefix=""',
+        'while [ $# -gt 0 ]; do if [ "$1" = --prefix ]; then prefix="$2"; fi; shift; done',
+        'mkdir -p "$prefix/node_modules/orm-preflight/dist"',
+        `echo 'console.log(JSON.stringify(process.argv.slice(2)))' > "$prefix/node_modules/orm-preflight/dist/cli.mjs"`,
+      ].join('\n')
+      writeFileSync(path.join(temp, 'npm'), `${fakeNpm}\n`)
+      chmodSync(path.join(temp, 'npm'), 0o755)
+      const call = 'source "$ACTION_PATH/scripts/action-run.sh" && orm_preflight --format json'
+      const script = Array.from({ length: calls }, () => call).join(' && ')
+      const result = spawnSync('bash', ['-c', script], {
+        cwd: project,
+        encoding: 'utf8',
+        env: {
+          PATH: `${temp}:${process.env.PATH ?? ''}`,
+          ACTION_PATH: root,
+          RUNNER_TEMP: temp,
+          VERSION: '1.2.3',
+          ...env,
+        },
+      })
+      const npmCalls = existsSync(log) ? readFileSync(log, 'utf8').trim().split('\n') : []
+      rmSync(temp, { recursive: true, force: true })
+      return { status: result.status, stdout: result.stdout, stderr: result.stderr, npmCalls }
+    }
+
+    it('installs the version with npm and runs it', () => {
+      const result = withFakeNpm({})
+      expect(result.status).toBe(0)
+      expect(result.npmCalls).toHaveLength(1)
+      expect(result.npmCalls[0]).toMatch(/^install .*orm-preflight@1\.2\.3$/)
+      expect(result.npmCalls[0]).toContain('--ignore-scripts')
+      // Only orm-preflight's output reaches stdout, so the SARIF file stays valid.
+      expect(JSON.parse(result.stdout)).toEqual(['--format', 'json'])
+      expect(result.stderr).toContain('added 42 packages')
+    })
+
+    it('installs the MySQL parser next to it when mysql is true', () => {
+      const result = withFakeNpm({ MYSQL: 'true' })
+      expect(result.status).toBe(0)
+      expect(result.npmCalls[0]).toMatch(/orm-preflight@1\.2\.3 node-sql-parser@5\.4\.0$/)
+    })
+
+    it('installs once when the action runs it twice', () => {
+      const result = withFakeNpm({}, 2)
+      expect(result.status).toBe(0)
+      expect(result.npmCalls).toHaveLength(1)
+    })
+  },
+)

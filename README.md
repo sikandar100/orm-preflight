@@ -206,8 +206,9 @@ Which version to use:
 - `@v1` follows every 1.x release, so you get fixes without changing anything.
 - `@v1.0.0`, or a commit SHA, stays exactly where it is, if your policy requires pinning.
 
-The action runs the orm-preflight version of its tag with `npx`, so GitHub-hosted runners need
-nothing else. On a self-hosted runner, set up Node.js 20 or newer first.
+The action installs the orm-preflight version of its tag with npm and runs it, so
+GitHub-hosted runners need nothing else. On a self-hosted runner, set up Node.js 20 or newer
+first.
 
 | Input               | Meaning                                                                                          |
 | ------------------- | ------------------------------------------------------------------------------------------------ |
