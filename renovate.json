@@ -32,6 +32,11 @@
       "matchPackageNames": ["@babel/parser", "@babel/types"],
       "groupName": "Babel",
       "allowedVersions": "<8"
+    },
+    {
+      "description": "vitest 5.0.2 needs why-is-node-running 3.2.2, which lost its npm provenance, so pnpm's trust policy blocks the install. Remove this rule once a newer vitest is out.",
+      "matchPackageNames": ["vitest", "@vitest/coverage-v8"],
+      "allowedVersions": "!/^5\\.0\\.2$/"
     }
   ]
 }

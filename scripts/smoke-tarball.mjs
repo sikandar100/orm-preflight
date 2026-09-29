@@ -115,6 +115,56 @@ try {
     JSON.stringify(noParser),
   )
 
+  // The MCP server from the installed package, over stdio, the way an AI agent starts it.
+  const mcpInput = [
+    {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'initialize',
+      params: {
+        protocolVersion: '2025-11-25',
+        capabilities: {},
+        clientInfo: { name: 'smoke', version: '0' },
+      },
+    },
+    { jsonrpc: '2.0', method: 'notifications/initialized' },
+    {
+      jsonrpc: '2.0',
+      id: 2,
+      method: 'tools/call',
+      params: { name: 'check_migrations', arguments: { files: ['migrations/*.ts'] } },
+    },
+  ]
+    .map((message) => `${JSON.stringify(message)}\n`)
+    .join('')
+  const mcp = spawnSync('npm exec --no -- orm-preflight mcp', {
+    cwd: project,
+    encoding: 'utf8',
+    shell: true,
+    input: mcpInput,
+  })
+  let replies = []
+  try {
+    replies = mcp.stdout
+      .split('\n')
+      .filter((line) => line !== '')
+      .map((line) => JSON.parse(line))
+  } catch {
+    // Anything on stdout that is not an MCP message fails the check below.
+  }
+  const initialized = replies.find((/** @type {{ id: number }} */ r) => r.id === 1)
+  const called = replies.find((/** @type {{ id: number }} */ r) => r.id === 2)
+  check(
+    'bin mcp answers an MCP client over stdio',
+    mcp.status === 0 &&
+      replies.length === 2 &&
+      initialized?.result?.serverInfo?.version === expected &&
+      called?.result?.structuredContent?.findings?.some(
+        (/** @type {{ ruleId: string }} */ f) => f.ruleId === 'no-drop-table',
+      ) === true,
+    JSON.stringify(mcp),
+  )
+
   // --execute loads the typeorm stand-in shipped in dist. A migration whose SQL is only known
   // at run time proves it works from the installed package, in ESM (the bin) and CJS (require).
   mkdirSync(path.join(project, 'dynamic'))

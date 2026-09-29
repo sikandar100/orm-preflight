@@ -109,6 +109,7 @@ orm-preflight [files or globs...] [options]
 orm-preflight rules                      List every rule
 orm-preflight explain <rule>             Print a rule's documentation
 orm-preflight init [files or globs...]   Write a starter config
+orm-preflight mcp                        Run as an MCP server for AI coding agents
 ```
 
 | Exit code | Meaning                                               |
@@ -246,6 +247,48 @@ npx orm-preflight --changed-since origin/main
 ```
 
 Check out enough history for the merge base (in GitHub Actions, `fetch-depth: 0`).
+
+## Use it from an AI coding agent
+
+AI coding agents write migrations fast, and they can write the dangerous ones too. With
+orm-preflight connected, the agent checks each migration it writes and fixes what it finds,
+before you review anything.
+
+`orm-preflight mcp` runs orm-preflight as an [MCP](https://modelcontextprotocol.io) server.
+MCP is the standard way to give an agent new tools. Add it once.
+
+In Claude Code:
+
+```sh
+claude mcp add orm-preflight -- npx -y orm-preflight mcp
+```
+
+In other agents, such as Cursor, VS Code, or Claude Desktop, add a server to the MCP settings
+that runs this command. Each app has its own settings file, but the command is always the
+same:
+
+```sh
+npx -y orm-preflight mcp
+```
+
+The agent gets three tools:
+
+| Tool               | What the agent gets                                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `check_migrations` | The findings for some files, the whole project, or the migrations changed since a git ref such as `origin/main`. Each finding has what happens, why, and the safe way to do it. |
+| `explain_rule`     | A rule's full documentation.                                                                                                                                                    |
+| `list_rules`       | Every rule with its category and default severity.                                                                                                                              |
+
+Good to know:
+
+- The tools only read files. They never run a migration or connect to a database, and
+  `--execute` is not available through MCP.
+- The server checks the project it was started in. An agent that starts it somewhere else
+  can pass `projectDir`.
+- Flags after `mcp` set the defaults, for example `npx -y orm-preflight mcp --dialect mysql`.
+  For MySQL, install `orm-preflight` and `node-sql-parser` in the project and use
+  `npx orm-preflight mcp` without `-y`, so the parser is found.
+- The server tells the agent never to add a suppression comment without asking you first.
 
 ## Suppressing a finding
 
