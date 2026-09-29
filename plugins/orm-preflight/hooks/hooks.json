@@ -1,0 +1,17 @@
+{
+  "description": "Checks each migration Claude writes or edits with orm-preflight, and hands any findings back to Claude.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/check-migration.mjs\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

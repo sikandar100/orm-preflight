@@ -254,10 +254,33 @@ AI coding agents write migrations fast, and they can write the dangerous ones to
 orm-preflight connected, the agent checks each migration it writes and fixes what it finds,
 before you review anything.
 
+### Claude Code plugin
+
+The plugin does the most for you. Install it once, inside Claude Code:
+
+```
+/plugin marketplace add sikandar100/orm-preflight
+/plugin install orm-preflight@orm-preflight
+```
+
+It adds three things:
+
+- **An automatic check.** Every time Claude writes or edits a migration, orm-preflight checks it
+  and hands the result straight back to Claude. Claude then fixes the migration, or tells you why
+  it is safe. You do not have to read any warnings yourself. Other files are skipped instantly.
+- **A skill** that teaches Claude the safe ways to change a schema, such as changing a column in
+  place instead of dropping it.
+- **The MCP tools** described below.
+
+The plugin uses the orm-preflight installed in your project when there is one, so your config
+and version apply. Otherwise it runs the version it was released with.
+
+### Any agent, with MCP
+
 `orm-preflight mcp` runs orm-preflight as an [MCP](https://modelcontextprotocol.io) server.
 MCP is the standard way to give an agent new tools. Add it once.
 
-In Claude Code:
+In Claude Code, without the plugin:
 
 ```sh
 claude mcp add orm-preflight -- npx -y orm-preflight mcp
@@ -289,6 +312,7 @@ Good to know:
   For MySQL, install `orm-preflight` and `node-sql-parser` in the project and use
   `npx orm-preflight mcp` without `-y`, so the parser is found.
 - The server tells the agent never to add a suppression comment without asking you first.
+- Your agent may ask you once to allow the tools.
 
 ## Suppressing a finding
 

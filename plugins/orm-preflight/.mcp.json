@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "orm-preflight": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/orm-preflight.mjs", "mcp"]
+    }
+  }
+}
