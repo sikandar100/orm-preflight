@@ -1,5 +1,15 @@
 # orm-preflight
 
+## 1.1.0
+
+### Minor Changes
+
+- [#35](https://github.com/sikandar100/orm-preflight/pull/35) [`de753cf`](https://github.com/sikandar100/orm-preflight/commit/de753cfbc24537174473b4a79aa9d9886f7011c9) Thanks [@sikandar100](https://github.com/sikandar100)! - New Claude Code plugin. Install it with `/plugin marketplace add sikandar100/orm-preflight` and `/plugin install orm-preflight@orm-preflight`. Every time Claude writes or edits a migration, orm-preflight checks it and hands the result back to Claude, which then fixes the migration or explains why it is safe. The plugin also adds a skill with the safe ways to change a schema, and the MCP tools.
+
+- [#33](https://github.com/sikandar100/orm-preflight/pull/33) [`4d02561`](https://github.com/sikandar100/orm-preflight/commit/4d02561380cbaee600183ded85c030e8e8ac2b83) Thanks [@sikandar100](https://github.com/sikandar100)! - New `orm-preflight mcp` command: runs orm-preflight as an MCP server, so AI coding agents such as Claude Code, Cursor, and VS Code can check migrations as they write them. Add it with `claude mcp add orm-preflight -- npx -y orm-preflight mcp`, or the same command in your agent's MCP settings.
+  
+  The agent gets three read-only tools: `check_migrations`, `explain_rule`, and `list_rules`. They never run migration code. The server works with clients on the current MCP protocol (2026-07-28) and on the earlier versions most clients still use.
+
 ## 1.0.2
 
 ### Patch Changes
