@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Sets the default "version" input of action.yml, and the version of the Claude Code plugin,
-// to the version in package.json. So the action at tag vX.Y.Z runs orm-preflight X.Y.Z, and
+// Sets the default "version" input of action.yml, the version of the Claude Code plugin, and
+// the versions in server.json (the MCP Registry listing) to the version in package.json. So the action at tag vX.Y.Z runs orm-preflight X.Y.Z, and
 // the plugin runs the same version through npx. The release workflow runs this right after
 // `changeset version`, so the Version PR carries all of these changes.
 // Usage: node scripts/sync-action-version.mjs [--check]   (--check only verifies, exit 1 if out of sync)
@@ -47,4 +47,18 @@ if (plugin.version === version) {
   writeFileSync(pluginFile, pluginText.replace(/("version": ")[^"]*(")/, `$1${version}$2`))
   console.log(`The Claude Code plugin is now version ${version}.`)
 }
+// The MCP Registry listing names the version twice: the server and its npm package.
+const serverFile = new URL('server.json', root)
+const serverText = readFileSync(serverFile, 'utf8')
+const server = JSON.parse(serverText)
+if (server.version === version && server.packages[0].version === version) {
+  console.log(`server.json is already version ${version}.`)
+} else if (check) {
+  console.error(`server.json is version ${server.version}, but package.json is ${version}.`)
+  outOfSync = true
+} else {
+  writeFileSync(serverFile, serverText.replaceAll(/("version": ")[^"]*(")/g, `$1${version}$2`))
+  console.log(`server.json is now version ${version}.`)
+}
+
 if (outOfSync) process.exit(1)

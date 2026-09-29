@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.sikandar100/orm-preflight",
+  "title": "orm-preflight",
+  "description": "Checks TypeORM migrations for data loss, table locks, and deploy problems before they run.",
+  "repository": {
+    "url": "https://github.com/sikandar100/orm-preflight",
+    "source": "github"
+  },
+  "websiteUrl": "https://sikandar100.github.io/orm-preflight/",
+  "version": "1.0.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "orm-preflight",
+      "version": "1.0.2",
+      "transport": { "type": "stdio" },
+      "packageArguments": [{ "type": "positional", "value": "mcp" }]
+    }
+  ]
+}
