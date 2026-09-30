@@ -58,6 +58,11 @@ describe('plugin files', () => {
     expect(plugin.name).toBe('orm-preflight')
   })
 
+  it('has a square SVG icon for the plugin directory', () => {
+    const icon = readFileSync(path.join(pluginDir, '.claude-plugin', 'icon.svg'), 'utf8')
+    expect(icon).toMatch(/^<svg [^>]*viewBox="0 0 256 256"/)
+  })
+
   it('is listed in the marketplace at an existing path', () => {
     const marketplace = readJson(path.join(root, '.claude-plugin', 'marketplace.json')) as {
       name: string

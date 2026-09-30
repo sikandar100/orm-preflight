@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="orm-preflight">
+  <rect width="256" height="256" rx="56" fill="#0f2a44"/>
+  <g fill="none" stroke="#e8f1fa" stroke-width="12" stroke-linejoin="round">
+    <ellipse cx="112" cy="72" rx="60" ry="20"/>
+    <path d="M52 72v112c0 11 27 20 60 20"/>
+    <path d="M172 72v44"/>
+    <path d="M52 128c0 11 27 20 60 20"/>
+  </g>
+  <circle cx="176" cy="176" r="48" fill="#2fb67c"/>
+  <path d="M154 177l15 15 29-31" fill="none" stroke="#ffffff" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
