@@ -2,10 +2,11 @@
 // Runs orm-preflight for the Claude Code plugin. No dependencies, so it runs on a bare Node.js.
 //
 // Which orm-preflight runs, in order:
-// 1. ORM_PREFLIGHT_CLI, a path to dist/cli.mjs (used by tests).
-// 2. The project's own install, so its config and version apply. For `mcp` it must be 1.1.0
+// 1. The project's own install, so its config and version apply. For `mcp` it must be 1.1.0
 //    or newer, the first version with the MCP server.
-// 3. The version of this plugin, through npx.
+// 2. The version of this plugin, through npx.
+//
+// The only environment variable it reads is CLAUDE_PROJECT_DIR, the project Claude Code opened.
 //
 // Run directly, it passes its arguments on and shares stdin and stdout, which the MCP server
 // needs: node orm-preflight.mjs mcp
@@ -26,13 +27,9 @@ export function pluginVersion() {
  * The command that runs orm-preflight for a project.
  * @param {string} projectDir
  * @param {readonly string[]} args
- * @param {Readonly<Record<string, string | undefined>>} env
  * @returns {{ command: string, args: string[], shell: boolean }}
  */
-export function resolveCommand(projectDir, args, env = process.env) {
-  if (env.ORM_PREFLIGHT_CLI) {
-    return { command: process.execPath, args: [env.ORM_PREFLIGHT_CLI, ...args], shell: false }
-  }
+export function resolveCommand(projectDir, args) {
   const local = findInstalled(projectDir)
   if (local !== undefined && (args[0] !== 'mcp' || atLeast(local.version, 1, 1))) {
     return { command: process.execPath, args: [local.cli, ...args], shell: false }

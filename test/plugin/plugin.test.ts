@@ -1,5 +1,13 @@
 import { spawnSync } from 'node:child_process'
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -14,7 +22,15 @@ import { resolveCommand } from '../../plugins/orm-preflight/scripts/orm-prefligh
 
 const root = fileURLToPath(new URL('../../', import.meta.url))
 const pluginDir = path.join(root, 'plugins', 'orm-preflight')
-const cli = path.join(root, 'dist', 'cli.mjs')
+
+/**
+ * Links this repository into a project's node_modules as its orm-preflight install, so the
+ * plugin runs the built CLI. A junction needs no extra rights on Windows.
+ */
+function linkInstall(project: string) {
+  mkdirSync(path.join(project, 'node_modules'), { recursive: true })
+  symlinkSync(root, path.join(project, 'node_modules', 'orm-preflight'), 'junction')
+}
 const hookScript = path.join(pluginDir, 'scripts', 'check-migration.mjs')
 const launcher = path.join(pluginDir, 'scripts', 'orm-preflight.mjs')
 
@@ -112,6 +128,7 @@ describe('the hook', () => {
     project = mkdtempSync(path.join(tmpdir(), 'orm-preflight-plugin-'))
     writeFileSync(path.join(project, 'package.json'), '{"name":"app","private":true}')
     mkdirSync(path.join(project, 'src', 'migrations'), { recursive: true })
+    linkInstall(project)
   })
 
   afterEach(() => {
@@ -131,7 +148,7 @@ describe('the hook', () => {
     return spawnSync(process.execPath, [hookScript], {
       input: JSON.stringify(event),
       encoding: 'utf8',
-      env: { ...env, ORM_PREFLIGHT_CLI: cli },
+      env,
     })
   }
 
@@ -274,7 +291,7 @@ describe('the launcher', () => {
 
   it("uses the project's own install", () => {
     const local = install('1.0.2')
-    expect(resolveCommand(project, ['--format', 'json'], {})).toEqual({
+    expect(resolveCommand(project, ['--format', 'json'])).toEqual({
       command: process.execPath,
       args: [local, '--format', 'json'],
       shell: false,
@@ -283,26 +300,27 @@ describe('the launcher', () => {
 
   it('uses the plugin version through npx for mcp when the install is too old', () => {
     install('1.0.2')
-    const { args } = resolveCommand(project, ['mcp'], {})
+    const { args } = resolveCommand(project, ['mcp'])
     expect(args.slice(-3)).toEqual(['-y', `orm-preflight@${pkg.version}`, 'mcp'])
   })
 
   it('uses a new enough install for mcp', () => {
     const local = install('1.1.0')
-    expect(resolveCommand(project, ['mcp'], {}).args).toEqual([local, 'mcp'])
+    expect(resolveCommand(project, ['mcp']).args).toEqual([local, 'mcp'])
   })
 
   it('uses the plugin version through npx without an install', () => {
-    const { args } = resolveCommand(project, ['--version'], {})
+    const { args } = resolveCommand(project, ['--version'])
     expect(args.slice(-3)).toEqual(['-y', `orm-preflight@${pkg.version}`, '--version'])
   })
 
   it('passes stdin and stdout through for the MCP server', () => {
+    linkInstall(project)
     const result = spawnSync(process.execPath, [launcher, 'mcp'], {
       cwd: project,
       input: '{"jsonrpc":"2.0","id":7,"method":"ping"}\n',
       encoding: 'utf8',
-      env: { ...process.env, ORM_PREFLIGHT_CLI: cli, CLAUDE_PROJECT_DIR: project },
+      env: { ...process.env, CLAUDE_PROJECT_DIR: project },
     })
     expect(result.status).toBe(0)
     expect(result.stdout).toBe('{"jsonrpc":"2.0","id":7,"result":{}}\n')
