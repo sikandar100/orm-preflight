@@ -41,7 +41,13 @@ export default defineConfig({
           ...typeorm.map(item('typeorm/')),
         ],
       },
-      { text: 'Reference', items: [{ text: 'JSON output', link: '/json-output' }] },
+      {
+        text: 'Reference',
+        items: [
+          { text: 'JSON output', link: '/json-output' },
+          { text: 'Privacy', link: '/privacy' },
+        ],
+      },
     ],
     socialLinks: [{ icon: 'github', link: 'https://github.com/sikandar100/orm-preflight' }],
     search: { provider: 'local' },

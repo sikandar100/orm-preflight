@@ -396,6 +396,12 @@ See [CONTRIBUTING.md](https://github.com/sikandar100/orm-preflight/blob/main/CON
 report a security issue, see
 [SECURITY.md](https://github.com/sikandar100/orm-preflight/blob/main/SECURITY.md).
 
+## Privacy
+
+orm-preflight collects nothing and sends nothing: no telemetry, no analytics, no accounts. It
+runs on your machine or CI runner and never connects to your database. The details are in the
+[privacy policy](https://sikandar100.github.io/orm-preflight/privacy).
+
 ## Acknowledgements
 
 orm-preflight is inspired by [strong_migrations](https://github.com/ankane/strong_migrations)
