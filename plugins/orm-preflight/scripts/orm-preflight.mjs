@@ -4,7 +4,8 @@
 // Which orm-preflight runs, in order:
 // 1. The project's own install, so its config and version apply. For `mcp` it must be 1.1.0
 //    or newer, the first version with the MCP server.
-// 2. The version of this plugin, through npx.
+// 2. Exactly the version below, through npx. It is pinned so the code the plugin runs can
+//    never change after the plugin was reviewed.
 //
 // The only environment variable it reads is CLAUDE_PROJECT_DIR, the project Claude Code opened.
 //
@@ -15,13 +16,8 @@ import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const pluginRoot = fileURLToPath(new URL('../', import.meta.url))
-
-/** The orm-preflight version this plugin was released with. */
-export function pluginVersion() {
-  const manifest = path.join(pluginRoot, '.claude-plugin', 'plugin.json')
-  return /** @type {{ version: string }} */ (JSON.parse(readFileSync(manifest, 'utf8'))).version
-}
+// The exact package this plugin runs. Kept equal to package.json by scripts/sync-action-version.mjs.
+export const PACKAGE = 'orm-preflight@1.1.0'
 
 /**
  * The command that runs orm-preflight for a project.
@@ -34,7 +30,7 @@ export function resolveCommand(projectDir, args) {
   if (local !== undefined && (args[0] !== 'mcp' || atLeast(local.version, 1, 1))) {
     return { command: process.execPath, args: [local.cli, ...args], shell: false }
   }
-  const npxArgs = ['-y', `orm-preflight@${pluginVersion()}`, ...args]
+  const npxArgs = ['-y', PACKAGE, ...args]
   // Run npm's npx script with this Node, so no shell parses the arguments.
   const npxCli = findNpxCli()
   if (npxCli !== undefined) {

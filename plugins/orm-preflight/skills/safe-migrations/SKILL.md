@@ -12,7 +12,7 @@ runs.
 ## Every time you write or change a migration
 
 1. Check it. The orm-preflight hook does this automatically after you write the file. You can
-   also call the `check_migrations` tool, or run `npx orm-preflight <file>`.
+   also call the `check_migrations` tool.
 2. Read each finding. It says what happens, why, and the safe way to do it.
 3. Fix the migration the safe way, then check it again.
 4. If a finding does not apply, explain why to the user. Do not hide it.
@@ -41,5 +41,5 @@ in the DataSource, and the same in `orm-preflight.config.json`:
 
 ## More help
 
-- `explain_rule` (or `npx orm-preflight explain <rule>`) prints a rule's full documentation.
+- The `explain_rule` tool returns a rule's full documentation.
 - Documentation: https://sikandar100.github.io/orm-preflight/

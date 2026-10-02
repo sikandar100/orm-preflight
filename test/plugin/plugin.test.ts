@@ -74,6 +74,23 @@ describe('plugin files', () => {
     expect(plugin.name).toBe('orm-preflight')
   })
 
+  it('runs only an exact orm-preflight version, written out in full', () => {
+    // Anthropic's plugin directory requires every package the plugin runs to name an exact
+    // version, so the code cannot change after review.
+    const files = [
+      'scripts/orm-preflight.mjs',
+      'scripts/check-migration.mjs',
+      'skills/safe-migrations/SKILL.md',
+      'hooks/hooks.json',
+      '.mcp.json',
+    ]
+    const text = files.map((f) => readFileSync(path.join(pluginDir, f), 'utf8')).join('\n')
+    expect(text).not.toMatch(/@latest\b/)
+    expect(text).not.toMatch(/\bnpx (?:-y )?orm-preflight(?!@)/)
+    const pinned = [...text.matchAll(/orm-preflight@([0-9][^'"`\s]*)/g)].map((m) => m[1])
+    expect(pinned).toEqual([pkg.version])
+  })
+
   it('has a square SVG icon for the plugin directory', () => {
     const icon = readFileSync(path.join(pluginDir, '.claude-plugin', 'icon.svg'), 'utf8')
     expect(icon).toMatch(/^<svg [^>]*viewBox="0 0 256 256"/)
