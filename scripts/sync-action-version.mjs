@@ -47,6 +47,27 @@ if (plugin.version === version) {
   writeFileSync(pluginFile, pluginText.replace(/("version": ")[^"]*(")/, `$1${version}$2`))
   console.log(`The Claude Code plugin is now version ${version}.`)
 }
+// The plugin's launcher runs an exact version, written out so reviewers can see it.
+const launcherFile = new URL('plugins/orm-preflight/scripts/orm-preflight.mjs', root)
+const launcherText = readFileSync(launcherFile, 'utf8')
+const pinned = /export const PACKAGE = 'orm-preflight@([^']*)'/.exec(launcherText)?.[1]
+if (pinned === undefined) {
+  console.error('The plugin launcher: the pinned PACKAGE constant was not found.')
+  process.exit(2)
+}
+if (pinned === version) {
+  console.log(`The plugin launcher already runs orm-preflight ${version}.`)
+} else if (check) {
+  console.error(`The plugin launcher runs orm-preflight ${pinned}, but package.json is ${version}.`)
+  outOfSync = true
+} else {
+  writeFileSync(
+    launcherFile,
+    launcherText.replace(`'orm-preflight@${pinned}'`, `'orm-preflight@${version}'`),
+  )
+  console.log(`The plugin launcher now runs orm-preflight ${version}.`)
+}
+
 // The MCP Registry listing names the version twice: the server and its npm package.
 const serverFile = new URL('server.json', root)
 const serverText = readFileSync(serverFile, 'utf8')
