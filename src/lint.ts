@@ -41,6 +41,8 @@ export interface LintOptions {
 export interface LintSummary {
   errors: number
   warnings: number
+  /** Findings worth knowing about that are not problems. They never fail a run. */
+  info: number
   suppressed: number
   files: number
   migrations: number
@@ -155,6 +157,7 @@ export async function lintSources(
     summary: {
       errors: active.filter((f) => f.severity === 'error').length,
       warnings: active.filter((f) => f.severity === 'warn').length,
+      info: active.filter((f) => f.severity === 'info').length,
       suppressed: findings.length - active.length,
       files: sources.length,
       migrations: migrations.length,

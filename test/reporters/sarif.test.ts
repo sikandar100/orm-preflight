@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { sarifRules } from '../../src/cli/commands.js'
 import { formatSarif } from '../../src/reporters/sarif.js'
-import { result } from './result.js'
+import { finding, result } from './result.js'
 import { validateSarif as validate } from './sarif-schema.js'
 
 interface Sarif {
@@ -41,6 +41,16 @@ describe('formatSarif', () => {
     expect(suppressed?.suppressions).toEqual([
       { kind: 'inSource', justification: 'unused since 2.3' },
     ])
+  })
+
+  it('reports info findings at the note level', () => {
+    const info = formatSarif(
+      { ...result, findings: [finding({ severity: 'info' })] },
+      { rules: sarifRules(), pathPrefix: '' },
+    )
+    const parsed = JSON.parse(info) as Sarif
+    expect(validate(parsed)).toBe(true)
+    expect(parsed.runs[0]?.results[0]?.level).toBe('note')
   })
 
   it('prefixes paths with the directory inside the repository', () => {

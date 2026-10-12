@@ -1,5 +1,5 @@
 import type { AlterTableCmd, ColumnDef, Constraint, Node, RangeVar, TypeName } from 'libpg-query'
-import type { ConstraintType, OperationBody, TableRef } from '../../ir/types.js'
+import type { CheckExpr, ConstraintType, OperationBody, TableRef } from '../../ir/types.js'
 import type { Utf8Offsets } from '../offsets.js'
 import { canonicalPostgresType, SERIAL_TYPES } from '../type-names.js'
 import { VOLATILE_FUNCTIONS } from '../volatility.js'
@@ -251,7 +251,9 @@ function mapAlterTableCmd(cmd: AlterTableCmd, t: TableRef, ctx: MapContext): Ope
         using: col?.raw_default !== undefined,
       }
       const mods = col?.typeName ? typmods(col.typeName) : []
-      return [mods.length > 0 && isBuiltin(col?.typeName) ? { ...op, toTypmods: mods } : op]
+      const withMods = mods.length > 0 && isBuiltin(col?.typeName) ? { ...op, toTypmods: mods } : op
+      const cut = col?.raw_default === undefined ? undefined : truncation(col.raw_default)
+      return [cut === undefined ? withMods : { ...withMods, truncates: cut }]
     }
     case 'AT_ColumnDefault':
       // DROP DEFAULT has no expression and needs no analysis.
@@ -317,9 +319,18 @@ function addColumn(col: ColumnDef, t: TableRef, ctx: MapContext): OperationBody[
         break
       case 'CONSTR_UNIQUE':
       case 'CONSTR_CHECK':
-      case 'CONSTR_FOREIGN':
         extra.push(addConstraint(c, t))
         break
+      case 'CONSTR_FOREIGN': {
+        // An inline REFERENCES names no columns: the foreign key is the column being added.
+        const fk = addConstraint(c, t)
+        extra.push(
+          fk.kind === 'add_constraint' && fk.columns === undefined
+            ? sortKeys({ ...fk, columns: [col.colname ?? ''] })
+            : fk,
+        )
+        break
+      }
       default:
         break
     }
@@ -352,12 +363,20 @@ function addConstraint(c: Constraint, t: TableRef): OperationBody {
   if (c.conname !== undefined) op.name = c.conname
   if (c.indexname !== undefined) op.usingIndex = c.indexname
   if (c.pktable !== undefined) op.references = table(c.pktable)
+  if (type === 'foreign_key') {
+    const columns = (c.fk_attrs ?? []).flatMap((n) => ('String' in n ? [n.String.sval ?? ''] : []))
+    if (columns.length > 0) op.columns = columns
+    if (c.fk_matchtype === 'f') op.match = 'full'
+  }
+  if (type === 'check' && c.raw_expr !== undefined) op.check = checkExpr(c.raw_expr)
   return Object.keys(op).length === 4 ? op : sortKeys(op)
 }
 
-/** Keeps a stable key order: kind, table, name, type, notValid, usingIndex, references. */
-function sortKeys(op: Extract<OperationBody, { kind: 'add_constraint' }>): OperationBody {
-  const { kind, table: t, name, type, notValid, usingIndex, references } = op
+/** Keeps a stable key order: kind, table, name, type, notValid, usingIndex, references, ... */
+function sortKeys(
+  op: Extract<OperationBody, { kind: 'add_constraint' }>,
+): Extract<OperationBody, { kind: 'add_constraint' }> {
+  const { kind, table: t, name, type, notValid, usingIndex, references, columns, match, check } = op
   return {
     kind,
     table: t,
@@ -366,7 +385,159 @@ function sortKeys(op: Extract<OperationBody, { kind: 'add_constraint' }>): Opera
     notValid,
     ...(usingIndex === undefined ? {} : { usingIndex }),
     ...(references === undefined ? {} : { references }),
+    ...(columns === undefined ? {} : { columns }),
+    ...(match === undefined ? {} : { match }),
+    ...(check === undefined ? {} : { check }),
   }
+}
+
+/** Built-in functions that keep only part of a value: some characters, or fewer digits. */
+const TRUNCATING_FUNCTIONS = new Set([
+  'left',
+  'right',
+  'substr',
+  'substring',
+  'split_part',
+  'trunc',
+  'round',
+  'date_trunc',
+])
+
+/** Types that an explicit cast with a length silently cuts to that length. */
+const TRUNCATING_CASTS = new Set(['varchar', 'bpchar', 'char', 'character', 'character varying'])
+
+/**
+ * The first part of a USING expression that keeps only part of each value: a function such as
+ * `left()`, or an explicit cast to `varchar(n)`, which cuts longer values without an error.
+ */
+function truncation(node: Node): string | undefined {
+  if ('FuncCall' in node) {
+    const name = node.FuncCall.funcname?.at(-1)
+    const fn = name !== undefined && 'String' in name ? (name.String.sval ?? '') : ''
+    if (TRUNCATING_FUNCTIONS.has(fn.toLowerCase())) return `${fn.toLowerCase()}()`
+  }
+  if ('TypeCast' in node && node.TypeCast.typeName !== undefined) {
+    const tn = node.TypeCast.typeName
+    const base = lastName(tn)?.toLowerCase()
+    const mods = typmods(tn)
+    if (base !== undefined && TRUNCATING_CASTS.has(base) && mods.length > 0 && isBuiltin(tn)) {
+      return `a cast to ${typeString(tn)}`
+    }
+  }
+  for (const value of Object.values(node as Record<string, unknown>)) {
+    for (const child of children(value)) {
+      const found = truncation(child)
+      if (found !== undefined) return found
+    }
+  }
+  return undefined
+}
+
+/** AST nodes directly inside a node's field. */
+function children(value: unknown): Node[] {
+  if (Array.isArray(value)) return value.flatMap(children)
+  if (typeof value !== 'object' || value === null) return []
+  const keys = Object.keys(value)
+  // A node is an object with one key naming its type, such as { FuncCall: {...} }.
+  if (keys.length === 1 && /^[A-Z]/.test(keys[0] ?? '')) return [value as Node]
+  return Object.values(value).flatMap(children)
+}
+
+/** Built-in functions that return NULL when any argument is NULL (they are STRICT). */
+const STRICT_FUNCTIONS = new Set([
+  'length',
+  'char_length',
+  'character_length',
+  'octet_length',
+  'lower',
+  'upper',
+  'btrim',
+  'ltrim',
+  'rtrim',
+  'abs',
+  'round',
+  'floor',
+  'ceil',
+  'ceiling',
+  'trunc',
+  'date_trunc',
+  'date_part',
+  'left',
+  'right',
+  'substr',
+  'substring',
+])
+
+/** A_Expr kinds that are NULL when their left operand is NULL, whatever the right one is. */
+const NULL_WITH_LEFT = new Set([
+  'AEXPR_OP_ANY',
+  'AEXPR_OP_ALL',
+  'AEXPR_IN',
+  'AEXPR_BETWEEN',
+  'AEXPR_NOT_BETWEEN',
+  'AEXPR_BETWEEN_SYM',
+  'AEXPR_NOT_BETWEEN_SYM',
+])
+
+/** NULL when either operand is NULL. */
+const NULL_WITH_EITHER = new Set(['AEXPR_OP', 'AEXPR_LIKE', 'AEXPR_ILIKE', 'AEXPR_SIMILAR'])
+
+/** Reduces a CHECK expression to the parts that decide whether NULLs can make it false. */
+function checkExpr(node: Node): CheckExpr {
+  if ('ColumnRef' in node) {
+    const last = node.ColumnRef.fields?.at(-1)
+    return last !== undefined && 'String' in last
+      ? { kind: 'column', name: last.String.sval ?? '' }
+      : { kind: 'other' }
+  }
+  if ('A_Const' in node) return node.A_Const.isnull === true ? { kind: 'null' } : { kind: 'value' }
+  if ('TypeCast' in node) {
+    return node.TypeCast.arg === undefined ? { kind: 'other' } : checkExpr(node.TypeCast.arg)
+  }
+  if ('NullTest' in node) {
+    const arg = node.NullTest.arg
+    if (arg === undefined) return { kind: 'other' }
+    return {
+      kind: node.NullTest.nulltesttype === 'IS_NOT_NULL' ? 'is_not_null' : 'is_null',
+      arg: checkExpr(arg),
+    }
+  }
+  if ('BoolExpr' in node) {
+    const args = (node.BoolExpr.args ?? []).map(checkExpr)
+    switch (node.BoolExpr.boolop) {
+      case 'AND_EXPR':
+        return { kind: 'and', args }
+      case 'OR_EXPR':
+        return { kind: 'or', args }
+      case 'NOT_EXPR':
+        return args[0] === undefined ? { kind: 'other' } : { kind: 'not', arg: args[0] }
+      default:
+        return { kind: 'other' }
+    }
+  }
+  if ('A_Expr' in node) {
+    const { kind, lexpr, rexpr } = node.A_Expr
+    if (kind !== undefined && NULL_WITH_LEFT.has(kind) && lexpr !== undefined) {
+      return { kind: 'strict', args: [checkExpr(lexpr)] }
+    }
+    if (kind !== undefined && NULL_WITH_EITHER.has(kind)) {
+      return {
+        kind: 'strict',
+        args: [lexpr, rexpr].flatMap((n) => (n === undefined ? [] : [checkExpr(n)])),
+      }
+    }
+    return { kind: 'other' }
+  }
+  if ('FuncCall' in node) {
+    const name = node.FuncCall.funcname?.at(-1)
+    const fn = name !== undefined && 'String' in name ? (name.String.sval ?? '') : ''
+    if (STRICT_FUNCTIONS.has(fn.toLowerCase())) {
+      return { kind: 'strict', args: (node.FuncCall.args ?? []).map(checkExpr) }
+    }
+    return { kind: 'other' }
+  }
+  if ('A_ArrayExpr' in node) return { kind: 'value' }
+  return { kind: 'other' }
 }
 
 // ---------------------------------------------------------------------------

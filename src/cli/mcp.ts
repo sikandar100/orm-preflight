@@ -34,10 +34,11 @@ const lintOutputSchema = {
     version: { type: 'string' },
     summary: {
       type: 'object',
-      required: ['errors', 'warnings', 'suppressed', 'files', 'migrations'],
+      required: ['errors', 'warnings', 'info', 'suppressed', 'files', 'migrations'],
       properties: {
         errors: { type: 'integer' },
         warnings: { type: 'integer' },
+        info: { type: 'integer' },
         suppressed: { type: 'integer' },
         files: { type: 'integer' },
         migrations: { type: 'integer' },
@@ -62,7 +63,7 @@ const lintOutputSchema = {
         ],
         properties: {
           ruleId: { type: 'string' },
-          severity: { enum: ['error', 'warn'] },
+          severity: { enum: ['error', 'warn', 'info'] },
           category: { type: 'string' },
           file: { type: 'string' },
           line: { type: 'integer' },
@@ -192,7 +193,20 @@ const explainRule: Tool = {
   annotations: READ_ONLY,
   call(args) {
     if (typeof args.rule !== 'string') return Promise.resolve(failed('rule must be a string.'))
-    return Promise.resolve({ text: explain(args.rule) })
+    try {
+      return Promise.resolve({ text: explain(args.rule) })
+    } catch (error) {
+      // The CLI's hint names a command; an agent has the list_rules tool instead.
+      const message = error instanceof Error ? error.message : String(error)
+      return Promise.resolve(
+        failed(
+          message.replace(
+            'Run "orm-preflight rules" to list every rule.',
+            'Call list_rules to see every rule.',
+          ),
+        ),
+      )
+    }
   },
 }
 
@@ -213,7 +227,7 @@ const listRules: Tool = {
           properties: {
             id: { type: 'string' },
             category: { type: 'string' },
-            defaultSeverity: { enum: ['error', 'warn', 'off'] },
+            defaultSeverity: { enum: ['error', 'warn', 'info', 'off'] },
             databases: { type: 'array', items: { type: 'string' } },
             docsUrl: { type: 'string' },
           },

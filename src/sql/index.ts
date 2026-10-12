@@ -29,7 +29,13 @@ export async function parseMigrations(
   migrations: readonly ExtractedMigration[],
   options: ParseOptions,
 ): Promise<AnalyzedMigration[]> {
-  const hasSql = migrations.some((m) => m.up.some((s) => s.kind === 'sql'))
+  const hasSql = migrations.some((m) =>
+    m.up.some(
+      (s) =>
+        s.kind === 'sql' ||
+        (s.operation.kind === 'add_constraint' && s.operation.checkSql !== undefined),
+    ),
+  )
   const parse = hasSql ? await loadParser(options.dialect) : undefined
   const normalize: NormalizeOptions = {
     dialect: options.dialect,
@@ -43,7 +49,7 @@ export async function parseMigrations(
         const { loc, origin, conditional, suppressions, ...body } = step.operation
         return [
           {
-            ...normalizeOperation(body as Operation, normalize),
+            ...normalizeOperation(withCheck(body as Operation, parse, options.dialect), normalize),
             loc,
             origin,
             ...(conditional === true ? { conditional } : {}),
@@ -83,4 +89,19 @@ export async function parseMigrations(
       )
     }),
   }))
+}
+
+/**
+ * Reads a builder call's CHECK expression with the SQL parser, so builder calls and SQL give
+ * the same operation. Only PostgreSQL rules use the expression.
+ */
+function withCheck(op: Operation, parse: SqlParser | undefined, dialect: Dialect): Operation {
+  if (op.kind !== 'add_constraint' || op.checkSql === undefined) return op
+  const { checkSql, ...rest } = op
+  if (dialect !== 'postgres' || parse === undefined) return rest
+  const result = parse(`ALTER TABLE t ADD CHECK (${checkSql})`)
+  const parsed = result.ok ? result.statements[0]?.ops[0] : undefined
+  return parsed?.kind === 'add_constraint' && parsed.check !== undefined
+    ? { ...rest, check: parsed.check }
+    : rest
 }

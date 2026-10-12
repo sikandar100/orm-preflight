@@ -1,5 +1,5 @@
 import type { LintResult } from '../lint.js'
-import type { Category, Severity } from '../rules/types.js'
+import type { Category, FindingSeverity, Severity } from '../rules/types.js'
 
 /** What SARIF needs to know about a rule. */
 export interface SarifRule {
@@ -44,7 +44,7 @@ export function formatSarif(result: LintResult, options: SarifOptions): string {
               help: { text: `${r.summary} See ${r.docsUrl}` },
               defaultConfiguration: {
                 enabled: r.defaultSeverity !== 'off',
-                level: r.defaultSeverity === 'error' ? 'error' : 'warning',
+                level: sarifLevel(r.defaultSeverity === 'off' ? 'warn' : r.defaultSeverity),
               },
               properties: { category: r.category, tags: [r.category] },
             })),
@@ -57,7 +57,7 @@ export function formatSarif(result: LintResult, options: SarifOptions): string {
           return {
             ruleId: f.ruleId,
             ...(ruleIndex === undefined ? {} : { ruleIndex }),
-            level: f.severity === 'error' ? 'error' : 'warning',
+            level: sarifLevel(f.severity),
             message: { text: text.join(' ') },
             locations: [
               {
@@ -80,4 +80,9 @@ export function formatSarif(result: LintResult, options: SarifOptions): string {
     ],
   }
   return `${JSON.stringify(sarif, null, 2)}\n`
+}
+
+/** SARIF's names for the three severities. */
+function sarifLevel(severity: FindingSeverity): 'error' | 'warning' | 'note' {
+  return severity === 'error' ? 'error' : severity === 'warn' ? 'warning' : 'note'
 }

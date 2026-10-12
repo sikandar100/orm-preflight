@@ -13,6 +13,7 @@ import noRenameColumn from '../../docs/rules/no-rename-column.md'
 import noRenameTable from '../../docs/rules/no-rename-table.md'
 import noSetNotNull from '../../docs/rules/no-set-not-null.md'
 import noTruncate from '../../docs/rules/no-truncate.md'
+import noTruncatingTypeChange from '../../docs/rules/no-truncating-type-change.md'
 import noUnsafeColumnTypeChange from '../../docs/rules/no-unsafe-column-type-change.md'
 import noVolatileDefault from '../../docs/rules/no-volatile-default.md'
 import possibleRenameDataLoss from '../../docs/rules/possible-rename-data-loss.md'
@@ -28,6 +29,7 @@ import typeormNoChangecolumnRecreate from '../../docs/rules/typeorm/no-changecol
 import typeormNoEnumRecreate from '../../docs/rules/typeorm/no-enum-recreate.md'
 import typeormTransactionOverrideForbidden from '../../docs/rules/typeorm/transaction-override-forbidden.md'
 import unanalyzableStatement from '../../docs/rules/unanalyzable-statement.md'
+import validateInSameTransaction from '../../docs/rules/validate-in-same-transaction.md'
 
 /** The Markdown documentation of each rule, by rule ID. */
 export const ruleDocs: Readonly<Record<string, string>> = {
@@ -44,6 +46,7 @@ export const ruleDocs: Readonly<Record<string, string>> = {
   'no-rename-table': noRenameTable,
   'no-set-not-null': noSetNotNull,
   'no-truncate': noTruncate,
+  'no-truncating-type-change': noTruncatingTypeChange,
   'no-unsafe-column-type-change': noUnsafeColumnTypeChange,
   'no-volatile-default': noVolatileDefault,
   'possible-rename-data-loss': possibleRenameDataLoss,
@@ -59,4 +62,5 @@ export const ruleDocs: Readonly<Record<string, string>> = {
   'typeorm/no-enum-recreate': typeormNoEnumRecreate,
   'typeorm/transaction-override-forbidden': typeormTransactionOverrideForbidden,
   'unanalyzable-statement': unanalyzableStatement,
+  'validate-in-same-transaction': validateInSameTransaction,
 }

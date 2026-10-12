@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "require-not-valid-foreign-key",
+    "severity": "info",
+    "category": "locking",
+    "file": "require-not-valid-foreign-key/bad/new-column.ts",
+    "line": 9,
+    "column": 8,
+    "message": "Adding foreign key \"FK_approver\" on \"holidays\" cannot fail: \"holidays\".\"approver_id\" was added earlier in this migration, so every row has NULL there. PostgreSQL still reads the whole table once while blocking writes to \"holidays\" and \"users\".",
+    "why": "PostgreSQL does not check rows whose foreign key columns are NULL. With the new column NULL in every row, no existing row can break the foreign key. Validating it still takes one full read of the table under a SHARE ROW EXCLUSIVE lock on both tables.",
+    "safeAlternative": "Nothing needs to change. On a large table, adding the constraint with NOT VALID skips the read; existing rows cannot break it, and new rows are always checked.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/require-not-valid-foreign-key.md",
+    "suppressed": null
+  }
+]

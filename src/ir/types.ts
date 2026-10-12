@@ -29,6 +29,23 @@ export interface OpBase {
 
 export type ConstraintType = 'foreign_key' | 'check' | 'unique' | 'primary_key'
 
+/**
+ * A CHECK expression, reduced to what decides whether it can be false when some columns are
+ * NULL. A CHECK constraint passes when its expression is true or NULL.
+ */
+export type CheckExpr =
+  | { kind: 'column'; name: string }
+  | { kind: 'null' }
+  /** A constant that is not NULL. */
+  | { kind: 'value' }
+  /** An operator or function that is NULL when any argument is NULL, such as `>` or `lower()`. */
+  | { kind: 'strict'; args: CheckExpr[] }
+  | { kind: 'and' | 'or'; args: CheckExpr[] }
+  | { kind: 'not'; arg: CheckExpr }
+  | { kind: 'is_null' | 'is_not_null'; arg: CheckExpr }
+  /** Anything else, such as COALESCE or CASE. Nothing is assumed about it. */
+  | { kind: 'other' }
+
 export type OperationBody =
   | { kind: 'create_table'; table: TableRef }
   | { kind: 'drop_table'; table: TableRef }
@@ -52,6 +69,11 @@ export type OperationBody =
       to: string
       toTypmods?: number[]
       using: boolean
+      /**
+       * Set when the USING expression keeps only part of each value, such as `left()` or a
+       * cast to `varchar(5)`. Describes it for messages.
+       */
+      truncates?: string
     }
   | { kind: 'set_not_null'; table: TableRef; column: string }
   /** ALTER COLUMN ... SET DEFAULT. The default applies to new rows only. */
@@ -64,6 +86,17 @@ export type OperationBody =
       notValid: boolean
       usingIndex?: string
       references?: TableRef
+      /** A foreign key's own columns. */
+      columns?: string[]
+      /** Set for MATCH FULL foreign keys. The default, MATCH SIMPLE, skips rows with a NULL. */
+      match?: 'full'
+      /** A CHECK constraint's expression. */
+      check?: CheckExpr
+      /**
+       * A CHECK expression from a builder call, as SQL text. The parse stage turns it into
+       * `check` and removes it.
+       */
+      checkSql?: string
     }
   | { kind: 'validate_constraint'; table: TableRef; name: string }
   | { kind: 'drop_constraint'; table: TableRef; name?: string; type?: ConstraintType }

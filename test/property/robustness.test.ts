@@ -211,6 +211,7 @@ describe('GitHub annotations', () => {
         const summary = {
           errors: findings.length,
           warnings: 0,
+          info: 0,
           suppressed: 0,
           files: 1,
           migrations: 1,

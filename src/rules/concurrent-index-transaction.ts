@@ -53,7 +53,7 @@ export const concurrentIndexTransaction: Rule = {
       } else if (inTransaction === 'unknown') {
         findings.push({
           op,
-          downgrade: true,
+          cap: 'warn',
           message: `${statement} fails if this migration runs inside a transaction, and orm-preflight cannot tell whether it does: the migration's transaction setting is not a constant.`,
           why,
           safeAlternative: SAFE,

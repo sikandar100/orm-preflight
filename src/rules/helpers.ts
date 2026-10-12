@@ -31,3 +31,37 @@ export function column(ref: TableRef, name: string, ctx: RuleContext): string {
 export function tableKey(ref: TableRef): string {
   return JSON.stringify([ref.schema ?? '', ref.name])
 }
+
+/**
+ * Columns of `ref` that are NULL in every row just before `before`: added earlier in the same
+ * migration without a default or NOT NULL, and not written to since. Any INSERT, UPDATE, or
+ * MERGE on the table in between may have filled them, so it clears the set.
+ */
+export function nullColumnsBefore(
+  ops: readonly Operation[],
+  before: Operation,
+  ref: TableRef,
+): Set<string> {
+  const key = tableKey(ref)
+  const nulls = new Set<string>()
+  for (const op of ops) {
+    if (op === before) break
+    if (op.kind === 'add_column' && tableKey(op.table) === key) {
+      if (op.default === undefined && !op.notNull && op.generated === undefined) {
+        nulls.add(op.column)
+      } else {
+        nulls.delete(op.column)
+      }
+    } else if (
+      op.kind === 'data_change' &&
+      op.statement !== 'delete' &&
+      tableKey(op.table) === key
+    ) {
+      nulls.clear()
+    } else if (op.kind === 'unanalyzable') {
+      // An unread statement could have written anything.
+      nulls.clear()
+    }
+  }
+  return nulls
+}

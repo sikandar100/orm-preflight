@@ -30,6 +30,19 @@ describe('formatGithub', () => {
     expect(lines[0]).toContain('"x%0A::add-mask::secret%0D%0A::error::fake %250A" is dropped.')
   })
 
+  it('shows info findings as notices', () => {
+    const output = formatGithub(
+      {
+        ...result,
+        findings: [finding({ severity: 'info' })],
+        summary: { errors: 0, warnings: 0, info: 1, suppressed: 0, files: 1, migrations: 1 },
+      },
+      { pathPrefix: '' },
+    )
+    expect(output).toMatch(/^::notice file=/)
+    expect(output).toMatch(/\norm-preflight: 0 errors, 0 warnings, 1 info in 1 migration\n$/)
+  })
+
   it('ends with a summary line', () => {
     expect(formatGithub(result, { pathPrefix: '' })).toMatch(
       /\norm-preflight: 1 error, 1 warning in 2 migrations \(1 suppressed\)\n$/,

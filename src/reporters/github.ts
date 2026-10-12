@@ -9,7 +9,7 @@ export interface GithubOptions {
 }
 
 /**
- * GitHub Actions workflow commands: one `::error` or `::warning` annotation per finding,
+ * GitHub Actions workflow commands: one `::error`, `::warning`, or `::notice` annotation per finding,
  * shown on the pull request at the exact line, then a summary line. Suppressed findings are
  * not annotated. GitHub shows at most 10 annotations of each level per step; the summary
  * line always counts every finding.
@@ -28,11 +28,11 @@ export function formatGithub(result: LintResult, options: GithubOptions): string
     const details = [f.message, `Why: ${f.why}`]
     if (f.safeAlternative !== null) details.push(`Safe: ${f.safeAlternative}`)
     details.push(`Docs: ${f.docsUrl}`)
-    const command = f.severity === 'error' ? 'error' : 'warning'
+    const command = f.severity === 'error' ? 'error' : f.severity === 'warn' ? 'warning' : 'notice'
     lines.push(`::${command} ${properties}::${escapeData(details.join('\n'))}`)
   }
-  const { errors, warnings, suppressed, migrations } = result.summary
-  let summary = `orm-preflight: ${count(errors, 'error')}, ${count(warnings, 'warning')} in ${count(migrations, 'migration')}`
+  const { errors, warnings, info, suppressed, migrations } = result.summary
+  let summary = `orm-preflight: ${count(errors, 'error')}, ${count(warnings, 'warning')}${info > 0 ? `, ${String(info)} info` : ''} in ${count(migrations, 'migration')}`
   if (suppressed > 0) summary += ` (${String(suppressed)} suppressed)`
   lines.push(summary)
   return `${lines.join('\n')}\n`

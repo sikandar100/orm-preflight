@@ -178,6 +178,7 @@ describe('PostgreSQL statements to operations', () => {
           type: 'foreign_key',
           notValid: false,
           references: users,
+          columns: ['author'],
         },
       ],
     ],
@@ -190,13 +191,21 @@ describe('PostgreSQL statements to operations', () => {
           type: 'foreign_key',
           notValid: true,
           references: { schema: 's', name: 'users' },
+          columns: ['a'],
         },
       ],
     ],
     [
       'ALTER TABLE users ADD CONSTRAINT c CHECK (age > 0) NOT VALID, ADD CONSTRAINT u UNIQUE USING INDEX idx, ADD PRIMARY KEY (id)',
       [
-        { kind: 'add_constraint', table: users, name: 'c', type: 'check', notValid: true },
+        {
+          kind: 'add_constraint',
+          table: users,
+          name: 'c',
+          type: 'check',
+          notValid: true,
+          check: { kind: 'strict', args: [{ kind: 'column', name: 'age' }, { kind: 'value' }] },
+        },
         {
           kind: 'add_constraint',
           table: users,
@@ -206,6 +215,20 @@ describe('PostgreSQL statements to operations', () => {
           usingIndex: 'idx',
         },
         { kind: 'add_constraint', table: users, type: 'primary_key', notValid: false },
+      ],
+    ],
+    [
+      'ALTER TABLE posts ADD FOREIGN KEY (a, b) REFERENCES users (x, y) MATCH FULL',
+      [
+        {
+          kind: 'add_constraint',
+          table: { name: 'posts' },
+          type: 'foreign_key',
+          notValid: false,
+          references: users,
+          columns: ['a', 'b'],
+          match: 'full',
+        },
       ],
     ],
     [
@@ -295,6 +318,7 @@ describe('PostgreSQL statements to operations', () => {
           type: 'foreign_key',
           notValid: false,
           references: users,
+          columns: ['author'],
         },
         {
           kind: 'add_column',
@@ -305,7 +329,13 @@ describe('PostgreSQL statements to operations', () => {
         },
         { kind: 'add_constraint', table: { name: 'posts' }, type: 'unique', notValid: false },
         { kind: 'add_column', table: { name: 'posts' }, column: 'n', type: 'int4', notNull: false },
-        { kind: 'add_constraint', table: { name: 'posts' }, type: 'check', notValid: false },
+        {
+          kind: 'add_constraint',
+          table: { name: 'posts' },
+          type: 'check',
+          notValid: false,
+          check: { kind: 'strict', args: [{ kind: 'column', name: 'n' }, { kind: 'value' }] },
+        },
       ],
     ],
     [
@@ -407,4 +437,26 @@ describe('statement boundaries', () => {
       expect(result.position).toBe(`SELECT '${grin}' FRM `.length)
     }
   })
+})
+
+describe('USING expressions that cut values short', () => {
+  it.each([
+    ['left("code", 5)', 'left()'],
+    ['substring("code" from 1 for 5)', 'substring()'],
+    ['upper(left("code", 5))', 'left()'],
+    ['round("price")', 'round()'],
+    ['"name"::varchar(20)', 'a cast to varchar(20)'],
+    ['CAST("name" AS char(3))', 'a cast to bpchar(3)'],
+  ])('%s', (expr, truncates) => {
+    const [op] = ops(`ALTER TABLE t ALTER COLUMN c TYPE varchar(5) USING ${expr}`)
+    expect(op).toMatchObject({ kind: 'alter_column_type', truncates })
+  })
+
+  it.each(['"age"::bigint', 'lower("email")', '"name"::varchar', '"s"::text::my_enum'])(
+    'keeps every value: %s',
+    (expr) => {
+      const [op] = ops(`ALTER TABLE t ALTER COLUMN c TYPE text USING ${expr}`)
+      expect(op).not.toHaveProperty('truncates')
+    },
+  )
 })

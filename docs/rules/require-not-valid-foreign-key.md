@@ -19,6 +19,12 @@ EXCLUSIVE lock, which does not block writes.
 A foreign key on a table created in the same migration is not reported: that table has no rows to
 check.
 
+**A column added in the same migration.** When the foreign key uses a column that was added
+earlier in the same migration, without a default, every row has NULL in that column. PostgreSQL
+does not check rows whose foreign key is NULL, so no existing row can break it. Then the finding
+is `info`: PostgreSQL still reads the whole table once under the lock, but nothing can fail. With
+`MATCH FULL`, every column of the foreign key must be new for this to hold.
+
 ## Bad
 
 What `migration:generate` writes for a new `@ManyToOne` relation:
@@ -59,7 +65,7 @@ export class AddPostAuthor1727200000000 implements MigrationInterface {
 }
 ```
 
-Then validate it in a separate, later migration:
+Then validate it in a migration deployed in a later release:
 
 ```ts
 import { MigrationInterface, QueryRunner } from 'typeorm'
@@ -77,6 +83,11 @@ export class ValidatePostAuthor1727300000000 implements MigrationInterface {
 
 TypeORM's `createForeignKey()` cannot add `NOT VALID`, so use `queryRunner.query()`.
 
+With TypeORM's default `migrationsTransactionMode: "all"`, every pending migration runs in one
+transaction. Then a `VALIDATE` deployed together with the `NOT VALID` migration gains nothing (see
+[validate-in-same-transaction](validate-in-same-transaction.md)). Deploy it in a later release, or
+use `"each"`.
+
 ## When to suppress
 
 When both tables are small, or the migration runs in a maintenance window.
@@ -93,4 +104,7 @@ When both tables are small, or the migration runs in a maintenance window.
   and the [notes](https://www.postgresql.org/docs/current/sql-altertable.html#SQL-ALTERTABLE-NOTES) ("validation acquires only a SHARE
   UPDATE EXCLUSIVE lock on the table being altered")
 - PostgreSQL: [explicit locking, table-level locks](https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-TABLES)
+- PostgreSQL: [CREATE TABLE, REFERENCES](https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-PARMS-REFERENCES)
+  ("MATCH SIMPLE allows any of the foreign key columns to be null; if any of them are null, the
+  row is not required to have a match in the referenced table")
 - orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

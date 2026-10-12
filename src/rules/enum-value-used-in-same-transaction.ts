@@ -41,7 +41,7 @@ export const enumValueUsedInSameTransaction: Rule = {
         const certain = u.batch !== undefined || u.inTransaction === true
         findings.push({
           op,
-          ...(certain ? {} : { downgrade: true }),
+          ...(certain ? {} : { cap: 'warn' as const }),
           message: certain
             ? `The new value ${u.literal} of enum "${u.name}" is used before the transaction that adds it commits. PostgreSQL rejects this: "unsafe use of new value".`
             : `The new value ${u.literal} of enum "${u.name}" is used in the same migration that adds it. If the migration runs in a transaction, PostgreSQL rejects this: "unsafe use of new value". orm-preflight cannot tell, because the migration's transaction setting is not a constant.`,

@@ -54,6 +54,9 @@
           },
           "type": "foreign_key",
           "notValid": false,
+          "columns": [
+            "org_id"
+          ],
           "loc": {
             "file": "handwritten/builder/optional-names.ts",
             "line": 11,

@@ -56,8 +56,8 @@ export class CheckUserEmail1727200000000 implements MigrationInterface {
 }
 ```
 
-Second migration, after NULLs are backfilled: validate it without blocking writes, set NOT NULL
-(no scan, because the CHECK proves it), and drop the CHECK.
+Second migration, deployed in a later release after NULLs are backfilled: validate it without
+blocking writes, set NOT NULL (no scan, because the CHECK proves it), and drop the CHECK.
 
 ```ts
 import { MigrationInterface, QueryRunner } from 'typeorm'
@@ -77,7 +77,8 @@ export class RequireUserEmail1727300000000 implements MigrationInterface {
 
 ## Safe on PostgreSQL 18
 
-Add the NOT NULL constraint without checking rows, then validate it in a later migration.
+Add the NOT NULL constraint without checking rows, then validate it in a migration deployed in a
+later release.
 Validation takes only a SHARE UPDATE EXCLUSIVE lock.
 
 ```ts
@@ -111,6 +112,11 @@ export class ValidateUserEmail1727300000000 implements MigrationInterface {
 ```
 
 Before PostgreSQL 12 there is no way to avoid the scan: run the change in a maintenance window.
+
+With TypeORM's default `migrationsTransactionMode: "all"`, every pending migration runs in one
+transaction. Then a `VALIDATE` deployed together with the `NOT VALID` migration gains nothing (see
+[validate-in-same-transaction](validate-in-same-transaction.md)). Deploy it in a later release, or
+use `"each"`.
 
 ## When to suppress
 

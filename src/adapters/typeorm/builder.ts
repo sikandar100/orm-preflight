@@ -418,6 +418,10 @@ function foreignKey(table: TableRef, fk: Value | undefined): OperationBody {
     const ref = parseTableName(referenced)
     op.references = schema === undefined ? ref : { schema, name: ref.name }
   }
+  const columns = o.props.get('columnNames')
+  if (columns?.kind === 'array' && columns.items.every((c) => c.kind === 'string')) {
+    op.columns = columns.items.map((c) => c.value)
+  }
   return op
 }
 
@@ -427,10 +431,15 @@ function constraint(
   type: 'unique' | 'check',
 ): OperationBody {
   const o = object(v, type === 'unique' ? 'unique constraint' : 'check constraint')
-  return withName(
-    { kind: 'add_constraint', table, type, notValid: false },
+  const op = withName(
+    { kind: 'add_constraint' as const, table, type, notValid: false },
     optional(o.props.get('name')),
   )
+  // The parse stage reads the expression with the SQL parser.
+  const expression = o.props.get('expression')
+  return type === 'check' && expression?.kind === 'string'
+    ? { ...op, checkSql: expression.value }
+    : op
 }
 
 function dropConstraint(

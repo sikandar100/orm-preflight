@@ -13,6 +13,7 @@ so the same input always gives byte-identical output.
   "summary": {
     "errors": 1,
     "warnings": 0,
+    "info": 0,
     "suppressed": 1,
     "files": 2,
     "migrations": 2
@@ -49,6 +50,7 @@ so the same input always gives byte-identical output.
 | ------------ | ------ | -------------------------------------------------------------- |
 | `errors`     | number | Findings with severity `error` that are not suppressed.        |
 | `warnings`   | number | Findings with severity `warn` that are not suppressed.         |
+| `info`       | number | Findings with severity `info` that are not suppressed.         |
 | `suppressed` | number | Findings suppressed with a `preflight safety-assured` comment. |
 | `files`      | number | Migration files read.                                          |
 | `migrations` | number | Migrations checked, after `startAfter` is applied.             |
@@ -58,7 +60,7 @@ so the same input always gives byte-identical output.
 | Field             | Type                             | Meaning                                                                                                  |
 | ----------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `ruleId`          | string                           | The rule that reported it. Adapter rules are prefixed, such as `typeorm/no-enum-recreate`.               |
-| `severity`        | `"error"` or `"warn"`            | The severity after config overrides.                                                                     |
+| `severity`        | `"error"`, `"warn"`, or `"info"` | The severity after config overrides. `info` findings never fail a run.                                   |
 | `category`        | string                           | `data-loss`, `locking`, `deploy-safety`, or `correctness`.                                               |
 | `file`            | string                           | Path relative to the project root, with forward slashes.                                                 |
 | `line`, `column`  | number                           | 1-based position of the statement in the file. For SQL, the position of the statement inside the string. |

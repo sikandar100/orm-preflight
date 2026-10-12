@@ -59,7 +59,7 @@
     "rules": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Severity overrides, by rule ID: error, warn, or off.",
+      "description": "Severity overrides, by rule ID: error, warn, info, or off. Info findings never fail a run.",
       "properties": {
         "no-drop-and-recreate-column": {
           "$ref": "#/definitions/severity"
@@ -80,6 +80,9 @@
           "$ref": "#/definitions/severity"
         },
         "no-truncate": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-truncating-type-change": {
           "$ref": "#/definitions/severity"
         },
         "no-rename-column": {
@@ -110,6 +113,9 @@
           "$ref": "#/definitions/severity"
         },
         "require-not-valid-check": {
+          "$ref": "#/definitions/severity"
+        },
+        "validate-in-same-transaction": {
           "$ref": "#/definitions/severity"
         },
         "require-concurrent-unique": {
@@ -150,7 +156,7 @@
   },
   "definitions": {
     "severity": {
-      "enum": ["error", "warn", "off"]
+      "enum": ["error", "warn", "info", "off"]
     }
   }
 }
