@@ -48,7 +48,7 @@ export const requireNotValidForeignKey: Rule = {
           message: `Adding ${label} on ${table(op.table, ctx)} checks every row while blocking writes to ${tables}.`,
           why: 'Adding a foreign key validates every existing row while holding a SHARE ROW EXCLUSIVE lock on both tables, which blocks INSERT, UPDATE, and DELETE until the check finishes.',
           safeAlternative:
-            'Add the constraint with NOT VALID, then run ALTER TABLE ... VALIDATE CONSTRAINT in a separate migration. VALIDATE holds only a SHARE UPDATE EXCLUSIVE lock, which does not block writes. TypeORM builder calls cannot add NOT VALID, so use queryRunner.query().',
+            'Add the constraint with NOT VALID, then run ALTER TABLE ... VALIDATE CONSTRAINT in its own transaction, after the NOT VALID one has committed. VALIDATE holds only a SHARE UPDATE EXCLUSIVE lock, which does not block writes. With TypeORM, migrationsTransactionMode "all" (the default) runs every pending migration in one transaction, so deploy the VALIDATE migration in a later release, or use "each". TypeORM builder calls cannot add NOT VALID, so use queryRunner.query().',
         }
       })
   },

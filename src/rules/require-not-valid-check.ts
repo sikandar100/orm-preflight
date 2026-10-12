@@ -36,7 +36,7 @@ export const requireNotValidCheck: Rule = {
           message: `Adding ${label} on ${table(op.table, ctx)} checks every row while blocking reads and writes to ${table(op.table, ctx)}.`,
           why: 'Adding a CHECK constraint scans the whole table to validate the existing rows, and holds an ACCESS EXCLUSIVE lock until the scan finishes.',
           safeAlternative:
-            'Add the constraint with NOT VALID, which applies it to new and changed rows without a scan. Then run ALTER TABLE ... VALIDATE CONSTRAINT in a separate migration; it holds only a SHARE UPDATE EXCLUSIVE lock, which does not block reads or writes. TypeORM builder calls cannot add NOT VALID, so use queryRunner.query().',
+            'Add the constraint with NOT VALID, which applies it to new and changed rows without a scan. Then run ALTER TABLE ... VALIDATE CONSTRAINT in its own transaction, after the NOT VALID one has committed; it holds only a SHARE UPDATE EXCLUSIVE lock, which does not block reads or writes. With TypeORM, migrationsTransactionMode "all" (the default) runs every pending migration in one transaction, so deploy the VALIDATE migration in a later release, or use "each". TypeORM builder calls cannot add NOT VALID, so use queryRunner.query().',
         }
       })
   },

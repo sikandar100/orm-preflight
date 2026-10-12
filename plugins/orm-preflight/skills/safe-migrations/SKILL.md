@@ -32,8 +32,11 @@ the check pass.
 | Rename a column or table         | Running app servers still use the old name            | Add the new column, write to both, switch reads, drop the old one in a later release                               |
 | Drop a column                    | Old app versions still read it                        | Remove it from the entity and deploy first, drop it in a later release                                             |
 | Create an index (PostgreSQL)     | Blocks writes while it builds                         | `CREATE INDEX CONCURRENTLY` in a migration with `transaction = false`                                              |
-| Add a foreign key (PostgreSQL)   | Blocks writes to both tables while it checks each row | Add it `NOT VALID`, then `VALIDATE CONSTRAINT` in a separate migration                                             |
+| Add a foreign key (PostgreSQL)   | Blocks writes to both tables while it checks each row | Add it `NOT VALID`, then `VALIDATE CONSTRAINT` in a later release                                                  |
 | Add a NOT NULL column            | Fails as soon as the table has rows                   | Add it nullable or with a default, backfill, then enforce NOT NULL                                                 |
+
+With TypeORM's default `migrationsTransactionMode: "all"`, every pending migration runs in one
+transaction. So "a separate migration" only helps when it is deployed in a later release.
 
 With TypeORM, `transaction = false` on a migration also needs `migrationsTransactionMode: "each"`
 in the DataSource, and the same in `orm-preflight.config.json`:

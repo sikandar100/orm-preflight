@@ -27,9 +27,9 @@ export const noSetNotNull: Rule = {
 
       const safeAlternative =
         ctx.pgVersion >= 18
-          ? `PostgreSQL 18: add the constraint without checking rows, then validate it in a separate migration: ALTER TABLE ${table(op.table, ctx)} ADD CONSTRAINT <name> NOT NULL "${op.column}" NOT VALID, then ALTER TABLE ${table(op.table, ctx)} VALIDATE CONSTRAINT <name>. VALIDATE does not block writes.`
+          ? `PostgreSQL 18: add the constraint without checking rows, then validate it in its own transaction: ALTER TABLE ${table(op.table, ctx)} ADD CONSTRAINT <name> NOT NULL "${op.column}" NOT VALID, then ALTER TABLE ${table(op.table, ctx)} VALIDATE CONSTRAINT <name>. VALIDATE does not block writes. With TypeORM, migrationsTransactionMode "all" (the default) runs every pending migration in one transaction, so deploy the VALIDATE migration in a later release, or use "each".`
           : ctx.pgVersion >= 12
-            ? `Add CHECK ("${op.column}" IS NOT NULL) NOT VALID, validate it in a separate migration, then SET NOT NULL (PostgreSQL skips the scan because the CHECK proves it) and drop the CHECK.`
+            ? `Add CHECK ("${op.column}" IS NOT NULL) NOT VALID, validate it in its own transaction, then SET NOT NULL (PostgreSQL skips the scan because the CHECK proves it) and drop the CHECK. With TypeORM, migrationsTransactionMode "all" (the default) runs every pending migration in one transaction, so deploy the VALIDATE migration in a later release, or use "each".`
             : 'Before PostgreSQL 12 there is no way to avoid the scan; run this in a maintenance window.'
       return [
         {

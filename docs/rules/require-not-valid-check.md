@@ -61,7 +61,7 @@ export class AddUserAgeCheck1727200000000 implements MigrationInterface {
 }
 ```
 
-Then validate it in a separate, later migration:
+Then validate it in a migration deployed in a later release:
 
 ```ts
 import { MigrationInterface, QueryRunner } from 'typeorm'
@@ -78,6 +78,11 @@ export class ValidateUserAgeCheck1727300000000 implements MigrationInterface {
 ```
 
 TypeORM's `createCheckConstraint()` cannot add `NOT VALID`, so use `queryRunner.query()`.
+
+With TypeORM's default `migrationsTransactionMode: "all"`, every pending migration runs in one
+transaction. Then a `VALIDATE` deployed together with the `NOT VALID` migration gains nothing (see
+[validate-in-same-transaction](validate-in-same-transaction.md)). Deploy it in a later release, or
+use `"each"`.
 
 ## When to suppress
 
