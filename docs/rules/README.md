@@ -11,15 +11,16 @@ To accept one finding, put a suppression comment with a reason above the stateme
 
 ## Data loss
 
-| Rule                                                                      | Reports                                                          |
-| ------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| [`no-drop-and-recreate-column`](no-drop-and-recreate-column.md)           | A column dropped and added again in one migration                |
-| [`possible-rename-data-loss`](possible-rename-data-loss.md)               | One column dropped and another added, with no data copied (warn) |
-| [`no-drop-column`](no-drop-column.md)                                     | A dropped column                                                 |
-| [`no-drop-table`](no-drop-table.md)                                       | A dropped table                                                  |
-| [`no-truncate`](no-truncate.md)                                           | `TRUNCATE` or `clearTable()`                                     |
-| [`typeorm/no-changecolumn-recreate`](typeorm/no-changecolumn-recreate.md) | `changeColumn()` that drops and re-adds the column               |
-| [`typeorm/no-enum-recreate`](typeorm/no-enum-recreate.md)                 | TypeORM 0.3's enum change by recreating the type (warn)          |
+| Rule                                                                      | Reports                                                                            |
+| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [`no-drop-and-recreate-column`](no-drop-and-recreate-column.md)           | A column dropped and added again in one migration                                  |
+| [`possible-rename-data-loss`](possible-rename-data-loss.md)               | One column dropped and another added, with no data copied (warn)                   |
+| [`no-drop-column`](no-drop-column.md)                                     | A dropped column                                                                   |
+| [`no-drop-table`](no-drop-table.md)                                       | A dropped table                                                                    |
+| [`no-truncate`](no-truncate.md)                                           | `TRUNCATE` or `clearTable()`                                                       |
+| [`no-truncating-type-change`](no-truncating-type-change.md)               | A type change whose `USING` keeps only part of each value, such as `left()` (warn) |
+| [`typeorm/no-changecolumn-recreate`](typeorm/no-changecolumn-recreate.md) | `changeColumn()` that drops and re-adds the column                                 |
+| [`typeorm/no-enum-recreate`](typeorm/no-enum-recreate.md)                 | TypeORM 0.3's enum change by recreating the type (warn)                            |
 
 ## Deploy safety
 

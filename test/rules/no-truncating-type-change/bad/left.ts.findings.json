@@ -1,0 +1,28 @@
+[
+  {
+    "ruleId": "no-truncating-type-change",
+    "severity": "warn",
+    "category": "data-loss",
+    "file": "no-truncating-type-change/bad/left.ts",
+    "line": 6,
+    "column": 30,
+    "message": "\"users\".\"code\" is converted to varchar(5) with left() in USING, which can keep only part of each value. Whatever it drops is lost.",
+    "why": "A USING expression replaces every value with its result. Functions such as left(), substring(), and round(), and an explicit cast to varchar(n), drop part of a value without any error, and the original cannot be recovered. Without USING, PostgreSQL fails on a value that does not fit instead of cutting it.",
+    "safeAlternative": "Check first that no value would be cut, for example with a SELECT that counts the rows where the expression changes the value. To keep the data, add a new column with the new type, copy the values, switch the code, and drop the old column in a later release. If cutting the values is intended, suppress this finding with that reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-truncating-type-change.md",
+    "suppressed": null
+  },
+  {
+    "ruleId": "no-unsafe-column-type-change",
+    "severity": "error",
+    "category": "locking",
+    "file": "no-truncating-type-change/bad/left.ts",
+    "line": 6,
+    "column": 30,
+    "message": "Changing the type of \"users\".\"code\" to varchar(5) with a USING expression rewrites the whole \"users\" table while blocking reads and writes.",
+    "why": "ALTER COLUMN ... TYPE holds an ACCESS EXCLUSIVE lock and rewrites the table and its indexes, unless the old and new types store values the same way (such as a longer varchar, or varchar to text).",
+    "safeAlternative": "Expand and contract: add a column with the new type, backfill it in batches, switch the code to it, and drop the old column in a later release.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-unsafe-column-type-change.md",
+    "suppressed": null
+  }
+]

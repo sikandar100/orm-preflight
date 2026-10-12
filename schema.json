@@ -82,6 +82,9 @@
         "no-truncate": {
           "$ref": "#/definitions/severity"
         },
+        "no-truncating-type-change": {
+          "$ref": "#/definitions/severity"
+        },
         "no-rename-column": {
           "$ref": "#/definitions/severity"
         },

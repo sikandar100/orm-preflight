@@ -16,6 +16,7 @@ import { noRenameColumn } from './no-rename-column.js'
 import { noRenameTable } from './no-rename-table.js'
 import { noSetNotNull } from './no-set-not-null.js'
 import { noTruncate } from './no-truncate.js'
+import { noTruncatingTypeChange } from './no-truncating-type-change.js'
 import { noUnsafeColumnTypeChange } from './no-unsafe-column-type-change.js'
 import { noVolatileDefault } from './no-volatile-default.js'
 import { possibleRenameDataLoss } from './possible-rename-data-loss.js'
@@ -32,6 +33,7 @@ export const coreRules: readonly Rule[] = [
   noDropColumn,
   noDropTable,
   noTruncate,
+  noTruncatingTypeChange,
   noRenameColumn,
   noRenameTable,
   requireConcurrentIndex,

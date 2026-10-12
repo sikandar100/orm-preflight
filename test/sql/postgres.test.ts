@@ -438,3 +438,25 @@ describe('statement boundaries', () => {
     }
   })
 })
+
+describe('USING expressions that cut values short', () => {
+  it.each([
+    ['left("code", 5)', 'left()'],
+    ['substring("code" from 1 for 5)', 'substring()'],
+    ['upper(left("code", 5))', 'left()'],
+    ['round("price")', 'round()'],
+    ['"name"::varchar(20)', 'a cast to varchar(20)'],
+    ['CAST("name" AS char(3))', 'a cast to bpchar(3)'],
+  ])('%s', (expr, truncates) => {
+    const [op] = ops(`ALTER TABLE t ALTER COLUMN c TYPE varchar(5) USING ${expr}`)
+    expect(op).toMatchObject({ kind: 'alter_column_type', truncates })
+  })
+
+  it.each(['"age"::bigint', 'lower("email")', '"name"::varchar', '"s"::text::my_enum'])(
+    'keeps every value: %s',
+    (expr) => {
+      const [op] = ops(`ALTER TABLE t ALTER COLUMN c TYPE text USING ${expr}`)
+      expect(op).not.toHaveProperty('truncates')
+    },
+  )
+})

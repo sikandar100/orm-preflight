@@ -251,7 +251,9 @@ function mapAlterTableCmd(cmd: AlterTableCmd, t: TableRef, ctx: MapContext): Ope
         using: col?.raw_default !== undefined,
       }
       const mods = col?.typeName ? typmods(col.typeName) : []
-      return [mods.length > 0 && isBuiltin(col?.typeName) ? { ...op, toTypmods: mods } : op]
+      const withMods = mods.length > 0 && isBuiltin(col?.typeName) ? { ...op, toTypmods: mods } : op
+      const cut = col?.raw_default === undefined ? undefined : truncation(col.raw_default)
+      return [cut === undefined ? withMods : { ...withMods, truncates: cut }]
     }
     case 'AT_ColumnDefault':
       // DROP DEFAULT has no expression and needs no analysis.
@@ -387,6 +389,58 @@ function sortKeys(
     ...(match === undefined ? {} : { match }),
     ...(check === undefined ? {} : { check }),
   }
+}
+
+/** Built-in functions that keep only part of a value: some characters, or fewer digits. */
+const TRUNCATING_FUNCTIONS = new Set([
+  'left',
+  'right',
+  'substr',
+  'substring',
+  'split_part',
+  'trunc',
+  'round',
+  'date_trunc',
+])
+
+/** Types that an explicit cast with a length silently cuts to that length. */
+const TRUNCATING_CASTS = new Set(['varchar', 'bpchar', 'char', 'character', 'character varying'])
+
+/**
+ * The first part of a USING expression that keeps only part of each value: a function such as
+ * `left()`, or an explicit cast to `varchar(n)`, which cuts longer values without an error.
+ */
+function truncation(node: Node): string | undefined {
+  if ('FuncCall' in node) {
+    const name = node.FuncCall.funcname?.at(-1)
+    const fn = name !== undefined && 'String' in name ? (name.String.sval ?? '') : ''
+    if (TRUNCATING_FUNCTIONS.has(fn.toLowerCase())) return `${fn.toLowerCase()}()`
+  }
+  if ('TypeCast' in node && node.TypeCast.typeName !== undefined) {
+    const tn = node.TypeCast.typeName
+    const base = lastName(tn)?.toLowerCase()
+    const mods = typmods(tn)
+    if (base !== undefined && TRUNCATING_CASTS.has(base) && mods.length > 0 && isBuiltin(tn)) {
+      return `a cast to ${typeString(tn)}`
+    }
+  }
+  for (const value of Object.values(node as Record<string, unknown>)) {
+    for (const child of children(value)) {
+      const found = truncation(child)
+      if (found !== undefined) return found
+    }
+  }
+  return undefined
+}
+
+/** AST nodes directly inside a node's field. */
+function children(value: unknown): Node[] {
+  if (Array.isArray(value)) return value.flatMap(children)
+  if (typeof value !== 'object' || value === null) return []
+  const keys = Object.keys(value)
+  // A node is an object with one key naming its type, such as { FuncCall: {...} }.
+  if (keys.length === 1 && /^[A-Z]/.test(keys[0] ?? '')) return [value as Node]
+  return Object.values(value).flatMap(children)
 }
 
 /** Built-in functions that return NULL when any argument is NULL (they are STRICT). */

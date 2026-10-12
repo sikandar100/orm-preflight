@@ -13,6 +13,7 @@ import noRenameColumn from '../../docs/rules/no-rename-column.md'
 import noRenameTable from '../../docs/rules/no-rename-table.md'
 import noSetNotNull from '../../docs/rules/no-set-not-null.md'
 import noTruncate from '../../docs/rules/no-truncate.md'
+import noTruncatingTypeChange from '../../docs/rules/no-truncating-type-change.md'
 import noUnsafeColumnTypeChange from '../../docs/rules/no-unsafe-column-type-change.md'
 import noVolatileDefault from '../../docs/rules/no-volatile-default.md'
 import possibleRenameDataLoss from '../../docs/rules/possible-rename-data-loss.md'
@@ -45,6 +46,7 @@ export const ruleDocs: Readonly<Record<string, string>> = {
   'no-rename-table': noRenameTable,
   'no-set-not-null': noSetNotNull,
   'no-truncate': noTruncate,
+  'no-truncating-type-change': noTruncatingTypeChange,
   'no-unsafe-column-type-change': noUnsafeColumnTypeChange,
   'no-volatile-default': noVolatileDefault,
   'possible-rename-data-loss': possibleRenameDataLoss,

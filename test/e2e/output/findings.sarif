@@ -110,6 +110,26 @@
               }
             },
             {
+              "id": "no-truncating-type-change",
+              "shortDescription": {
+                "text": "Reports a column type change whose `USING` expression keeps only part of each value, such as `left()` or a cast to `varchar(n)`."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-truncating-type-change.md",
+              "help": {
+                "text": "Reports a column type change whose `USING` expression keeps only part of each value, such as `left()` or a cast to `varchar(n)`. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-truncating-type-change.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
               "id": "no-rename-column",
               "shortDescription": {
                 "text": "Reports a renamed column, which breaks the previous version of the application while a deploy is in progress."
@@ -617,7 +637,7 @@
         },
         {
           "ruleId": "no-add-not-null-without-default",
-          "ruleIndex": 9,
+          "ruleIndex": 10,
           "level": "error",
           "message": {
             "text": "\"users\".\"name\" is added as NOT NULL without a default. The migration fails as soon as \"users\" has any rows. Why: PostgreSQL fills a new column with its default for every existing row. With no default that value is NULL, which the NOT NULL constraint rejects. Safe: Add the column as nullable, backfill it in batches, then enforce NOT NULL without a long lock (see no-set-not-null). Or add it with a constant default, which PostgreSQL 11 and later add without rewriting the table."
@@ -639,7 +659,7 @@
         },
         {
           "ruleId": "require-down",
-          "ruleIndex": 23,
+          "ruleIndex": 24,
           "level": "warning",
           "message": {
             "text": "This migration has an empty or missing down(), so reverting it changes nothing in the database but still marks it as not applied. Why: Reverting runs down() and then deletes the migration from the migrations table. With an empty down(), the schema keeps every change, and the next run applies up() again to a schema that already has them, which usually fails. Safe: Write the reverse of up() in down(). If the change cannot be undone, for example because it deletes data, throw an error in down() that says so, so a revert stops instead of silently doing nothing."

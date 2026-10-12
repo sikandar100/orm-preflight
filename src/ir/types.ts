@@ -69,6 +69,11 @@ export type OperationBody =
       to: string
       toTypmods?: number[]
       using: boolean
+      /**
+       * Set when the USING expression keeps only part of each value, such as `left()` or a
+       * cast to `varchar(5)`. Describes it for messages.
+       */
+      truncates?: string
     }
   | { kind: 'set_not_null'; table: TableRef; column: string }
   /** ALTER COLUMN ... SET DEFAULT. The default applies to new rows only. */
