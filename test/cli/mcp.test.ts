@@ -55,6 +55,14 @@ describe('explain_rule and list_rules', () => {
     })
   })
 
+  it('points to list_rules, not to a CLI command, for an unknown rule', async () => {
+    const result = await tool('explain_rule').call({ rule: 'no-drop-colum' })
+    expect(result).toEqual({
+      text: 'Unknown rule "no-drop-colum". Did you mean "no-drop-column"? Call list_rules to see every rule.',
+      isError: true,
+    })
+  })
+
   it('lists rules with their databases', async () => {
     const result = await tool('list_rules').call({})
     expect(result.structured).toMatchObject({

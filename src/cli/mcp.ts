@@ -193,7 +193,20 @@ const explainRule: Tool = {
   annotations: READ_ONLY,
   call(args) {
     if (typeof args.rule !== 'string') return Promise.resolve(failed('rule must be a string.'))
-    return Promise.resolve({ text: explain(args.rule) })
+    try {
+      return Promise.resolve({ text: explain(args.rule) })
+    } catch (error) {
+      // The CLI's hint names a command; an agent has the list_rules tool instead.
+      const message = error instanceof Error ? error.message : String(error)
+      return Promise.resolve(
+        failed(
+          message.replace(
+            'Run "orm-preflight rules" to list every rule.',
+            'Call list_rules to see every rule.',
+          ),
+        ),
+      )
+    }
   },
 }
 
