@@ -18,7 +18,7 @@ export const noChangecolumnRecreate: Rule = {
         target: { table: op.table, column: op.column },
         // TypeORM compares against the column read from the database when only a name is
         // given, so the recreate cannot be confirmed statically.
-        downgrade: op.recreates === 'unknown',
+        ...(op.recreates === 'unknown' ? { cap: 'warn' as const } : {}),
         message:
           op.recreates === 'yes'
             ? `changeColumn drops and re-adds ${column(op.table, op.column, ctx)} because its type, length, or array flag changes. Every existing value in the column is lost.`

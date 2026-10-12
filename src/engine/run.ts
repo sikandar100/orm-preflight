@@ -1,7 +1,15 @@
 import type { ChangeSet } from '../discovery/git.js'
 import type { AnalyzedMigration, Suppression } from '../ir/types.js'
 import { tableKey } from '../rules/helpers.js'
-import type { Dialect, Finding, Rule, RuleContext, RuleFinding, Severity } from '../rules/types.js'
+import type {
+  Dialect,
+  Finding,
+  FindingSeverity,
+  Rule,
+  RuleContext,
+  RuleFinding,
+  Severity,
+} from '../rules/types.js'
 
 export interface EngineOptions {
   dialect: Dialect
@@ -75,7 +83,7 @@ export function runRules(
         const loc = f.op?.loc ?? f.loc ?? migration.loc
         const finding: Finding & { key?: string } = {
           ruleId: rule.meta.id,
-          severity: f.downgrade === true || severity === 'warn' ? 'warn' : 'error',
+          severity: lower(severity, f.cap),
           category: rule.meta.category,
           file: loc.file,
           line: loc.line,
@@ -93,6 +101,13 @@ export function runRules(
   }
 
   return sortFindings(dedupe(findings, rules))
+}
+
+const RANK: Readonly<Record<FindingSeverity, number>> = { error: 2, warn: 1, info: 0 }
+
+/** The configured severity, lowered to the rule's cap for this finding. */
+function lower(configured: FindingSeverity, cap: RuleFinding['cap']): FindingSeverity {
+  return cap !== undefined && RANK[cap] < RANK[configured] ? cap : configured
 }
 
 /**

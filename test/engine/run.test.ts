@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { AnalyzedMigration, Operation } from '../../src/ir/types.js'
 import { runRules, type EngineOptions } from '../../src/engine/run.js'
-import type { Rule } from '../../src/rules/types.js'
+import type { Rule, Severity } from '../../src/rules/types.js'
 
 const loc = (line: number, file = 'm.ts') => ({ file, line, column: 1 })
 
@@ -27,7 +27,7 @@ const drop = (line: number, name = 'users', file = 'm.ts'): Operation => ({
   origin: 'sql',
 })
 
-function rule(id: string, overrides: Partial<Rule['meta']> = {}, downgrade = false): Rule {
+function rule(id: string, overrides: Partial<Rule['meta']> = {}, cap?: 'warn' | 'info'): Rule {
   return {
     meta: {
       id,
@@ -46,7 +46,7 @@ function rule(id: string, overrides: Partial<Rule['meta']> = {}, downgrade = fal
                 target: { table: op.table },
                 message: `m ${op.table.name}`,
                 why: 'w',
-                downgrade,
+                ...(cap === undefined ? {} : { cap }),
               },
             ]
           : [],
@@ -87,7 +87,19 @@ describe('runRules', () => {
       'warn',
     )
     expect(runRules(m, [rule('r')], { ...options, severities: { r: 'off' } })).toEqual([])
-    expect(runRules(m, [rule('r', {}, true)], options)[0]?.severity).toBe('warn')
+    expect(runRules(m, [rule('r', {}, 'warn')], options)[0]?.severity).toBe('warn')
+  })
+
+  it('reports at info when the config or the rule asks for it, and never raises a cap', () => {
+    const m = [migration([drop(3)])]
+    const severity = (r: Rule, severities: Record<string, Severity> = {}) =>
+      runRules(m, [r], { ...options, severities })[0]?.severity
+    expect(severity(rule('r'), { r: 'info' })).toBe('info')
+    expect(severity(rule('r', { defaultSeverity: 'info' }))).toBe('info')
+    expect(severity(rule('r', {}, 'info'))).toBe('info')
+    expect(severity(rule('r', {}, 'info'), { r: 'warn' })).toBe('info')
+    // A cap only lowers: a rule configured as info stays info when it caps at warn.
+    expect(severity(rule('r', {}, 'warn'), { r: 'info' })).toBe('info')
   })
 
   it('skips rules for other dialects and newer PostgreSQL versions', () => {

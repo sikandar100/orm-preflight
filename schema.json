@@ -59,7 +59,7 @@
     "rules": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Severity overrides, by rule ID: error, warn, or off.",
+      "description": "Severity overrides, by rule ID: error, warn, info, or off. Info findings never fail a run.",
       "properties": {
         "no-drop-and-recreate-column": {
           "$ref": "#/definitions/severity"
@@ -150,7 +150,7 @@
   },
   "definitions": {
     "severity": {
-      "enum": ["error", "warn", "off"]
+      "enum": ["error", "warn", "info", "off"]
     }
   }
 }

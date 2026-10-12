@@ -1,7 +1,9 @@
 import type { ChangeSet } from '../discovery/git.js'
 import type { AnalyzedMigration, Loc, Operation, TableRef } from '../ir/types.js'
 
-export type Severity = 'error' | 'warn' | 'off'
+export type Severity = 'error' | 'warn' | 'info' | 'off'
+/** The severity of a reported finding. `info` never fails a run. */
+export type FindingSeverity = Exclude<Severity, 'off'>
 export type Dialect = 'postgres' | 'mysql'
 export type Category = 'data-loss' | 'locking' | 'deploy-safety' | 'correctness'
 
@@ -30,10 +32,11 @@ export interface RuleFinding {
   /** The table (and column) the finding is about, for new-table checks and de-duplication. */
   target?: { table: TableRef; column?: string }
   /**
-   * Report as a warning even when the rule is configured as an error, because this case
-   * cannot be confirmed statically. Rules may lower severity, never raise it.
+   * The highest severity for this finding. `warn` when the case cannot be confirmed
+   * statically, `info` when it is worth knowing but not a problem. Rules may lower severity,
+   * never raise it.
    */
-  downgrade?: boolean
+  cap?: 'warn' | 'info'
 }
 
 export interface RuleContext {
@@ -57,7 +60,7 @@ export interface Rule {
 /** A finding as returned by lint() and printed by the JSON reporter. Public API. */
 export interface Finding {
   ruleId: string
-  severity: 'error' | 'warn'
+  severity: FindingSeverity
   category: Category
   file: string
   line: number

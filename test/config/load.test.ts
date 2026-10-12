@@ -90,7 +90,7 @@ describe('loadConfig', () => {
     ],
     [
       { rules: { 'no-drop-column': 'fatal' } },
-      'Invalid config in orm-preflight.config.json: "rules.no-drop-column" must be one of "error", "warn", "off", but is "fatal".',
+      'Invalid config in orm-preflight.config.json: "rules.no-drop-column" must be one of "error", "warn", "info", "off", but is "fatal".',
     ],
     [[], 'Invalid config in orm-preflight.config.json: The config must be an object.'],
     [

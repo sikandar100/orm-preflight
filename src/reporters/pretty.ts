@@ -25,7 +25,12 @@ export function formatPretty(result: LintResult, options: PrettyOptions): string
     const locWidth = Math.max(...findings.map((f) => location(f).length))
     const indent = ' '.repeat(2 + locWidth + 2)
     for (const f of findings) {
-      const severity = f.severity === 'error' ? c.red('error') : c.yellow('warn ')
+      const severity =
+        f.severity === 'error'
+          ? c.red('error')
+          : f.severity === 'warn'
+            ? c.yellow('warn ')
+            : c.cyan('info ')
       out.push(`  ${c.dim(location(f).padEnd(locWidth))}  ${severity}  ${c.bold(f.ruleId)}`)
       out.push(`${indent}${f.message}`)
       out.push(`${indent}${c.dim('Why: ')} ${f.why}`)
@@ -35,8 +40,8 @@ export function formatPretty(result: LintResult, options: PrettyOptions): string
     }
   }
 
-  const { errors, warnings, suppressed, migrations } = result.summary
-  let summary = `${count(errors, 'error')}, ${count(warnings, 'warning')} in ${count(migrations, 'migration')}`
+  const { errors, warnings, info, suppressed, migrations } = result.summary
+  let summary = `${count(errors, 'error')}, ${count(warnings, 'warning')}${info > 0 ? `, ${String(info)} info` : ''} in ${count(migrations, 'migration')}`
   if (suppressed > 0) summary += ` (${String(suppressed)} suppressed)`
   out.push(
     errors > 0 ? c.red(c.bold(summary)) : warnings > 0 ? c.yellow(summary) : c.green(summary),

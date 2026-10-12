@@ -127,7 +127,8 @@ describe.each(rules.map((r) => ({ id: r.meta.id, rule: r })))(
 
 /**
  * The rule tables in the README and in docs/rules/README.md list every rule once, and mark its
- * default severity: "(warn)" or "(warning)" for warn, "(off, opt-in)" for off, nothing for error.
+ * default severity: "(warn)" or "(warning)" for warn, "(info)" for info, "(off, opt-in)" for off,
+ * nothing for error.
  */
 describe.each(['README.md', 'docs/rules/README.md'])('rule table in %s', (path) => {
   const text = readFileSync(fileURLToPath(new URL(`../../${path}`, import.meta.url)), 'utf8')
@@ -144,9 +145,11 @@ describe.each(['README.md', 'docs/rules/README.md'])('rule table in %s', (path) 
       expect(label, `${id} is missing`).toBeDefined()
       const marked = /\((warn|warning)\)$/.test(label ?? '')
         ? 'warn'
-        : label?.endsWith('(off, opt-in)')
-          ? 'off'
-          : 'error'
+        : label?.endsWith('(info)')
+          ? 'info'
+          : label?.endsWith('(off, opt-in)')
+            ? 'off'
+            : 'error'
       expect(marked).toBe(severity)
     },
   )

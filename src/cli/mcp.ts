@@ -34,10 +34,11 @@ const lintOutputSchema = {
     version: { type: 'string' },
     summary: {
       type: 'object',
-      required: ['errors', 'warnings', 'suppressed', 'files', 'migrations'],
+      required: ['errors', 'warnings', 'info', 'suppressed', 'files', 'migrations'],
       properties: {
         errors: { type: 'integer' },
         warnings: { type: 'integer' },
+        info: { type: 'integer' },
         suppressed: { type: 'integer' },
         files: { type: 'integer' },
         migrations: { type: 'integer' },
@@ -62,7 +63,7 @@ const lintOutputSchema = {
         ],
         properties: {
           ruleId: { type: 'string' },
-          severity: { enum: ['error', 'warn'] },
+          severity: { enum: ['error', 'warn', 'info'] },
           category: { type: 'string' },
           file: { type: 'string' },
           line: { type: 'integer' },
@@ -213,7 +214,7 @@ const listRules: Tool = {
           properties: {
             id: { type: 'string' },
             category: { type: 'string' },
-            defaultSeverity: { enum: ['error', 'warn', 'off'] },
+            defaultSeverity: { enum: ['error', 'warn', 'info', 'off'] },
             databases: { type: 'array', items: { type: 'string' } },
             docsUrl: { type: 'string' },
           },

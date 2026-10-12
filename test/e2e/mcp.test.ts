@@ -68,6 +68,7 @@ describe.each(MODES)('orm-preflight mcp ($era era)', ({ mode, version }) => {
     expect(output.summary).toEqual({
       errors: 2,
       warnings: 2,
+      info: 0,
       suppressed: 1,
       files: 4,
       migrations: 3,

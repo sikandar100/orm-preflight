@@ -53,6 +53,7 @@ describe('lint', () => {
     expect(result.summary).toEqual({
       errors: 2,
       warnings: 0,
+      info: 0,
       suppressed: 0,
       files: 2,
       migrations: 2,
@@ -74,6 +75,13 @@ describe('lint', () => {
     write('package.json', JSON.stringify({ ormPreflight: { rules: { 'no-drop-column': 'warn' } } }))
     const result = await lint({ cwd: dir, patterns: ['src/migrations/*-DropBio.ts'] })
     expect(result.summary).toMatchObject({ errors: 0, warnings: 1, files: 1 })
+  })
+
+  it('counts info findings apart, and they never count as errors or warnings', async () => {
+    write('orm-preflight.config.json', JSON.stringify({ rules: { 'no-drop-column': 'info' } }))
+    const result = await lint({ cwd: dir })
+    expect(result.summary).toMatchObject({ errors: 1, warnings: 0, info: 1 })
+    expect(result.findings.find((f) => f.ruleId === 'no-drop-column')?.severity).toBe('info')
   })
 
   it('fails with a usage error when nothing matches', async () => {

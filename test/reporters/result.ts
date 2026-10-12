@@ -37,5 +37,5 @@ export const result: LintResult = {
       suppressed: { reason: 'unused since 2.3' },
     }),
   ],
-  summary: { errors: 1, warnings: 1, suppressed: 1, files: 2, migrations: 2 },
+  summary: { errors: 1, warnings: 1, info: 0, suppressed: 1, files: 2, migrations: 2 },
 }

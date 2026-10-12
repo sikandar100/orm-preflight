@@ -10,6 +10,7 @@ export function formatJson(result: LintResult): string {
     summary: {
       errors: result.summary.errors,
       warnings: result.summary.warnings,
+      info: result.summary.info,
       suppressed: result.summary.suppressed,
       files: result.summary.files,
       migrations: result.summary.migrations,

@@ -150,9 +150,18 @@ Put the config in `orm-preflight.config.json`, or under the `"ormPreflight"` key
 | `postgresVersion`         | The PostgreSQL major version you run, 12 or newer. Some safe alternatives depend on it. Default: 16.       |
 | `defaultSchema`           | The schema of unqualified table names. Default: `public` on PostgreSQL.                                    |
 | `typeorm.transactionMode` | Must match `migrationsTransactionMode` in your DataSource: `all` (the TypeORM default), `each`, or `none`. |
-| `rules`                   | Severity per rule: `error`, `warn`, or `off`.                                                              |
+| `rules`                   | Severity per rule: `error`, `warn`, `info`, or `off`.                                                      |
 
 Command-line flags override the config.
+
+What each severity does:
+
+| Severity | Meaning                                                                                             |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| `error`  | A real problem. The run fails (exit code 1).                                                        |
+| `warn`   | Probably a problem. Fails the run only above `--max-warnings`.                                      |
+| `info`   | Worth knowing, not a problem, such as a statement that rewrites existing rows. Never fails the run. |
+| `off`    | The rule does not run.                                                                              |
 
 ## Adopting on an existing project
 

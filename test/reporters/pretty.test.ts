@@ -34,7 +34,7 @@ const result: LintResult = {
     finding({ file: 'src/migrations/1727700000000-Drop.ts', suppressed: { reason: 'unused' } }),
     finding({ file: 'src/migrations/1727800000000-Table.ts', ruleId: 'no-drop-table' }),
   ],
-  summary: { errors: 2, warnings: 1, suppressed: 1, files: 3, migrations: 3 },
+  summary: { errors: 2, warnings: 1, info: 0, suppressed: 1, files: 3, migrations: 3 },
 }
 
 describe('formatPretty', () => {
@@ -55,6 +55,19 @@ describe('formatPretty', () => {
       /Too many warnings: 1, and --max-warnings is 0\.\n$/,
     )
     expect(formatPretty(result, { color: false, maxWarnings: 1 })).not.toContain('Too many')
+  })
+
+  it('shows info findings, and counts them only when there are some', () => {
+    const output = formatPretty(
+      {
+        ...result,
+        findings: [finding({ severity: 'info', ruleId: 'rewrites-existing-rows' })],
+        summary: { errors: 0, warnings: 0, info: 1, suppressed: 0, files: 1, migrations: 1 },
+      },
+      { color: false },
+    )
+    expect(output).toContain('5:30  info   rewrites-existing-rows')
+    expect(output).toMatch(/\n0 errors, 0 warnings, 1 info in 1 migration\n$/)
   })
 
   it('prints only the summary when there is nothing to report', () => {
