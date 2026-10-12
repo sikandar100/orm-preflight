@@ -224,16 +224,32 @@
         }
       },
       {
-        "kind": "operation",
-        "operation": {
-          "kind": "unanalyzable",
-          "reason": "SQL is built from a template literal with ${...} expressions",
-          "loc": {
-            "file": "handwritten/strings/string-forms.ts",
-            "line": 27,
-            "column": 11
-          },
-          "origin": "sql"
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" DROP COLUMN \"name\"",
+        "loc": {
+          "file": "handwritten/strings/string-forms.ts",
+          "line": 27,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/string-forms.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 4,
+              "column": 20
+            },
+            {
+              "offset": 12,
+              "line": 4,
+              "column": 35
+            },
+            {
+              "offset": 19,
+              "line": 4,
+              "column": 44
+            }
+          ]
         }
       },
       {

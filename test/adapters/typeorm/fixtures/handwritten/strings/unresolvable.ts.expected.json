@@ -12,16 +12,32 @@
     "runsInTransaction": true,
     "up": [
       {
-        "kind": "operation",
-        "operation": {
-          "kind": "unanalyzable",
-          "reason": "SQL is built from a template literal with ${...} expressions",
-          "loc": {
-            "file": "handwritten/strings/unresolvable.ts",
-            "line": 14,
-            "column": 11
-          },
-          "origin": "sql"
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"y\" integer",
+        "loc": {
+          "file": "handwritten/strings/unresolvable.ts",
+          "line": 14,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/unresolvable.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 14,
+              "column": 30
+            },
+            {
+              "offset": 25,
+              "line": 13,
+              "column": 21
+            },
+            {
+              "offset": 26,
+              "line": 14,
+              "column": 64
+            }
+          ]
         }
       },
       {
@@ -51,16 +67,32 @@
         }
       },
       {
-        "kind": "operation",
-        "operation": {
-          "kind": "unanalyzable",
-          "reason": "SQL comes from a function call",
-          "loc": {
-            "file": "handwritten/strings/unresolvable.ts",
-            "line": 17,
-            "column": 11
-          },
-          "origin": "sql"
+        "kind": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"z\" integer",
+        "loc": {
+          "file": "handwritten/strings/unresolvable.ts",
+          "line": 17,
+          "column": 11
+        },
+        "map": {
+          "file": "handwritten/strings/unresolvable.ts",
+          "runs": [
+            {
+              "offset": 0,
+              "line": 8,
+              "column": 11
+            },
+            {
+              "offset": 25,
+              "line": 17,
+              "column": 39
+            },
+            {
+              "offset": 26,
+              "line": 8,
+              "column": 45
+            }
+          ]
         }
       },
       {

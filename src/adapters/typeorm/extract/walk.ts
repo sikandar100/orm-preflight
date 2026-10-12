@@ -13,7 +13,7 @@ import type { MigrationFunction } from './classes.js'
 import { evaluateCondition, switchBranch } from './dialect.js'
 import { keyName, span, unwrap } from './parse.js'
 import { patternNames, Scope } from './scope.js'
-import { resolveString, resolveValue } from './values.js'
+import { arrayElements, resolveString, resolveValue } from './values.js'
 
 // Each reason states what could not be read. The unanalyzable-statement rule says what to do.
 export const HELPER_REASON = 'SQL is built in a helper the tool cannot follow'
@@ -212,6 +212,16 @@ function visit(node: t.Node, scope: Scope, ctx: Context, cond: boolean): void {
     case 'ForInStatement':
     case 'ForOfStatement': {
       visit(node.right, scope, ctx, cond)
+      const unrolled = node.type === 'ForOfStatement' ? loopItems(node, scope) : undefined
+      if (unrolled !== undefined) {
+        // A loop over a known array runs its body once per item, in order.
+        for (const item of unrolled.items) {
+          const inner = new Scope(scope)
+          inner.declare(unrolled.name, { kind: 'const', init: item.node, scope: item.scope })
+          visit(node.body, inner, ctx, cond)
+        }
+        return
+      }
       const inner = new Scope(scope)
       inner.declareStatements([node.left])
       visit(node.body, inner, ctx, true)
@@ -424,6 +434,55 @@ function visitCall(
     return
   }
   visitChildren(node, scope, ctx, cond)
+}
+
+/** Most items a loop is unrolled for. Longer loops are walked once, as before. */
+const MAX_UNROLL = 100
+
+/**
+ * The items of `for (const x of <known array>)`, when the loop always runs its body once per
+ * item: no `await` loop, a plain `const` name, and no break, continue, return, or throw.
+ */
+function loopItems(
+  node: t.ForOfStatement,
+  scope: Scope,
+): { name: string; items: ReturnType<typeof arrayElements> & object } | undefined {
+  if (node.await || node.left.type !== 'VariableDeclaration' || node.left.kind !== 'const') {
+    return undefined
+  }
+  const [declarator] = node.left.declarations
+  if (node.left.declarations.length !== 1 || declarator?.id.type !== 'Identifier') return undefined
+  if (mayLeaveLoop(node.body)) return undefined
+  const items = arrayElements(node.right, scope)
+  if (items === undefined || items.length > MAX_UNROLL) return undefined
+  return { name: declarator.id.name, items }
+}
+
+/** Whether a loop body can stop early. Nested functions and loops have their own scope. */
+function mayLeaveLoop(node: t.Node): boolean {
+  switch (node.type) {
+    case 'BreakStatement':
+    case 'ContinueStatement':
+    case 'ReturnStatement':
+    case 'ThrowStatement':
+      return true
+    case 'FunctionExpression':
+    case 'ArrowFunctionExpression':
+    case 'FunctionDeclaration':
+    case 'ClassMethod':
+    case 'ObjectMethod':
+      return false
+    default:
+      break
+  }
+  for (const [key, value] of Object.entries(node)) {
+    if (SKIP_KEYS.has(key)) continue
+    const children = Array.isArray(value) ? value : [value]
+    for (const child of children) {
+      if (isNode(child) && mayLeaveLoop(child)) return true
+    }
+  }
+  return false
 }
 
 function handleQueryRunnerCall(

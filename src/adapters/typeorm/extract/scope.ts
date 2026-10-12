@@ -11,6 +11,8 @@ export type Binding =
   | { kind: 'instance' }
   /** A function declared in the file, so `helper(queryRunner)` can be followed. */
   | { kind: 'function'; node: t.FunctionDeclaration; scope: Scope }
+  /** A class declared in the file, so its static properties such as `Migration.TABLES` resolve. */
+  | { kind: 'class'; node: t.ClassDeclaration; scope: Scope }
 
 /** A same-file helper function, with the scope it was declared in. */
 export interface HelperFunction {
@@ -66,7 +68,7 @@ export class Scope {
         if (node.id) this.declare(node.id.name, { kind: 'function', node, scope: this })
         break
       case 'ClassDeclaration':
-        if (node.id) this.declare(node.id.name, { kind: 'mutable' })
+        if (node.id) this.declare(node.id.name, { kind: 'class', node, scope: this })
         break
       case 'ImportDeclaration':
         for (const specifier of node.specifiers)

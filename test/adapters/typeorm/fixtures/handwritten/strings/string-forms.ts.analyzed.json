@@ -179,14 +179,19 @@
         }
       },
       {
-        "kind": "unanalyzable",
-        "reason": "SQL is built from a template literal with ${...} expressions",
+        "kind": "drop_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "name",
         "loc": {
           "file": "handwritten/strings/string-forms.ts",
-          "line": 27,
-          "column": 11
+          "line": 4,
+          "column": 20
         },
-        "origin": "sql"
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" DROP COLUMN \"name\""
       }
     ]
   }
