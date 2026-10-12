@@ -310,6 +310,26 @@
               }
             },
             {
+              "id": "validate-in-same-transaction",
+              "shortDescription": {
+                "text": "Reports `VALIDATE CONSTRAINT` in the same transaction that added the constraint with `NOT VALID`, where it gains nothing."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/validate-in-same-transaction.md",
+              "help": {
+                "text": "Reports `VALIDATE CONSTRAINT` in the same transaction that added the constraint with `NOT VALID`, where it gains nothing. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/validate-in-same-transaction.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
               "id": "require-concurrent-unique",
               "shortDescription": {
                 "text": "Reports a unique constraint or primary key added to an existing table, which builds its index while blocking reads and writes."
@@ -597,7 +617,7 @@
         },
         {
           "ruleId": "unanalyzable-statement",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "This statement could not be analyzed. Why: Dropping a column deletes its data immediately."

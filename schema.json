@@ -112,6 +112,9 @@
         "require-not-valid-check": {
           "$ref": "#/definitions/severity"
         },
+        "validate-in-same-transaction": {
+          "$ref": "#/definitions/severity"
+        },
         "require-concurrent-unique": {
           "$ref": "#/definitions/severity"
         },

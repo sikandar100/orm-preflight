@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "validate-in-same-transaction",
+    "severity": "warn",
+    "category": "locking",
+    "file": "validate-in-same-transaction/bad/unknown-transaction.ts",
+    "line": 14,
+    "column": 30,
+    "message": "VALIDATE CONSTRAINT \"CHK_age\" runs in the same migration that added it NOT VALID. If the migration runs in a transaction, it gains nothing: the ACCESS EXCLUSIVE lock from adding it blocks reads and writes to \"users\" until the transaction commits. orm-preflight cannot tell, because the migration's transaction setting is not a constant.",
+    "why": "NOT VALID skips the table scan when the constraint is added, and VALIDATE CONSTRAINT checks the rows later under a weaker lock. Locks last until the transaction ends, so the weaker lock only helps once the transaction that added the constraint has committed.",
+    "safeAlternative": "Validate in a transaction of its own, after the one that added the constraint has committed. With TypeORM, migrationsTransactionMode \"all\" (the default) runs every pending migration in one transaction, so a VALIDATE in a separate migration only helps when it is deployed in a later release, or with \"each\".",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/validate-in-same-transaction.md",
+    "suppressed": null
+  }
+]

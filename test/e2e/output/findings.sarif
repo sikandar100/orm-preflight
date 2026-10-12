@@ -310,6 +310,26 @@
               }
             },
             {
+              "id": "validate-in-same-transaction",
+              "shortDescription": {
+                "text": "Reports `VALIDATE CONSTRAINT` in the same transaction that added the constraint with `NOT VALID`, where it gains nothing."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/validate-in-same-transaction.md",
+              "help": {
+                "text": "Reports `VALIDATE CONSTRAINT` in the same transaction that added the constraint with `NOT VALID`, where it gains nothing. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/validate-in-same-transaction.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "locking",
+                "tags": [
+                  "locking"
+                ]
+              }
+            },
+            {
               "id": "require-concurrent-unique",
               "shortDescription": {
                 "text": "Reports a unique constraint or primary key added to an existing table, which builds its index while blocking reads and writes."
@@ -619,7 +639,7 @@
         },
         {
           "ruleId": "require-down",
-          "ruleIndex": 22,
+          "ruleIndex": 23,
           "level": "warning",
           "message": {
             "text": "This migration has an empty or missing down(), so reverting it changes nothing in the database but still marks it as not applied. Why: Reverting runs down() and then deletes the migration from the migrations table. With an empty down(), the schema keeps every change, and the next run applies up() again to a schema that already has them, which usually fails. Safe: Write the reverse of up() in down(). If the change cannot be undone, for example because it deletes data, throw an error in down() that says so, so a revert stops instead of silently doing nothing."

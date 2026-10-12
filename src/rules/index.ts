@@ -22,6 +22,7 @@ import { possibleRenameDataLoss } from './possible-rename-data-loss.js'
 import { requireConcurrentIndex } from './require-concurrent-index.js'
 import { requireNotValidForeignKey } from './require-not-valid-foreign-key.js'
 import type { Rule } from './types.js'
+import { validateInSameTransaction } from './validate-in-same-transaction.js'
 import { unanalyzableStatement } from './unanalyzable-statement.js'
 
 /** Core rules. Rule IDs are public API. */
@@ -41,6 +42,7 @@ export const coreRules: readonly Rule[] = [
   requireNotValidForeignKey,
   noSetNotNull,
   requireNotValidCheck,
+  validateInSameTransaction,
   requireConcurrentUnique,
   requireConcurrentIndexDrop,
   noBlockingMaintenance,

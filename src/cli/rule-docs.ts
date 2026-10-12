@@ -28,6 +28,7 @@ import typeormNoChangecolumnRecreate from '../../docs/rules/typeorm/no-changecol
 import typeormNoEnumRecreate from '../../docs/rules/typeorm/no-enum-recreate.md'
 import typeormTransactionOverrideForbidden from '../../docs/rules/typeorm/transaction-override-forbidden.md'
 import unanalyzableStatement from '../../docs/rules/unanalyzable-statement.md'
+import validateInSameTransaction from '../../docs/rules/validate-in-same-transaction.md'
 
 /** The Markdown documentation of each rule, by rule ID. */
 export const ruleDocs: Readonly<Record<string, string>> = {
@@ -59,4 +60,5 @@ export const ruleDocs: Readonly<Record<string, string>> = {
   'typeorm/no-enum-recreate': typeormNoEnumRecreate,
   'typeorm/transaction-override-forbidden': typeormTransactionOverrideForbidden,
   'unanalyzable-statement': unanalyzableStatement,
+  'validate-in-same-transaction': validateInSameTransaction,
 }
