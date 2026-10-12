@@ -64,6 +64,8 @@ check "reindex index                  " "REINDEX INDEX child_pkey"
 check "cluster                        " "CLUSTER child USING child_pkey"
 check "enum recreate (TypeORM 0.3)  " "DROP TYPE IF EXISTS st_old; DROP TYPE IF EXISTS st CASCADE; CREATE TYPE st AS ENUM ('a', 'b'); ALTER TABLE child ADD s st; COMMIT; BEGIN; ALTER TYPE st RENAME TO st_old; CREATE TYPE st AS ENUM ('a', 'b', 'c'); ALTER TABLE child ALTER COLUMN s TYPE st USING s::text::st; DROP TYPE st_old"
 check "enum add value                 " "DROP TYPE IF EXISTS st CASCADE; CREATE TYPE st AS ENUM ('a', 'b'); ALTER TABLE child ADD s st; COMMIT; BEGIN; ALTER TYPE st ADD VALUE 'c'"
+check "check NOT VALID + VALIDATE, 1 tx" "ALTER TABLE child ADD CONSTRAINT c CHECK (n > 0) NOT VALID; ALTER TABLE child VALIDATE CONSTRAINT c"
+check "fk NOT VALID + VALIDATE, 1 tx   " "ALTER TABLE child ADD CONSTRAINT fk FOREIGN KEY (parent_id) REFERENCES parent (id) NOT VALID; ALTER TABLE child VALIDATE CONSTRAINT fk"
 if [ "$ver" -ge 18 ]; then
   check "add not null NOT VALID (18+)   " "ALTER TABLE child ADD CONSTRAINT nn NOT NULL email NOT VALID"
   check "validate not null (18+)        " "ALTER TABLE child ADD CONSTRAINT nn NOT NULL email NOT VALID; COMMIT; BEGIN; ALTER TABLE child VALIDATE CONSTRAINT nn"
@@ -135,4 +137,30 @@ ALTER TABLE child VALIDATE CONSTRAINT nn;
 SET client_min_messages = debug1;
 ALTER TABLE child ALTER COLUMN email SET NOT NULL;
 SQL
+# A CHECK passes when its expression is true or NULL, so a check on a column that was just
+# added (NULL in every row) cannot fail. One that requires the column fails on any row.
+echo -n "check on a new NULL column           | "; setup; psql <<'SQL' 2>&1 | tr '\n' ' '; echo
+ALTER TABLE child ADD e date;
+ALTER TABLE child ADD CONSTRAINT ce CHECK (e IS NULL OR e >= DATE '2020-01-01');
+ALTER TABLE child ADD CONSTRAINT cf CHECK (e > DATE '2020-01-01');
+SELECT 'ok';
+SQL
+echo -n "check requiring a new NULL column    | "; setup; psql <<'SQL' 2>&1 | grep -o 'ERROR.*' | tr '\n' ' '; echo
+ALTER TABLE child ADD e date;
+ALTER TABLE child ADD CONSTRAINT ce CHECK (e IS NOT NULL);
+SQL
+# A foreign key skips rows whose key is NULL: it is added even against an empty table.
+echo -n "fk on a new NULL column, empty parent | "; setup; psql <<'SQL' 2>&1 | tr '\n' ' '; echo
+SET client_min_messages = warning;
+DROP TABLE IF EXISTS empty_parent;
+CREATE TABLE empty_parent (id int PRIMARY KEY);
+ALTER TABLE child ADD p int;
+ALTER TABLE child ADD CONSTRAINT fp FOREIGN KEY (p) REFERENCES empty_parent (id);
+SELECT 'ok';
+SQL
+# Narrowing a varchar fails when a value is too long, but USING left() or an explicit cast
+# cuts the values short without any error.
+echo -n "varchar(100)->varchar(3), no USING   | "; setup; psql -c "ALTER TABLE child ALTER COLUMN name TYPE varchar(3)" 2>&1 | grep -o 'ERROR.*' | tr '\n' ' '; echo
+echo -n "varchar(3) USING left(name, 3)       | "; setup; psql -c "ALTER TABLE child ALTER COLUMN name TYPE varchar(3) USING left(name, 3)" -c "SELECT name FROM child WHERE id = 1000" 2>&1 | tr '\n' ' '; echo
+echo -n "varchar(3) USING name::varchar(3)    | "; setup; psql -c "ALTER TABLE child ALTER COLUMN name TYPE varchar(3) USING name::varchar(3)" -c "SELECT name FROM child WHERE id = 1000" 2>&1 | tr '\n' ' '; echo
 docker rm -f $name >/dev/null

@@ -30,6 +30,9 @@
           "schema": "public",
           "name": "users"
         },
+        "columns": [
+          "authorId"
+        ],
         "loc": {
           "file": "generated/postgres-16/typeorm-1.1.1/1727100005000-AddRelation.ts",
           "line": 7,

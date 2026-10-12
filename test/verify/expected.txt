@@ -24,6 +24,8 @@ reindex index                   | child=ShareLock | no rewrite
 cluster                         | child=AccessExclusiveLock, child=ShareLock | REWRITE 
 enum recreate (TypeORM 0.3)   | child=AccessExclusiveLock, child=ShareLock | REWRITE 
 enum add value                  |  | no rewrite 
+check NOT VALID + VALIDATE, 1 tx | child=AccessExclusiveLock, child=ShareUpdateExclusiveLock | no rewrite 
+fk NOT VALID + VALIDATE, 1 tx    | child=AccessShareLock, child=ShareRowExclusiveLock, child=ShareUpdateExclusiveLock, parent=AccessShareLock, parent=RowShareLock, parent=ShareRowExclusiveLock | no rewrite 
 add not null NOT VALID (18+)    | child=AccessExclusiveLock | no rewrite 
 validate not null (18+)         | child=ShareUpdateExclusiveLock | no rewrite 
 vacuum full (outside a tx)      | waits for AccessExclusiveLock 
@@ -43,3 +45,9 @@ SELECT queued behind a waiting ALTER | waiting: AccessExclusiveLock (the ALTER),
 CONCURRENTLY alone (autocommit)      | ok
 SET NOT NULL uses valid CHECK        | DEBUG:  existing constraints on column "child.email" are sufficient to prove that it does not contain nulls
 
+check on a new NULL column           | ok 
+check requiring a new NULL column    | ERROR:  check constraint "ce" of relation "child" is violated by some row 
+fk on a new NULL column, empty parent | ok 
+varchar(100)->varchar(3), no USING   | ERROR:  value too long for type character varying(3) 
+varchar(3) USING left(name, 3)       | n10 
+varchar(3) USING name::varchar(3)    | n10 

@@ -28,6 +28,9 @@
           "schema": "public",
           "name": "users"
         },
+        "columns": [
+          "author_id"
+        ],
         "loc": {
           "file": "handwritten/builder/constraints.ts",
           "line": 5,
@@ -48,6 +51,9 @@
           "schema": "content",
           "name": "posts"
         },
+        "columns": [
+          "post_id"
+        ],
         "loc": {
           "file": "handwritten/builder/constraints.ts",
           "line": 9,
@@ -200,6 +206,18 @@
         "type": "check",
         "notValid": false,
         "name": "CHK_age",
+        "check": {
+          "kind": "strict",
+          "args": [
+            {
+              "kind": "column",
+              "name": "age"
+            },
+            {
+              "kind": "value"
+            }
+          ]
+        },
         "loc": {
           "file": "handwritten/builder/constraints.ts",
           "line": 27,
@@ -215,6 +233,18 @@
         },
         "type": "check",
         "notValid": false,
+        "check": {
+          "kind": "strict",
+          "args": [
+            {
+              "kind": "column",
+              "name": "score"
+            },
+            {
+              "kind": "value"
+            }
+          ]
+        },
         "loc": {
           "file": "handwritten/builder/constraints.ts",
           "line": 28,

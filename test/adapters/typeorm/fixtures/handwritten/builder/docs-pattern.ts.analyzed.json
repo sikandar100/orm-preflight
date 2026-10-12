@@ -86,6 +86,9 @@
           "schema": "public",
           "name": "question"
         },
+        "columns": [
+          "questionId"
+        ],
         "loc": {
           "file": "handwritten/builder/docs-pattern.ts",
           "line": 39,

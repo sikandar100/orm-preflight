@@ -18,6 +18,13 @@ lock, which does not block reads or writes.
 
 Statements on a table created in the same migration are not reported: the table has no rows yet.
 
+**A column added in the same migration.** When the check reads a column that was added earlier in
+the same migration, without a default, every row has NULL in that column. A CHECK constraint
+passes when its expression is true or NULL, so if the check cannot be false while that column is
+NULL, no existing row can break it. Then the finding is `info`: PostgreSQL still reads the whole
+table once under the lock, but nothing can fail. It stays an error when the check requires the
+column, as with `IS NOT NULL`, or when an `UPDATE` fills the column before the check is added.
+
 ## Bad
 
 ```ts
@@ -88,4 +95,6 @@ When the table is small, or the migration runs in a maintenance window.
   potentially-lengthy scan is skipped.")
 - PostgreSQL: [ALTER TABLE, notes](https://www.postgresql.org/docs/current/sql-altertable.html#SQL-ALTERTABLE-NOTES) ("validation
   acquires only a SHARE UPDATE EXCLUSIVE lock on the table being altered")
+- PostgreSQL: [check constraints](https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-CHECK-CONSTRAINTS)
+  ("a check constraint is satisfied if the check expression evaluates to true or the null value")
 - orm-preflight [lock verification results](https://github.com/sikandar100/orm-preflight/blob/main/test/verify/README.md)

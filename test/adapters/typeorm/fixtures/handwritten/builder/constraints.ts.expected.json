@@ -23,6 +23,9 @@
           "references": {
             "name": "users"
           },
+          "columns": [
+            "author_id"
+          ],
           "loc": {
             "file": "handwritten/builder/constraints.ts",
             "line": 5,
@@ -45,6 +48,9 @@
             "schema": "content",
             "name": "posts"
           },
+          "columns": [
+            "post_id"
+          ],
           "loc": {
             "file": "handwritten/builder/constraints.ts",
             "line": 9,
@@ -217,6 +223,7 @@
           "type": "check",
           "notValid": false,
           "name": "CHK_age",
+          "checkSql": "\"age\" > 0",
           "loc": {
             "file": "handwritten/builder/constraints.ts",
             "line": 27,
@@ -234,6 +241,7 @@
           },
           "type": "check",
           "notValid": false,
+          "checkSql": "\"score\" >= 0",
           "loc": {
             "file": "handwritten/builder/constraints.ts",
             "line": 28,
