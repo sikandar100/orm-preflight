@@ -17,14 +17,21 @@
     },
     "up": [
       {
-        "kind": "unanalyzable",
-        "reason": "SQL is built from a template literal with ${...} expressions",
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "y",
+        "notNull": false,
+        "type": "int4",
         "loc": {
           "file": "handwritten/strings/unresolvable.ts",
           "line": 14,
-          "column": 11
+          "column": 30
         },
-        "origin": "sql"
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"y\" integer"
       },
       {
         "kind": "unanalyzable",
@@ -47,14 +54,21 @@
         "origin": "sql"
       },
       {
-        "kind": "unanalyzable",
-        "reason": "SQL comes from a function call",
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "users"
+        },
+        "column": "z",
+        "notNull": false,
+        "type": "int4",
         "loc": {
           "file": "handwritten/strings/unresolvable.ts",
-          "line": 17,
+          "line": 8,
           "column": 11
         },
-        "origin": "sql"
+        "origin": "sql",
+        "sql": "ALTER TABLE \"users\" ADD \"z\" integer"
       },
       {
         "kind": "unanalyzable",

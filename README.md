@@ -344,7 +344,10 @@ rule is itself an error.
 ## How it works
 
 orm-preflight parses each migration file with Babel and reads the SQL strings passed to
-`queryRunner.query()` and the builder calls such as `addColumn()` and `createIndex()`. It parses
+`queryRunner.query()` and the builder calls such as `addColumn()` and `createIndex()`. It also
+fills in `${...}` in SQL when the value is known in the same file, such as a constant, a local
+function called with fixed arguments, or `.join()` on a known array, and it reads a loop over a
+known array once per item. It parses
 the SQL with the PostgreSQL parser (libpg-query) or a MySQL parser, and runs its rules on the
 result.
 
@@ -354,8 +357,9 @@ TypeORM. Anything it cannot read, such as SQL built at run time, is reported as
 
 ### Running migrations with `--execute`
 
-Some migrations build their SQL at run time, for example in a loop over table names, or in a
-helper imported from another file. Static analysis cannot read that SQL. `--execute` can:
+Some migrations build their SQL from values that are only known at run time, for example names
+read from the database, or a helper imported from another file. Static analysis cannot read that
+SQL. `--execute` can:
 
 ```sh
 npx orm-preflight --execute

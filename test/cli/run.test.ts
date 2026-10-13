@@ -450,7 +450,7 @@ writeFileSync(${JSON.stringify(marker)}, 'ran')
 
 export class Dynamic1727000000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    const table = ['us', 'ers'].join('')
+    const table = 'sresu'.split('').reverse().join('')
     await queryRunner.query(\`DROP TABLE "\${table}"\`)
   }
 

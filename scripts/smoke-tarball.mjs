@@ -170,7 +170,7 @@ try {
   mkdirSync(path.join(project, 'dynamic'))
   writeFileSync(
     path.join(project, 'dynamic', '1727000000001-Dynamic.ts'),
-    "import { MigrationInterface, QueryRunner } from 'typeorm'\n\nexport class Dynamic1727000000001 implements MigrationInterface {\n  async up(queryRunner: QueryRunner) {\n    const table = ['us', 'ers'].join('')\n    await queryRunner.query(`DROP TABLE \"${table}\"`)\n  }\n\n  async down() {\n    throw new Error('irreversible')\n  }\n}\n",
+    "import { MigrationInterface, QueryRunner } from 'typeorm'\n\nexport class Dynamic1727000000001 implements MigrationInterface {\n  async up(queryRunner: QueryRunner) {\n    const table = 'sresu'.split('').reverse().join('')\n    await queryRunner.query(`DROP TABLE \"${table}\"`)\n  }\n\n  async down() {\n    throw new Error('irreversible')\n  }\n}\n",
   )
   const executed = npm([
     'exec',

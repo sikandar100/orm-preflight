@@ -1,0 +1,150 @@
+[
+  {
+    "adapter": "typeorm",
+    "file": "handwritten/strings/templates.ts",
+    "id": "Templates1727200000010",
+    "loc": {
+      "file": "handwritten/strings/templates.ts",
+      "line": 13,
+      "column": 8
+    },
+    "timestamp": 1727200000010,
+    "runsInTransaction": true,
+    "downIsEmpty": true,
+    "suppressions": [],
+    "adapterData": {
+      "className": "Templates1727200000010"
+    },
+    "up": [
+      {
+        "kind": "data_change",
+        "table": {
+          "schema": "public",
+          "name": "history"
+        },
+        "statement": "insert",
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 19,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "INSERT INTO \"history\" (id, name, dml_status) SELECT id, name, dml_status FROM \"users\" WHERE dml_status = 1"
+      },
+      {
+        "kind": "create_table",
+        "table": {
+          "schema": "public",
+          "name": "amounts"
+        },
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 23,
+          "column": 30
+        },
+        "origin": "sql",
+        "sql": "CREATE TABLE \"amounts\" (\"value\" integer, CONSTRAINT ck_amounts_value CHECK (value > 0))"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "employees"
+        },
+        "column": "note",
+        "notNull": false,
+        "type": "text",
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 35,
+          "column": 32
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"employees\" ADD \"note\" text"
+      },
+      {
+        "kind": "add_column",
+        "table": {
+          "schema": "public",
+          "name": "teams"
+        },
+        "column": "note",
+        "notNull": false,
+        "type": "text",
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 35,
+          "column": 32
+        },
+        "origin": "sql",
+        "sql": "ALTER TABLE \"teams\" ADD \"note\" text"
+      },
+      {
+        "kind": "create_index",
+        "table": {
+          "schema": "public",
+          "name": "leave_requests"
+        },
+        "unique": false,
+        "concurrently": false,
+        "name": "ix_leave_requests",
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 40,
+          "column": 32
+        },
+        "origin": "sql",
+        "sql": "CREATE INDEX \"ix_leave_requests\" ON \"leave_requests\" (\"status\")"
+      },
+      {
+        "kind": "create_index",
+        "table": {
+          "schema": "public",
+          "name": "timesheets"
+        },
+        "unique": false,
+        "concurrently": false,
+        "name": "ix_timesheets",
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 40,
+          "column": 32
+        },
+        "origin": "sql",
+        "sql": "CREATE INDEX \"ix_timesheets\" ON \"timesheets\" (\"state\")"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built from a template literal, and ${live} is not known: it comes from an awaited call",
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 45,
+          "column": 11
+        },
+        "origin": "sql"
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built from a template literal, and ${table} is not known: \"table\" is not a constant in this file",
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 48,
+          "column": 13
+        },
+        "origin": "sql",
+        "conditional": true
+      },
+      {
+        "kind": "unanalyzable",
+        "reason": "SQL is built from a template literal, and ${table} is not known: \"table\" is not a constant in this file",
+        "loc": {
+          "file": "handwritten/strings/templates.ts",
+          "line": 51,
+          "column": 13
+        },
+        "origin": "sql",
+        "conditional": true
+      }
+    ]
+  }
+]
