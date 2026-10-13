@@ -15,6 +15,8 @@ import { noEditAppliedMigration } from './no-edit-applied-migration.js'
 import { noRenameColumn } from './no-rename-column.js'
 import { noRenameTable } from './no-rename-table.js'
 import { noSetNotNull } from './no-set-not-null.js'
+import { noDeleteRows } from './no-delete-rows.js'
+import { noNullOutColumn } from './no-null-out-column.js'
 import { noTruncate } from './no-truncate.js'
 import { noTruncatingTypeChange } from './no-truncating-type-change.js'
 import { noUnsafeColumnTypeChange } from './no-unsafe-column-type-change.js'
@@ -22,6 +24,7 @@ import { noVolatileDefault } from './no-volatile-default.js'
 import { possibleRenameDataLoss } from './possible-rename-data-loss.js'
 import { requireConcurrentIndex } from './require-concurrent-index.js'
 import { requireNotValidForeignKey } from './require-not-valid-foreign-key.js'
+import { rewritesExistingRows } from './rewrites-existing-rows.js'
 import type { Rule } from './types.js'
 import { validateInSameTransaction } from './validate-in-same-transaction.js'
 import { unanalyzableStatement } from './unanalyzable-statement.js'
@@ -34,6 +37,9 @@ export const coreRules: readonly Rule[] = [
   noDropTable,
   noTruncate,
   noTruncatingTypeChange,
+  noDeleteRows,
+  noNullOutColumn,
+  rewritesExistingRows,
   noRenameColumn,
   noRenameTable,
   requireConcurrentIndex,

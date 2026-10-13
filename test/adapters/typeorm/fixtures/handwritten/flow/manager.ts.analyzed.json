@@ -23,6 +23,7 @@
           "name": "users"
         },
         "statement": "update",
+        "rows": "all",
         "loc": {
           "file": "handwritten/flow/manager.ts",
           "line": 7,

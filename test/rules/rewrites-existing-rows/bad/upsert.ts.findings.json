@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "rewrites-existing-rows",
+    "severity": "info",
+    "category": "data-loss",
+    "file": "rewrites-existing-rows/bad/upsert.ts",
+    "line": 6,
+    "column": 30,
+    "message": "This INSERT ... ON CONFLICT DO UPDATE may overwrite existing rows of \"settings\".",
+    "why": "When a row already exists, its values are replaced. The old values are gone once the migration commits.",
+    "safeAlternative": "Check that the change is intended, and whether down() needs to restore the old values.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/rewrites-existing-rows.md",
+    "suppressed": null
+  }
+]

@@ -130,6 +130,66 @@
               }
             },
             {
+              "id": "no-delete-rows",
+              "shortDescription": {
+                "text": "Reports a `DELETE` on an existing table, which removes rows for good."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-delete-rows.md",
+              "help": {
+                "text": "Reports a `DELETE` on an existing table, which removes rows for good. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-delete-rows.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
+              "id": "no-null-out-column",
+              "shortDescription": {
+                "text": "Reports an `UPDATE` that only clears columns, setting them to `NULL` on an existing table, which deletes the values they held."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-null-out-column.md",
+              "help": {
+                "text": "Reports an `UPDATE` that only clears columns, setting them to `NULL` on an existing table, which deletes the values they held. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-null-out-column.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
+              "id": "rewrites-existing-rows",
+              "shortDescription": {
+                "text": "Lists every statement that changes existing data, such as an `UPDATE` backfill, so a review can check it."
+              },
+              "helpUri": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/rewrites-existing-rows.md",
+              "help": {
+                "text": "Lists every statement that changes existing data, such as an `UPDATE` backfill, so a review can check it. See https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/rewrites-existing-rows.md"
+              },
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "note"
+              },
+              "properties": {
+                "category": "data-loss",
+                "tags": [
+                  "data-loss"
+                ]
+              }
+            },
+            {
               "id": "no-rename-column",
               "shortDescription": {
                 "text": "Reports a renamed column, which breaks the previous version of the application while a deploy is in progress."
@@ -637,7 +697,7 @@
         },
         {
           "ruleId": "unanalyzable-statement",
-          "ruleIndex": 22,
+          "ruleIndex": 25,
           "level": "warning",
           "message": {
             "text": "This statement could not be analyzed. Why: Dropping a column deletes its data immediately."

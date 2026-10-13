@@ -292,12 +292,25 @@ describe('PostgreSQL statements to operations', () => {
       [{ kind: 'lock_table', tables: [users, { schema: 's', name: 't' }], mode: 'SHARE' }],
     ],
     ['LOCK users', [{ kind: 'lock_table', tables: [users], mode: 'ACCESS EXCLUSIVE' }]],
-    ['UPDATE users SET a = 1', [{ kind: 'data_change', table: users, statement: 'update' }]],
+    [
+      'UPDATE users SET a = 1',
+      [{ kind: 'data_change', table: users, statement: 'update', rows: 'all' }],
+    ],
     [
       'INSERT INTO s.users (a) SELECT 1',
-      [{ kind: 'data_change', table: { schema: 's', name: 'users' }, statement: 'insert' }],
+      [
+        {
+          kind: 'data_change',
+          table: { schema: 's', name: 'users' },
+          statement: 'insert',
+          from: 'select',
+        },
+      ],
     ],
-    ['DELETE FROM users WHERE a = 1', [{ kind: 'data_change', table: users, statement: 'delete' }]],
+    [
+      'DELETE FROM users WHERE a = 1',
+      [{ kind: 'data_change', table: users, statement: 'delete', rows: 'where', where: 'a = 1' }],
+    ],
     [
       'MERGE INTO users u USING src s ON u.id = s.id WHEN MATCHED THEN UPDATE SET a = s.a',
       [{ kind: 'data_change', table: users, statement: 'merge' }],
@@ -459,4 +472,38 @@ describe('USING expressions that cut values short', () => {
       expect(op).not.toHaveProperty('truncates')
     },
   )
+})
+
+describe('data changes', () => {
+  it.each<[string, Record<string, unknown>]>([
+    ['DELETE FROM "audit_log"', { statement: 'delete', rows: 'all' }],
+    [
+      'DELETE FROM users WHERE inactive = true RETURNING id',
+      { statement: 'delete', rows: 'where', where: 'inactive = true' },
+    ],
+    [
+      "UPDATE users SET phone = NULL, note = NULL, name = $1 WHERE country = 'UK'",
+      { statement: 'update', rows: 'where', where: "country = 'UK'", nulls: ['phone', 'note'] },
+    ],
+    [
+      'UPDATE users SET phone = NULL',
+      { statement: 'update', rows: 'all', nulls: ['phone'], onlyNulls: true },
+    ],
+    [
+      'UPDATE t SET a = (SELECT max(b) FROM s WHERE s.x = 1) WHERE t.id IN (SELECT id FROM s)',
+      { statement: 'update', rows: 'where', where: 't.id IN (SELECT id FROM s)' },
+    ],
+    ['INSERT INTO t (a) VALUES (1)', { statement: 'insert' }],
+    ['INSERT INTO t (a) SELECT a FROM s', { statement: 'insert', from: 'select' }],
+    [
+      'INSERT INTO t (a) VALUES (1) ON CONFLICT (a) DO UPDATE SET a = excluded.a',
+      { statement: 'insert', from: 'upsert' },
+    ],
+  ])('%s', (sql, expected) => {
+    const [op] = ops(sql)
+    expect(op).toMatchObject({ kind: 'data_change', ...expected })
+    if (!('nulls' in expected)) expect(op).not.toHaveProperty('nulls')
+    if (!('from' in expected)) expect(op).not.toHaveProperty('from')
+    if (!('onlyNulls' in expected)) expect(op).not.toHaveProperty('onlyNulls')
+  })
 })

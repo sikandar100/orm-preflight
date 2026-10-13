@@ -11,5 +11,18 @@
     "safeAlternative": "Add the value in one migration and use it in a later one. With migrationsTransactionMode \"all\", every pending migration shares one transaction, so use \"each\", or deploy the migration that uses the value separately.",
     "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/enum-value-used-in-same-transaction.md",
     "suppressed": null
+  },
+  {
+    "ruleId": "rewrites-existing-rows",
+    "severity": "info",
+    "category": "data-loss",
+    "file": "enum-value-used-in-same-transaction/bad/update.ts",
+    "line": 6,
+    "column": 30,
+    "message": "This UPDATE rewrites the rows of \"orders\" where \"closedAt\" < now() - interval '1 year'.",
+    "why": "Data changed in a migration is easy to miss in review, and the old values are gone once it commits.",
+    "safeAlternative": "Check that the change is intended, and whether down() needs to restore the old values.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/rewrites-existing-rows.md",
+    "suppressed": null
   }
 ]

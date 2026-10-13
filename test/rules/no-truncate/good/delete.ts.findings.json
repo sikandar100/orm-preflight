@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "ruleId": "no-delete-rows",
+    "severity": "warn",
+    "category": "data-loss",
+    "file": "no-truncate/good/delete.ts",
+    "line": 5,
+    "column": 30,
+    "message": "Rows of \"sessions\" where \"expires_at\" < now() are deleted. They are gone once the migration commits.",
+    "why": "DELETE removes rows for good. down() cannot bring them back unless the migration saved a copy first, and a data loss in a migration is easy to miss in review.",
+    "safeAlternative": "Check which rows go, for example by counting them first, and keep a copy, such as in a backup table, if they might be needed. If removing them is intended, suppress this finding with the reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-delete-rows.md",
+    "suppressed": null
+  }
+]

@@ -122,7 +122,21 @@ export type OperationBody =
   /** BEGIN, COMMIT, or ROLLBACK, from SQL or from QueryRunner transaction methods. */
   | { kind: 'transaction_control'; action: 'start' | 'commit' | 'rollback' }
   /** INSERT, UPDATE, DELETE, or MERGE on a table, such as a backfill. */
-  | { kind: 'data_change'; table: TableRef; statement: 'insert' | 'update' | 'delete' | 'merge' }
+  | {
+      kind: 'data_change'
+      table: TableRef
+      statement: 'insert' | 'update' | 'delete' | 'merge'
+      /** UPDATE and DELETE: whether a WHERE limits the rows. Absent when not known. */
+      rows?: 'all' | 'where'
+      /** The WHERE condition as written, shortened, for messages. */
+      where?: string
+      /** UPDATE: columns set to NULL. */
+      nulls?: string[]
+      /** UPDATE: set when the SET list only sets columns to NULL. */
+      onlyNulls?: true
+      /** INSERT: `select` when the rows come from a query, `upsert` for ON CONFLICT DO UPDATE. */
+      from?: 'select' | 'upsert'
+    }
   /** An explicit LOCK TABLE statement. */
   | { kind: 'lock_table'; tables: TableRef[]; mode: string }
   | { kind: 'unanalyzable'; reason: string }

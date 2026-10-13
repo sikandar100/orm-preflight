@@ -291,11 +291,28 @@ describe('MySQL statements to operations', () => {
     ],
     [
       'UPDATE `u` JOIN `v` ON 1 SET `u`.`a` = 1',
-      [{ kind: 'data_change', table: { name: 'u' }, statement: 'update' }],
+      [{ kind: 'data_change', table: { name: 'u' }, statement: 'update', rows: 'all' }],
     ],
     [
       'DELETE FROM `u` WHERE `a` = 1',
-      [{ kind: 'data_change', table: { name: 'u' }, statement: 'delete' }],
+      [{ kind: 'data_change', table: { name: 'u' }, statement: 'delete', rows: 'where' }],
+    ],
+    [
+      'UPDATE `u` SET `phone` = NULL',
+      [
+        {
+          kind: 'data_change',
+          table: { name: 'u' },
+          statement: 'update',
+          rows: 'all',
+          nulls: ['phone'],
+          onlyNulls: true,
+        },
+      ],
+    ],
+    [
+      'INSERT INTO `t` (`a`) SELECT `a` FROM `s`',
+      [{ kind: 'data_change', table: { name: 't' }, statement: 'insert', from: 'select' }],
     ],
     ['START TRANSACTION', [{ kind: 'transaction_control', action: 'start' }]],
     ['COMMIT', [{ kind: 'transaction_control', action: 'commit' }]],

@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "rewrites-existing-rows",
+    "severity": "info",
+    "category": "data-loss",
+    "file": "no-null-out-column/good/other-value.ts",
+    "line": 6,
+    "column": 30,
+    "message": "This UPDATE rewrites the rows of \"users\" where \"status\" IS NULL.",
+    "why": "Data changed in a migration is easy to miss in review, and the old values are gone once it commits.",
+    "safeAlternative": "Check that the change is intended, and whether down() needs to restore the old values.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/rewrites-existing-rows.md",
+    "suppressed": null
+  }
+]

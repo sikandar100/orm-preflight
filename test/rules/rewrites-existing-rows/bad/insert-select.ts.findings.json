@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "rewrites-existing-rows",
+    "severity": "info",
+    "category": "data-loss",
+    "file": "rewrites-existing-rows/bad/insert-select.ts",
+    "line": 6,
+    "column": 30,
+    "message": "This INSERT ... SELECT writes rows into \"users_history\" from a query.",
+    "why": "Rows copied by a query depend on the data at deploy time, which a review of the migration does not show.",
+    "safeAlternative": "Check which rows the query returns on real data, and that running the migration again or reverting it leaves no duplicates.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/rewrites-existing-rows.md",
+    "suppressed": null
+  }
+]
