@@ -1,5 +1,28 @@
 # orm-preflight
 
+## 1.2.0
+
+### Minor Changes
+
+- [#49](https://github.com/sikandar100/orm-preflight/pull/49) [`f70b03d`](https://github.com/sikandar100/orm-preflight/commit/f70b03de2bf8a23162edb3d739a297af12d15855) Thanks [@sikandar100](https://github.com/sikandar100)! - Three rules for data changes in a migration, which are easy to miss in review:
+  
+  - `no-delete-rows` (warning): a `DELETE` on an existing table. On PostgreSQL the finding quotes the `WHERE` condition, or says every row is deleted.
+  - `no-null-out-column` (warning): an `UPDATE` that only clears columns, setting them to `NULL`.
+  - `rewrites-existing-rows` (info): every `UPDATE`, `MERGE`, upsert, or `INSERT ... SELECT` on an existing table, with its `WHERE` condition, so a "nothing may lose data" release check can review them. It points out a whole-table `UPDATE` in one statement, and names columns an `UPDATE` clears while it changes others.
+
+- [#46](https://github.com/sikandar100/orm-preflight/pull/46) [`5d0f6eb`](https://github.com/sikandar100/orm-preflight/commit/5d0f6ebc59f007c3b713b9c730a99cbadbf5ccdf) Thanks [@sikandar100](https://github.com/sikandar100)! - Rule corrections from real use on a production TypeORM project.
+  
+  - New `info` severity, for findings worth knowing that are not problems. Info findings never fail a run and do not count toward `--max-warnings`. The JSON output gains `"info"` as a severity and an `info` count in the summary. In SARIF they are notes, and in GitHub annotations notices.
+  - `require-not-valid-check` and `require-not-valid-foreign-key` report a constraint as `info` when it cannot fail: it only uses a column added earlier in the same migration, so every row has NULL there.
+  - New rule `validate-in-same-transaction` (warning): `VALIDATE CONSTRAINT` in the same transaction that added the constraint `NOT VALID` gains nothing, because the strong lock is held until the transaction commits.
+  - New rule `no-truncating-type-change` (warning): a type change whose `USING` keeps only part of each value, such as `left()`, `round()`, or a cast to `varchar(n)`, loses data without an error.
+  - The advice to validate a constraint "in a separate migration" now says when that helps: with TypeORM's default `migrationsTransactionMode: "all"`, every pending migration runs in one transaction, so deploy it in a later release, or use `"each"`.
+  - The MCP `explain_rule` tool points to `list_rules` instead of a command line hint.
+
+- [#48](https://github.com/sikandar100/orm-preflight/pull/48) [`6854a08`](https://github.com/sikandar100/orm-preflight/commit/6854a088306271722302293692a420925919004b) Thanks [@sikandar100](https://github.com/sikandar100)! - orm-preflight now reads `${...}` in SQL templates when the value is known in the same file, instead of reporting the statement as unanalyzable. It follows `const` strings, numbers, arrays, and objects, static properties of the class such as `Migration.TABLES`, `.join()` and `.replace()` on known values, and local functions that return a string. A `for (const x of ...)` loop over a known array is read once per item.
+  
+  This removes false `require-concurrent-index` findings on tables created with a template, and shows real findings that were hidden in loops. An unanalyzable message now names the `${...}` that is not known, and why.
+
 ## 1.1.0
 
 ### Minor Changes
