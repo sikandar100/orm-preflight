@@ -23,6 +23,7 @@
           "name": "history"
         },
         "statement": "insert",
+        "from": "select",
         "loc": {
           "file": "handwritten/strings/templates.ts",
           "line": 19,

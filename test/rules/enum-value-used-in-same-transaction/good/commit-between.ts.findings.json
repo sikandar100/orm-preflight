@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "ruleId": "rewrites-existing-rows",
+    "severity": "info",
+    "category": "data-loss",
+    "file": "enum-value-used-in-same-transaction/good/commit-between.ts",
+    "line": 9,
+    "column": 30,
+    "message": "This UPDATE rewrites every row of \"people\", in one statement.",
+    "why": "A whole-table UPDATE locks every row it changes until the migration commits, so writes to those rows wait, and it writes a new version of each row. On a large table that takes long and leaves the table bloated until VACUUM.",
+    "safeAlternative": "Check that the change is intended, and whether down() needs to restore the old values. On a large table, update in batches, for example by ranges of the primary key, outside the migration's transaction.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/rewrites-existing-rows.md",
+    "suppressed": null
+  }
+]

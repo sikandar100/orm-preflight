@@ -192,10 +192,39 @@ export function mapStatement(node: Node, ctx: MapContext): OperationBody[] {
     const tables = (l.relations ?? []).flatMap((r) => ('RangeVar' in r ? [table(r.RangeVar)] : []))
     return [{ kind: 'lock_table', tables, mode: LOCK_MODES[l.mode ?? 8] ?? 'ACCESS EXCLUSIVE' }]
   }
-  if ('InsertStmt' in node) return dataChange(node.InsertStmt.relation, 'insert')
-  if ('UpdateStmt' in node) return dataChange(node.UpdateStmt.relation, 'update')
-  if ('DeleteStmt' in node) return dataChange(node.DeleteStmt.relation, 'delete')
-  if ('MergeStmt' in node) return dataChange(node.MergeStmt.relation, 'merge')
+  if ('InsertStmt' in node) {
+    const i = node.InsertStmt
+    const from =
+      i.onConflictClause?.action === 'ONCONFLICT_UPDATE'
+        ? 'upsert'
+        : i.selectStmt !== undefined &&
+            'SelectStmt' in i.selectStmt &&
+            i.selectStmt.SelectStmt.valuesLists === undefined
+          ? 'select'
+          : undefined
+    return dataChange(i.relation, 'insert', from === undefined ? {} : { from })
+  }
+  if ('UpdateStmt' in node) {
+    const u = node.UpdateStmt
+    const nulls = (u.targetList ?? []).flatMap((target) => {
+      if (!('ResTarget' in target)) return []
+      const { name, val } = target.ResTarget
+      return name !== undefined && val !== undefined && 'A_Const' in val && val.A_Const.isnull
+        ? [name]
+        : []
+    })
+    const onlyNulls = nulls.length > 0 && nulls.length === (u.targetList ?? []).length
+    return dataChange(u.relation, 'update', {
+      ...rowsOf(u.whereClause, u.returningClause, ctx),
+      ...(nulls.length > 0 ? { nulls } : {}),
+      ...(onlyNulls ? { onlyNulls: true as const } : {}),
+    })
+  }
+  if ('DeleteStmt' in node) {
+    const d = node.DeleteStmt
+    return dataChange(d.relation, 'delete', rowsOf(d.whereClause, d.returningClause, ctx))
+  }
+  if ('MergeStmt' in node) return dataChange(node.MergeStmt.relation, 'merge', {})
   if ('DoStmt' in node) return [unanalyzable(DO_REASON)]
   if ('CreateFunctionStmt' in node) return [unanalyzable(FUNCTION_REASON)]
 
@@ -204,11 +233,73 @@ export function mapStatement(node: Node, ctx: MapContext): OperationBody[] {
   return [unanalyzable(`This kind of statement (${type ?? 'unknown'}) is not analyzed`)]
 }
 
+type DataChange = Extract<OperationBody, { kind: 'data_change' }>
+
 function dataChange(
   relation: RangeVar | undefined,
-  statement: 'insert' | 'update' | 'delete' | 'merge',
+  statement: DataChange['statement'],
+  details: Partial<Pick<DataChange, 'rows' | 'where' | 'nulls' | 'onlyNulls' | 'from'>>,
 ): OperationBody[] {
-  return relation === undefined ? [] : [{ kind: 'data_change', table: table(relation), statement }]
+  return relation === undefined
+    ? []
+    : [{ kind: 'data_change', table: table(relation), statement, ...details }]
+}
+
+/** Longest WHERE condition kept for messages. */
+const MAX_WHERE = 120
+
+/**
+ * Whether a WHERE limits the rows of an UPDATE or DELETE, and the condition as written: from
+ * its first token to RETURNING or the end of the statement.
+ */
+function rowsOf(
+  where: Node | undefined,
+  returning: unknown,
+  ctx: MapContext,
+): Pick<DataChange, 'rows' | 'where'> {
+  if (where === undefined) return { rows: 'all' }
+  const start = firstLocation(where)
+  if (start === undefined) return { rows: 'where' }
+  const from = ctx.offsets.toIndex(start)
+  const returnAt = returning === undefined ? undefined : firstLocation(returning)
+  let to = ctx.end
+  if (returnAt !== undefined) {
+    const keyword = ctx.sql
+      .slice(0, ctx.offsets.toIndex(returnAt))
+      .toLowerCase()
+      .lastIndexOf('returning')
+    if (keyword > from) to = keyword
+  }
+  const text = ctx.sql
+    .slice(from, to)
+    .replace(/\s+/g, ' ')
+    .replace(/[\s;]+$/, '')
+    .trim()
+  return {
+    rows: 'where',
+    where: text.length > MAX_WHERE ? `${text.slice(0, MAX_WHERE - 3)}...` : text,
+  }
+}
+
+/** The smallest source location anywhere inside an AST node. */
+function firstLocation(node: unknown): number | undefined {
+  let min: number | undefined
+  const walk = (value: unknown): void => {
+    if (Array.isArray(value)) {
+      for (const v of value) walk(v)
+      return
+    }
+    if (typeof value !== 'object' || value === null) return
+    for (const [key, v] of Object.entries(value)) {
+      if (key === 'location' && typeof v === 'number' && v >= 0) {
+        if (min === undefined || v < min) min = v
+      } else {
+        walk(v)
+      }
+    }
+  }
+  walk(node)
+  return min
 }
 
 function mapDrop(drop: import('libpg-query').DropStmt): OperationBody[] {

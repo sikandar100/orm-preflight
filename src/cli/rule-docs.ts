@@ -7,10 +7,12 @@ import noAddNotNullWithoutDefault from '../../docs/rules/no-add-not-null-without
 import noBlockingMaintenance from '../../docs/rules/no-blocking-maintenance.md'
 import noDropAndRecreateColumn from '../../docs/rules/no-drop-and-recreate-column.md'
 import noDropColumn from '../../docs/rules/no-drop-column.md'
+import noDeleteRows from '../../docs/rules/no-delete-rows.md'
 import noDropTable from '../../docs/rules/no-drop-table.md'
 import noEditAppliedMigration from '../../docs/rules/no-edit-applied-migration.md'
 import noRenameColumn from '../../docs/rules/no-rename-column.md'
 import noRenameTable from '../../docs/rules/no-rename-table.md'
+import noNullOutColumn from '../../docs/rules/no-null-out-column.md'
 import noSetNotNull from '../../docs/rules/no-set-not-null.md'
 import noTruncate from '../../docs/rules/no-truncate.md'
 import noTruncatingTypeChange from '../../docs/rules/no-truncating-type-change.md'
@@ -28,6 +30,7 @@ import typeormInvalidMigrationName from '../../docs/rules/typeorm/invalid-migrat
 import typeormNoChangecolumnRecreate from '../../docs/rules/typeorm/no-changecolumn-recreate.md'
 import typeormNoEnumRecreate from '../../docs/rules/typeorm/no-enum-recreate.md'
 import typeormTransactionOverrideForbidden from '../../docs/rules/typeorm/transaction-override-forbidden.md'
+import rewritesExistingRows from '../../docs/rules/rewrites-existing-rows.md'
 import unanalyzableStatement from '../../docs/rules/unanalyzable-statement.md'
 import validateInSameTransaction from '../../docs/rules/validate-in-same-transaction.md'
 
@@ -40,10 +43,12 @@ export const ruleDocs: Readonly<Record<string, string>> = {
   'no-blocking-maintenance': noBlockingMaintenance,
   'no-drop-and-recreate-column': noDropAndRecreateColumn,
   'no-drop-column': noDropColumn,
+  'no-delete-rows': noDeleteRows,
   'no-drop-table': noDropTable,
   'no-edit-applied-migration': noEditAppliedMigration,
   'no-rename-column': noRenameColumn,
   'no-rename-table': noRenameTable,
+  'no-null-out-column': noNullOutColumn,
   'no-set-not-null': noSetNotNull,
   'no-truncate': noTruncate,
   'no-truncating-type-change': noTruncatingTypeChange,
@@ -61,6 +66,7 @@ export const ruleDocs: Readonly<Record<string, string>> = {
   'typeorm/no-changecolumn-recreate': typeormNoChangecolumnRecreate,
   'typeorm/no-enum-recreate': typeormNoEnumRecreate,
   'typeorm/transaction-override-forbidden': typeormTransactionOverrideForbidden,
+  'rewrites-existing-rows': rewritesExistingRows,
   'unanalyzable-statement': unanalyzableStatement,
   'validate-in-same-transaction': validateInSameTransaction,
 }

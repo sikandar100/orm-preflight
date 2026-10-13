@@ -87,9 +87,32 @@ export function mapStatement(ast: MysqlAst): OperationBody[] {
     case 'delete': {
       const target = first(ast.table)
       const statement = DATA_CHANGES[type]
-      return target === undefined || statement === undefined
-        ? []
-        : [{ kind: 'data_change', table: tableRef(target), statement }]
+      if (target === undefined || statement === undefined) return []
+      const nulls = list(ast.set).flatMap((s) =>
+        isObj(s) && isObj(s.value) && s.value.type === 'null' && str(s.column) !== undefined
+          ? [str(s.column) ?? '']
+          : [],
+      )
+      return [
+        {
+          kind: 'data_change',
+          table: tableRef(target),
+          statement,
+          // The parser does not keep the WHERE text, only whether there is one.
+          ...(type === 'update' || type === 'delete'
+            ? { rows: ast.where === null ? ('all' as const) : ('where' as const) }
+            : {}),
+          ...(nulls.length > 0 ? { nulls } : {}),
+          ...(nulls.length > 0 && nulls.length === list(ast.set).length
+            ? { onlyNulls: true as const }
+            : {}),
+          ...((type === 'insert' || type === 'replace') &&
+          isObj(ast.values) &&
+          ast.values.type === 'select'
+            ? { from: 'select' as const }
+            : {}),
+        },
+      ]
     }
     case 'truncate':
       return [{ kind: 'truncate', tables: list(ast.name).map(tableRef) }]

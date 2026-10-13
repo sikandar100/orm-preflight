@@ -11,5 +11,18 @@
     "safeAlternative": "Add the value in one migration and use it in a later one. With migrationsTransactionMode \"all\", every pending migration shares one transaction, so use \"each\", or deploy the migration that uses the value separately.",
     "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/enum-value-used-in-same-transaction.md",
     "suppressed": null
+  },
+  {
+    "ruleId": "rewrites-existing-rows",
+    "severity": "info",
+    "category": "data-loss",
+    "file": "enum-value-used-in-same-transaction/bad/batch.ts",
+    "line": 8,
+    "column": 67,
+    "message": "This UPDATE rewrites every row of \"people\", in one statement.",
+    "why": "A whole-table UPDATE locks every row it changes until the migration commits, so writes to those rows wait, and it writes a new version of each row. On a large table that takes long and leaves the table bloated until VACUUM.",
+    "safeAlternative": "Check that the change is intended, and whether down() needs to restore the old values. On a large table, update in batches, for example by ranges of the primary key, outside the migration's transaction.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/rewrites-existing-rows.md",
+    "suppressed": null
   }
 ]

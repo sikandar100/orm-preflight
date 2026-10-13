@@ -1,0 +1,15 @@
+[
+  {
+    "ruleId": "no-null-out-column",
+    "severity": "warn",
+    "category": "data-loss",
+    "file": "no-null-out-column/bad/all.ts",
+    "line": 6,
+    "column": 30,
+    "message": "\"users\".\"phone\" is set to NULL in every row, which deletes the values it held.",
+    "why": "Setting a column to NULL overwrites its values for good. down() cannot bring them back unless the migration saved a copy first.",
+    "safeAlternative": "Check which values are cleared, and keep a copy, such as in a backup table, if they might be needed. If clearing them is intended, suppress this finding with the reason.",
+    "docsUrl": "https://github.com/sikandar100/orm-preflight/blob/main/docs/rules/no-null-out-column.md",
+    "suppressed": null
+  }
+]

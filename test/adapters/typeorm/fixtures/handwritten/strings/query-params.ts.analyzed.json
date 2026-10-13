@@ -23,6 +23,8 @@
           "name": "users"
         },
         "statement": "update",
+        "rows": "where",
+        "where": "\"status\" IS NULL",
         "loc": {
           "file": "handwritten/strings/query-params.ts",
           "line": 5,
@@ -38,6 +40,8 @@
           "name": "sessions"
         },
         "statement": "delete",
+        "rows": "where",
+        "where": "\"expires\" < $1",
         "loc": {
           "file": "handwritten/strings/query-params.ts",
           "line": 6,

@@ -85,6 +85,15 @@
         "no-truncating-type-change": {
           "$ref": "#/definitions/severity"
         },
+        "no-delete-rows": {
+          "$ref": "#/definitions/severity"
+        },
+        "no-null-out-column": {
+          "$ref": "#/definitions/severity"
+        },
+        "rewrites-existing-rows": {
+          "$ref": "#/definitions/severity"
+        },
         "no-rename-column": {
           "$ref": "#/definitions/severity"
         },
