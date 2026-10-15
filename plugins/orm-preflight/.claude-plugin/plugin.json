@@ -10,5 +10,13 @@
   "homepage": "https://sikandar100.github.io/orm-preflight/",
   "repository": "https://github.com/sikandar100/orm-preflight",
   "license": "MIT",
-  "keywords": ["typeorm", "migrations", "postgresql", "mysql", "database", "nestjs", "mcp"]
+  "keywords": ["typeorm", "migrations", "postgresql", "mysql", "database", "nestjs", "mcp"],
+  "userConfig": {
+    "use_project_install": {
+      "type": "boolean",
+      "title": "Use the project's own orm-preflight",
+      "description": "Off by default: the automatic migration check runs the exact orm-preflight version this plugin was released with, downloaded from npm. Turn this on to run the orm-preflight installed in the project folder instead (node_modules/orm-preflight), for example to use its MySQL parser. Parent folders are never searched. The MCP tools always use the released version.",
+      "default": false
+    }
+  }
 }

@@ -8,7 +8,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { runCaptured } from './orm-preflight.mjs'
+import { runCaptured, useProjectInstall } from './orm-preflight.mjs'
 
 const MIGRATION_EXTENSIONS = new Set(['.ts', '.js', '.mjs', '.cjs', '.mts', '.cts'])
 
@@ -124,7 +124,10 @@ export function feedback(shownPath, run, beforeStartAfter = false) {
  * @param {unknown} event
  * @param {(dir: string, args: string[]) => { status: number | null, stdout: string | null, stderr: string | null, error?: Error | undefined }} run
  */
-export function handle(event, run = runCaptured) {
+export function handle(
+  event,
+  run = (dir, args) => runCaptured(dir, args, { useProjectInstall: useProjectInstall() }),
+) {
   const input = /** @type {{ cwd?: unknown, tool_input?: { file_path?: unknown } }} */ (event)
   const filePath = input.tool_input?.file_path
   if (typeof filePath !== 'string') return undefined
