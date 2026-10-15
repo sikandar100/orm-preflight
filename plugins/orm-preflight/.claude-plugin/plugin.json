@@ -1,7 +1,7 @@
 {
   "name": "orm-preflight",
   "displayName": "orm-preflight",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Checks database migrations as Claude writes them. Catches data loss, table locks, and deploy problems in TypeORM migrations, and tells Claude the safe way to make the change.",
   "author": {
     "name": "Sikandar Waheed",

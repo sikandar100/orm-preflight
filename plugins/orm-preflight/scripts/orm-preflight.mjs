@@ -17,7 +17,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 // The exact package this plugin runs. Kept equal to package.json by scripts/sync-action-version.mjs.
-export const PACKAGE = 'orm-preflight@1.1.0'
+export const PACKAGE = 'orm-preflight@1.2.0'
 
 /**
  * The command that runs orm-preflight for a project.
