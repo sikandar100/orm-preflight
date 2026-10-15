@@ -19,3 +19,6 @@ allowBuilds:
   lefthook: false
   # VitePress's bundler. Its platform binary comes as an optional package; the script is not needed.
   esbuild: false
+minimumReleaseAgeExclude:
+  # Renovate security update: @modelcontextprotocol/client@2.2.0
+  - "@modelcontextprotocol/client@2.2.0"
