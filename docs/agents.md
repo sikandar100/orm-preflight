@@ -31,8 +31,10 @@ It adds:
 - **A skill** with the safe ways to change a schema.
 - **The MCP tools** below.
 
-The plugin uses the orm-preflight installed in your project when there is one, so your config
-and version apply. Otherwise it runs the version it was released with.
+The plugin runs the exact orm-preflight version it was released with, downloaded from npm on
+first use. Your project's `orm-preflight.config.json` still applies. To make the automatic
+check run the orm-preflight installed in your project instead, for example to use its MySQL
+parser, turn on the plugin setting **Use the project's own orm-preflight** in `/config`.
 
 For example, asked to make a column longer, Claude writes `ALTER COLUMN ... TYPE` instead of
 TypeORM's drop and re-add. If it does write a risky migration, it gets the findings right away

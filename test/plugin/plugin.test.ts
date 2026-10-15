@@ -18,7 +18,7 @@ import {
   looksLikeMigration,
   projectDirFor,
 } from '../../plugins/orm-preflight/scripts/check-migration.mjs'
-import { resolveCommand } from '../../plugins/orm-preflight/scripts/orm-preflight.mjs'
+import { resolveCommand, settingOn } from '../../plugins/orm-preflight/scripts/orm-preflight.mjs'
 
 const root = fileURLToPath(new URL('../../', import.meta.url))
 const pluginDir = path.join(root, 'plugins', 'orm-preflight')
@@ -165,7 +165,8 @@ describe('the hook', () => {
     return spawnSync(process.execPath, [hookScript], {
       input: JSON.stringify(event),
       encoding: 'utf8',
-      env,
+      // As Claude Code passes the setting to hooks, so the check runs this repository's build.
+      env: { ...env, CLAUDE_PLUGIN_OPTION_USE_PROJECT_INSTALL: 'true' },
     })
   }
 
@@ -306,29 +307,70 @@ describe('the launcher', () => {
     return path.join(dir, 'dist', 'cli.mjs')
   }
 
-  it("uses the project's own install", () => {
-    const local = install('1.0.2')
-    expect(resolveCommand(project, ['--format', 'json'])).toEqual({
+  const npx = (...args: string[]) => ['-y', `orm-preflight@${pkg.version}`, ...args]
+
+  it('runs the pinned package by default, even when the project has its own copy', () => {
+    install('1.2.0')
+    const resolved = resolveCommand(project, ['--format', 'json'])
+    expect(resolved).toEqual({
       command: process.execPath,
-      args: [local, '--format', 'json'],
-      shell: false,
+      args: [expect.stringMatching(/npx-cli\.js$/) as unknown, ...npx('--format', 'json')],
     })
   })
 
-  it('uses the plugin version through npx for mcp when the install is too old', () => {
+  it("runs the project's own copy only when the setting is on", () => {
+    const local = install('1.0.2')
+    expect(resolveCommand(project, ['--format', 'json'], { useProjectInstall: true })).toEqual({
+      command: process.execPath,
+      args: [local, '--format', 'json'],
+    })
+  })
+
+  it('never looks for a copy in a parent folder', () => {
+    install('1.2.0')
+    const child = path.join(project, 'packages', 'api')
+    mkdirSync(child, { recursive: true })
+    const resolved = resolveCommand(child, ['--version'], { useProjectInstall: true })
+    expect('args' in resolved && resolved.args.slice(-3)).toEqual(npx('--version'))
+  })
+
+  it('uses the pinned package for mcp when the copy is too old for it', () => {
     install('1.0.2')
-    const { args } = resolveCommand(project, ['mcp'])
-    expect(args.slice(-3)).toEqual(['-y', `orm-preflight@${pkg.version}`, 'mcp'])
+    const resolved = resolveCommand(project, ['mcp'], { useProjectInstall: true })
+    expect('args' in resolved && resolved.args.slice(-3)).toEqual(npx('mcp'))
   })
 
-  it('uses a new enough install for mcp', () => {
+  it('uses a new enough copy for mcp when the setting is on', () => {
     const local = install('1.1.0')
-    expect(resolveCommand(project, ['mcp']).args).toEqual([local, 'mcp'])
+    const resolved = resolveCommand(project, ['mcp'], { useProjectInstall: true })
+    expect('args' in resolved && resolved.args).toEqual([local, 'mcp'])
   })
 
-  it('uses the plugin version through npx without an install', () => {
-    const { args } = resolveCommand(project, ['--version'])
-    expect(args.slice(-3)).toEqual(['-y', `orm-preflight@${pkg.version}`, '--version'])
+  it('never uses a shell, so a file name reaches orm-preflight as it is', () => {
+    const file = 'migrations/$(touch pwned)`x`\\"q.ts'
+    const resolved = resolveCommand(project, ['--format', 'json', file])
+    expect(resolved).not.toHaveProperty('shell')
+    expect('args' in resolved && resolved.args.at(-1)).toBe(file)
+  })
+
+  it('reports a missing npx script instead of falling back to a shell', () => {
+    const node = path.join(project, 'bin', 'node')
+    expect(resolveCommand(project, ['--version'], { node })).toEqual({
+      error: `npm's npx script was not found next to Node.js (${node}), so orm-preflight@${pkg.version} cannot be started. Install Node.js together with npm.`,
+    })
+  })
+
+  it.each([
+    ['true', true],
+    ['TRUE', true],
+    ['1', true],
+    ['false', false],
+    ['0', false],
+    ['', false],
+    [undefined, false],
+    ['yes please', false],
+  ])('reads the setting %j as %s', (value, on) => {
+    expect(settingOn(value)).toBe(on)
   })
 
   it('passes stdin and stdout through for the MCP server', () => {
@@ -337,7 +379,12 @@ describe('the launcher', () => {
       cwd: project,
       input: '{"jsonrpc":"2.0","id":7,"method":"ping"}\n',
       encoding: 'utf8',
-      env: { ...process.env, CLAUDE_PROJECT_DIR: project },
+      // Claude Code passes the setting only to hooks; set here so the test runs this build.
+      env: {
+        ...process.env,
+        CLAUDE_PROJECT_DIR: project,
+        CLAUDE_PLUGIN_OPTION_USE_PROJECT_INSTALL: 'true',
+      },
     })
     expect(result.status).toBe(0)
     expect(result.stdout).toBe('{"jsonrpc":"2.0","id":7,"result":{}}\n')
