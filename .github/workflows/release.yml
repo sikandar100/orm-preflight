@@ -39,7 +39,7 @@ jobs:
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 24
+          node-version: 26
           package-manager-cache: false
       - run: pnpm install --frozen-lockfile
       # The publish job asks the owner for approval, so it should only start when there is
@@ -91,7 +91,7 @@ jobs:
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 24
+          node-version: 26
           package-manager-cache: false
       - run: pnpm install --frozen-lockfile
       - name: Refuse to publish the placeholder version
@@ -153,7 +153,7 @@ jobs:
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 24
+          node-version: 26
           package-manager-cache: false
       - run: pnpm install --frozen-lockfile
       - name: Pending changesets
@@ -216,7 +216,7 @@ jobs:
         node: [20, 22, 24]
     services:
       verdaccio:
-        image: verdaccio/verdaccio:6.10.4@sha256:43c4067288b050422265407ea2fe747e511fcd0c407a85ec90ab9a326d9400cd
+        image: verdaccio/verdaccio:7.0.2@sha256:5623458a61100ff2c89526752e8ea2db58ae2d494fa202c18bf4a508ec46892c
         ports:
           - 4873:4873
     env:
